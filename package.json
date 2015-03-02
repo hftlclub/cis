@@ -1,0 +1,21 @@
+{
+	"name": "club-admin",
+	"version": "0.0.1",
+	"description": "HfTL Club Admin",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/hftlclub/club-admin"
+	},
+	"main": "server.js",
+	"engines": {
+		"node": ">= 0.8.x"
+	},
+	"dependencies": {
+		"express": "~4.1.1",
+		"body-parser": "1.10.2"
+	},
+
+	"scripts": {
+		"start": "node server.js"
+	}
+}
