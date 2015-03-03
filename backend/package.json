@@ -13,11 +13,8 @@
 	"dependencies": {
 		"express": "~4.1.1",
 		"body-parser": "1.10.2",
-		"cookie-parser": "1.x.x",
-        "express-session": "1.x.x",
-		"passport": "0.2.x",
-        "passport-local": "1.x.x",
-		"connect-ensure-login": "0.1.x",
+		"jwt-simple": "*",
+		"moment": "2.6.0",        
 		"smbhash": "0.0.1",
 		"ldapjs": "0.7.1"
 	},

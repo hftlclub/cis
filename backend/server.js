@@ -1,26 +1,34 @@
 var express = require('express');
-var passport = require('passport');
-var session = require('express-session');
 var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
+var moment = require('moment');
+var jwt = require('jwt-simple');
+
 
 var app = express();
 
-app.use(cookieParser());
+var ldap = require('./ldap');
+var config = require('./config');
+
+var auth = require('./controllers/auth');
+
+var jwtauth = require('./middleware/jwtauth')
+var requireAuth = require('./middleware/requireauth');
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-app.use(session({
-    secret: config.sessionsecret,
-    resave: false,
-    saveUninitialized: false
-}));
-
-app.use(passport.initialize());
-app.use(passport.session());
 
 
-app.listen(config.port);
-console.log('Club Admin Backend Server started on port ' + config.port);
+
+app.post('/login', auth.login);
+
+
+app.get('/secret', jwtauth, requireAuth, function(req, res){
+    res.send('Club Admin Backend ' + JSON.stringify(req.user));
+})
+
+app.listen(config.port, function(err){
+    console.log('Club Admin Backend Server started on port ' + config.port);
+});
