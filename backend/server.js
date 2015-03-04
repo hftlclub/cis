@@ -26,8 +26,8 @@ api.use(bodyParser.urlencoded({
 api.post('/login', auth.login);
 
 
-api.get('/secret', jwtauth, requireAuth, function(req, res){
-    res.send('Club Admin Backend ' + JSON.stringify(req.user));
+api.get('/userdata', jwtauth, requireAuth, function(req, res){
+    res.json(req.user);
 })
 
 
