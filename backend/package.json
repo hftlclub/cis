@@ -14,9 +14,10 @@
 		"express": "~4.1.1",
 		"body-parser": "1.10.2",
 		"jwt-simple": "*",
-		"moment": "2.6.0",        
+		"moment": "2.6.0",
 		"smbhash": "0.0.1",
-		"ldapjs": "0.7.1"
+		"ldapjs": "0.7.1",
+		"cors": "*"
 	},
 
 	"scripts": {

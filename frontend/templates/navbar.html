@@ -1,0 +1,13 @@
+
+<ul class="nav navbar-nav">
+	<li club-active-state><a href="#/users">Benutzer</a></li>
+	<li club-active-state><a href="#/settings">Einstellungen</a></li>
+</ul>
+
+<div class="navbar-right">
+	<p class="navbar-text">
+		<b><a href="#/settings/profile" class="navbar-link">{{ nav.name }}</a></b> <span class="clubUserType">(Super-User)</span>
+	</p>
+
+	<button type="button" class="btn btn-xs btn-default navbar-btn navbar-right" ng-click="nav.logout()">Logout</button>
+</div>

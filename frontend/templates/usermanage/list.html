@@ -1,0 +1,125 @@
+
+
+<div class="page-header">
+	<div class="pull-right">
+		<a href="#/users/add" class="btn btn-success">
+			<span class="glyphicon glyphicon-plus"></span>
+			Hinzufügen
+		</a>
+	</div>
+	<h2>Benutzer</h2>
+</div>
+
+<div class="table-responsive">
+<table class="table table-striped table-bordered table-condensed" ng-if="users.data">
+	<thead>
+		<tr>
+			<th>Steuerungs-SN</th>
+			<th>Name</th>
+			<th>Adresse</th>
+			<th>E-Mail</th>
+			<th>Telefon</th>
+			<th ng-if="clubUser.type != 'installer'">Installateur</th>
+			<th ng-if="clubUser.type != 'bank'">SAB</th>
+			<th>CSV</th>
+			<th>Newsletter</th>
+			<th>Monitoring</th>
+			<th>Aktiv</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+	<tr ng-repeat="user in users.data | filter:users.filter.fn | orderBy:'lastname'">
+			<td>{{ user.serial }}</td>
+			<td>{{ user.lastname}}, {{ user.firstname}}</td>
+			<td>{{ user.street }}<br>{{ user.zip }} {{ user.city }}</td>
+			<td>{{ user.email }}</td>
+			<td>{{ user.tel }}</td>
+			<td ng-if="clubUser.type != 'installer'">
+				<span ng-if="user.installer">
+					{{ user.inst_lastname }}, {{ user.inst_firstname }}<br>
+					{{ user.inst_company }}
+				</span>
+				<span ng-if="!user.installer" class="glyphicon glyphicon-warning-sign text-danger"></span>
+			</td>
+			<td ng-if="clubUser.type != 'bank'">
+				<span ng-if="user.sab" class="glyphicon glyphicon-ok"></span>
+				<span ng-if="!user.sab" class="glyphicon glyphicon-remove"></span>
+			</td>
+			<td>
+				<span ng-if="user.csv" class="glyphicon glyphicon-ok"></span>
+				<span ng-if="!user.csv" class="glyphicon glyphicon-remove"></span>
+			</td>
+			<td>
+				<span ng-if="user.newsletter" class="glyphicon glyphicon-ok"></span>
+				<span ng-if="!user.newsletter" class="glyphicon glyphicon-remove"></span>
+			</td>
+			<td ng-if="clubUser.superuser || clubUser.type == 'installer'">
+				<span ng-if="!user.noinstaccess" class="glyphicon glyphicon-ok"></span>
+				<span ng-if="user.noinstaccess" class="glyphicon glyphicon-remove"></span>
+			</td>
+			<td>
+				<span ng-if="user.active" class="glyphicon glyphicon-ok text-success"></span>
+				<span ng-if="!user.active" class="glyphicon glyphicon-remove text-danger"></span>
+			</td>
+			<td class="text-center" style="width: 33px">
+				<div class="btn-group" dropdown>
+					<button type="button" class="btn btn-xs btn-default dropdown-toggle">
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu pull-right" role="menu">
+						<li ng-if="!(user.noinstaccess && clubUser.type == 'installer')">
+							<a ng-href="#/status/{{ user.id }}">
+								<span class="glyphicon glyphicon-stats"></span>
+								Monitoring
+							</a>
+						</li>
+						<li ng-if="user.noinstaccess && clubUser.type == 'installer'" class="disabled">
+							<a>
+								<span class="glyphicon glyphicon-stats"></span>
+								Monitoring
+							</a>
+						</li>
+
+						<li><a ng-if="clubUser.superuser || clubUser.type == 'installer'" ng-href="#/users/edit/{{user.id}}">
+							<span class="glyphicon glyphicon-pencil"></span>
+							Bearbeiten
+						</a></li>
+
+						<li><a ng-if="clubUser.superuser" ng-click="users.remove(user)">
+							<span class="glyphicon glyphicon-trash"></span>
+							Löschen
+						</a></li>
+
+						<li ng-if="!user.active && clubUser.type == 'installer'">
+							<a ng-click="users.activate(user)">
+								<span class="glyphicon glyphicon-ok"></span>
+								Entsperren
+							</a>
+						</li>
+						<li ng-if="user.active && clubUser.type == 'installer'">
+							<a ng-click="users.deactivate(user)">
+								<span class="glyphicon glyphicon-remove"></span>
+								Sperren
+							</a>
+						</li>
+
+						<li ng-if="!user.active && clubUser.superuser">
+							<a ng-click="users.activate(user)">
+								<span class="glyphicon glyphicon-ok"></span>
+								Aktivieren
+							</a>
+						</li>
+						<li ng-if="user.active && clubUser.superuser">
+							<a ng-click="users.deactivate(user)">
+								<span class="glyphicon glyphicon-remove"></span>
+								Deaktivieren
+							</a>
+						</li>
+					</ul>
+				</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</div>

@@ -1,0 +1,13 @@
+a {
+  cursor: pointer;
+}
+span.clubUserType {
+  font-size: xx-small;
+}
+span.largeicon {
+  font-size: 2em;
+}
+
+.centering{
+  text-align: center;
+}

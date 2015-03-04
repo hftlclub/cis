@@ -2,7 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var moment = require('moment');
 var jwt = require('jwt-simple');
-
+var cors = require('cors')
 
 var app = express();
 var api = express.Router();
@@ -18,6 +18,10 @@ var requireAuth = require('./middleware/requireauth');
 api.use(bodyParser.json());
 api.use(bodyParser.urlencoded({
     extended: true
+}));
+
+api.use(cors({
+  origin: '*'
 }));
 
 

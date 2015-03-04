@@ -1,0 +1,16 @@
+<div class="modal-header">
+	<h3 class="modal-title">Benutzer löschen</h3>
+</div>
+<div class="modal-body">
+	<p>
+		Der Endkunde <strong>{{ user.lastname }}, {{ user.firstname }}</strong>
+		(SN: {{ user.serial }}) wird unwiderruflich gelöscht.
+	</p>
+	<p>
+		Wirklich fortfahren?
+	</p>
+</div>
+<div class="modal-footer">
+	<button class="btn btn-danger" ng-click="$close()">Löschen</button>
+	<button class="btn btn-default" ng-click="$dismiss()">Abbrechen</button>
+</div>

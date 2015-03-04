@@ -1,2 +1,1 @@
-# clubadmin
-Club Admin App
+# Club Admin Interface

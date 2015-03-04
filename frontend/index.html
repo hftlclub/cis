@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="de" ng-app="clubAdminApp">
+	<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Clubinformationssystem</title>
+
+	<!-- Bootstrap -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet">
+
+	<!-- Angular.js libs -->
+	<script src="lib/angular.min.js"></script>
+	<script src="lib/angular-locale_de-de.js"></script>
+	<script src="lib/angular-route.min.js"></script>
+	<script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.1.js"></script>
+
+	<!-- basic controllers -->
+	<script src="js/main-controllers.js?wipecache=20140831"></script>
+	<script src="js/public-controllers.js?wipecache=20140831"></script>
+	<script src="js/settings-controllers.js?wipecache=20140831"></script>
+	<script src="js/status-controllers.js?wipecache=20140831"></script>
+
+	<!-- management controllers -->
+	<script src="js/bankmanage-controllers.js?wipecache=20140831"></script>
+	<script src="js/usermanage-controllers.js?wipecache=20140831"></script>
+	<script src="js/installermanage-controllers.js?wipecache=20140831"></script>
+	<script src="js/superusermanage-controllers.js?wipecache=20140831"></script>
+
+	<!-- additional angular dependencies -->
+	<script src="js/auth-service.js?wipecache=20140831"></script>
+	<script src="js/route-config.js?wipecache=20140831"></script>
+
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+</head>
+<body ng-controller="MainController">
+
+	<nav class="navbar navbar-default navbar-static-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">
+					<img src="img/stecker.svg" />
+				</a>
+			</div>
+			<div ng-include="nav.templateUrl"></div>
+		</div>
+	</nav>
+
+	<div class="container">
+		<div ng-view></div>
+	</div>
+
+
+</body>
+</html>
