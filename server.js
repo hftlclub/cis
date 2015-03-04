@@ -20,16 +20,15 @@ api.use(bodyParser.urlencoded({
     extended: true
 }));
 
-api.use(cors({
-  origin: '*'
-}));
+api.use(cors({ origin: '*' }));
+
+//static frontend
+app.use(express.static(__dirname + '/frontend'));
 
 
 
-
+//routes
 api.post('/login', auth.login);
-
-
 api.get('/userdata', jwtauth, requireAuth, function(req, res){
     res.json(req.user);
 })
@@ -37,6 +36,7 @@ api.get('/userdata', jwtauth, requireAuth, function(req, res){
 
 //assign api router to /api
 app.use('/api', api);
+
 
 //start server
 app.listen(config.port, function(err){
