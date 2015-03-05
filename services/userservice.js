@@ -93,8 +93,8 @@ exports.addUser = function(data, callback){
 		
 		uidNumber: data.uidnumber,
 		gidNumber: 100,
-		homeDirectory: '/home/' + user.uid,
-		sambaSID: "S-1-0-0-" + (user.uidNumber * 2 + 5),
+		homeDirectory: '/home/' + data.username,
+		sambaSID: "S-1-0-0-" + (data.uidnumber * 2 + 5),
 		objectClass: [
 			'inetOrgPerson',
 			'organizationalPerson',
@@ -105,6 +105,8 @@ exports.addUser = function(data, callback){
 			'top'
 		]
 	};
+
+	console.log(user);
 
 	ldap.client.add(uidtodn(user.uid), user, function(err) {
 		if(err) callback(err);

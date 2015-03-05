@@ -21,7 +21,7 @@ exports.adduser = function(req, res, next){
 	//get next free unix ID
 	userservice.nextFreeUnixID(1, function(err, uidnumber){
 		
-		data.uidNumber = uidNumber;
+		data.uidnumber = uidnumber;
 		
 		//add new user
 		userservice.addUser(data, function(err, success){
