@@ -1,5 +1,5 @@
 var ldapjs = require('ldapjs');
-var config = require('./config');
+var config = require('../config');
 
 var userattrs = ['uid', 'uidNumber', 'gidNumber', 'sn', 'givenName', 'street', 'postalCode', 'l', 'mail', 'telephoneNumber', 'loginShell', 'registeredAddress'];
 

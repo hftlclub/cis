@@ -1,5 +1,5 @@
 var ldapjs = require('ldapjs');
-var ldap = require('../modles/ldap');
+var ldap = require('../modules/ldap');
 var config = require('../config');
 
 

@@ -17,7 +17,8 @@
 		"moment": "2.6.0",
 		"smbhash": "0.0.1",
 		"ldapjs": "0.7.1",
-		"cors": "*"
+		"cors": "*",
+		"ssha": "~1.0.1"
 	},
 
 	"scripts": {
