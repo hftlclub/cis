@@ -6,15 +6,15 @@
 
 <div class="row">
   <div class="col-md-8 col-md-offset-2">
-    <div ng-if="form.message == 'error'" class="alert alert-danger">
+    <alert ng-if="form.message == 'error'" type="alert alert-danger">
       Systemfehler
-    </div>
-    <div ng-if="form.message == 'invalid'" class="alert alert-warning">
+    </alert>
+    <alert ng-if="form.message == 'invalid'" type="alert alert-warning">
       Einige Felder sind fehlerhaft.
-    </div>
-    <div ng-if="form.message == 'success'" class="alert alert-success">
-      Ihre Daten wurden erfolgreich übermittelt.
-    </div>
+    </alert>
+    <alert ng-if="form.message == 'successAdd'" type="alert alert-success">
+      Der Benutzer <b>{{form.data.username}}</b> wurde erfolgreich hinzugefügt! Das Passwort lautet: <b>{{form.data.password}}</b>
+    </alert>
 
 
     <form class="form-horizontal" role="form" ng-submit="form.submit()" ng-if="form.data">
@@ -26,11 +26,11 @@
         </div>
       </div>
 
-      <div class="form-group" ng-class="{'has-error': form.errors.permissions}">
+      <div class="form-group" ng-class="{'has-error': form.errors.type}">
         <label class="col-sm-3 control-label">Nutzerrechte</label>
         <div class="col-sm-7">
 					<select class="form-control"  ng-disabled="! clubUser.superuser">
-						<option ng-repeat="type in usertypes" value="{{type.id}}" ng-model="form.data.userType">{{type.name}}</option>
+						<option ng-repeat="type in usertypes" value="{{type.id}}" ng-model="form.data.type">{{type.name}}</option>
 					</select>
 				</div>
 				<div class="col-sm-2">

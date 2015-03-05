@@ -22,9 +22,9 @@ clubAdminApp.controller('MainController', function ($scope, $route, $routeParams
 	};
 
 	$scope.$on('clubAuthRefreshed', function(){
-		if(clubAuth.user && clubAuth.user.uid) {
+		if(clubAuth.user && clubAuth.user.username) {
 			$scope.nav.templateUrl = 'templates/navbar.html';
-			$scope.nav.name = clubAuth.user.uid;
+			$scope.nav.name = clubAuth.user.username;
 		} else {
 			$scope.nav.templateUrl = 'templates/navbar-public.html';
 			$scope.nav.name = null;

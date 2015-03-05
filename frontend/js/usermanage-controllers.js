@@ -44,8 +44,15 @@ clubAdminApp.controller('userFormController', function($scope, $routeParams, $ht
 
 		$http(req).
 			success(function(data) {
-				$scope.form.data = {};
-				$location.path("/users");
+				if(form.mode == 'add'){
+					console.log(data);
+					$scope.form.data.password = data.password;
+					$scope.form.message = 'successAdd';
+				}
+				if(form.mode == 'edit'){
+					console.log(data);
+				}
+				//$scope.form.data = {};
 			}).
 			error(function(data, status) {
 				if(status == 400 && data.error == 'form') {
@@ -87,17 +94,27 @@ clubAdminApp.controller('userListController', function($scope, $http, $routePara
 
 	refresh();
 
-	if($routeParams.filter) {
-		filter.params = $routeParams.filter.split('/');
-		filter.fn = function(user) {
-			return user.type == filter.params[0];
-		}
-	}
 
 
 	/*** functions ***/
 
 	function refresh() {
+		var req = {
+			url: apiPath+'/user',
+			method: 'GET',
+			headers: {
+				'X-Access-Token': localStorage.getItem('accessToken')
+			}
+		};
+
+
+		$http(req).
+			success(function(data){
+				console.log('received user data:', data);
+				$scope.users.data = data;
+		});
+
+		/*
 		if(clubAuth.user.type == 'superuser') {
 			if(installerId) {
 				url = 'json/superuser/getusers.php?installer=' + installerId;
@@ -109,6 +126,7 @@ clubAdminApp.controller('userListController', function($scope, $http, $routePara
 			success(function(data){
 				$scope.users.data = data;
 			});
+		*/
 	}
 
 	function remove(user) {
