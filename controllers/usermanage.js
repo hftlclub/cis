@@ -9,22 +9,52 @@ var crypto = require('crypto');
 
 
 exports.adduser = function(req, res, next){
-	var user = req.body.user;
+	var data = req.body.user;
 	
-	/*res.statusCode = 400;
-	next(new Error('SCHLIMM!'));*/
+
 	
-	//NTLM passwords
+	//loginShell default to /bin/false
+	data.loginShell = data.loginShell || '/bin/false';
+	
+	//random password
 	var password = randomString(5);
-	var pwhashes = ldaphashes(password);
-	user.passwordcleartext = password;
-	user.userPassword = pwhashes.userPassword;
-	user.sambaNTPassword = pwhashes.sambaNTPassword;
-	user.sambaLMPassword = pwhashes.sambaLMPassword;
+	var hashes = ldaphashes(password);
 	
-	console.log(user);
-	res.json(user);
-	
+	//get next free unix ID
+	userservice.nextFreeUnixID(1, function(err, uidnumber){
+		
+		//build new user object
+		var user = {
+			uid: data.username,
+			mail: data.email,
+			givenName: data.firstname,
+			sn: data.lastname,
+			street: data.street,
+			postalCode: data.zip,
+			l: data.city,
+			telephoneNumber: data.tel,
+			registeredAddress: data.teamdrive,
+			loginShell: data.loginShell,
+			employeeType: data.role,
+		
+			userPassword: hashes.userPassword,
+			sambaNTPassword: hashes.sambaNTPassword,
+			sambaLMPassword: hashes.sambaLMPassword,
+		
+			uidNumber: uidnumber		
+		};
+		
+		//add new user
+		userservice.addUser(user, function(err, success){
+			if(err) next(err);
+			
+			res.json({
+				'password': password
+			}).end();
+		});
+
+	});
+
 }
 
 
