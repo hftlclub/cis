@@ -11,41 +11,20 @@ var crypto = require('crypto');
 exports.adduser = function(req, res, next){
 	var data = req.body.user;
 	
-
-	
 	//loginShell default to /bin/false
 	data.loginShell = data.loginShell || '/bin/false';
 	
 	//random password
 	var password = randomString(5);
-	var hashes = ldaphashes(password);
+	data.hashes = ldaphashes(password);
 	
 	//get next free unix ID
 	userservice.nextFreeUnixID(1, function(err, uidnumber){
 		
-		//build new user object
-		var user = {
-			uid: data.username,
-			mail: data.email,
-			givenName: data.firstname,
-			sn: data.lastname,
-			street: data.street,
-			postalCode: data.zip,
-			l: data.city,
-			telephoneNumber: data.tel,
-			registeredAddress: data.teamdrive,
-			loginShell: data.loginShell,
-			employeeType: data.role,
-		
-			userPassword: hashes.userPassword,
-			sambaNTPassword: hashes.sambaNTPassword,
-			sambaLMPassword: hashes.sambaLMPassword,
-		
-			uidNumber: uidnumber		
-		};
+		data.uidNumber = uidNumber;
 		
 		//add new user
-		userservice.addUser(user, function(err, success){
+		userservice.addUser(data, function(err, success){
 			if(err) next(err);
 			
 			res.json({
@@ -56,6 +35,15 @@ exports.adduser = function(req, res, next){
 	});
 
 }
+
+
+
+exports.listusers = function(req, res, next){
+	userservice.getAll(function(err, users){
+		res.json(users).end();
+	});
+}
+
 
 
 

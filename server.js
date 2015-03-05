@@ -34,6 +34,7 @@ api.post('/login', auth.login);
 api.get('/userdata', jwtauth, requireAuth, function(req, res){
     res.json(req.user);
 });
+api.get('/user', jwtauth, requireAuth, usermanage.listusers);
 api.post('/user', jwtauth, requireAuth, usermanage.adduser);
 
 
