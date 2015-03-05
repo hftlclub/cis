@@ -27,6 +27,7 @@ exports.adduser = function(req, res, next){
 		userservice.addUser(data, function(err, success){
 			if(err) next(err);
 			
+			//return new password
 			res.json({
 				'password': password
 			}).end();
@@ -49,7 +50,7 @@ exports.listusers = function(req, res, next){
 
 function ldaphashes(cleartext){
 	return {
-		'userPassword': ssha.create(cleartext),
+		'userPassword'   : ssha.create(cleartext),
 		'sambaNTPassword': smbhash.nthash(cleartext),
 		'sambaLMPassword': smbhash.lmhash(cleartext)
 	};

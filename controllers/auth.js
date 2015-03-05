@@ -7,12 +7,12 @@ var jwt = require('jwt-simple');
 exports.login = function(req, res, next){
 
     //error if uid or password not set
-    if (!req.body.uid || !req.body.password){
+    if (!req.body.username || !req.body.password){
         res.send(null, 401);
     }
 
     //login user
-    userservice.userlogin(req.body.uid, req.body.password, function(err, success){
+    userservice.userlogin(req.body.username, req.body.password, function(err, success){
         //error if login failed or error occured
         if(err || !success){
             res.send(null, 401);
@@ -20,16 +20,16 @@ exports.login = function(req, res, next){
         }
 
         //get user
-        userservice.getUserByUid(req.body.uid, function(err, user){
+        userservice.getUserByUid(req.body.username, function(err, user){
             if(err || !user){
                 res.send(null, 401);
             }
 
-            //user is authenticated and fetched --> send token now
+            //user is authenticated and fetched --> send token
             var expires = moment().add('days', 7).valueOf()
             var token = jwt.encode(
                 {
-                    uid: user.uid,
+                    uid: user.username,
                     exp: expires
                 },
                 config.tokensecret
@@ -37,7 +37,7 @@ exports.login = function(req, res, next){
             res.json({
                 token: token,
                 expires: expires,
-                uid: user.uid
+                username: user.username
             });
 
         });

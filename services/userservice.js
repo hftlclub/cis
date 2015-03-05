@@ -18,6 +18,7 @@ var userattrs = {
 	'employeeType'     : 'role'
 }
 
+
 //returns all ldap attributes for a user
 function userLDAPAttrs(){
 	var keys = [];
@@ -65,7 +66,25 @@ exports.getUserByUid = function(uid, callback){
 				user[userattrs[key]] = entry.object[key];            
             }
             
-            callback(null, user);
+            
+            //get groups for user
+            exports.getGroupsByUid(uid, function(err, groups){
+				console.log(groups);
+				
+				user.superuser = (groups.indexOf('clubadmins') >= 0) ? true : false;
+				if(groups.indexOf('clubmembers') >= 0){
+					user.type = 'club';
+				}else if(groups.indexOf('clubothers') >= 0){
+					user.type = 'other';
+				}else{
+					user.type = null;
+				}
+				
+				callback(null, user);
+			});
+            
+            
+            
         });
     });
 }
@@ -142,6 +161,32 @@ exports.getAll = function(callback){
         //return user list
         res.on('end', function(result){
 	        callback(null, users);
+        });
+    });
+}
+
+
+exports.getGroupsByUid = function(uid, callback){
+    var opts = {
+        'attributes': ['cn'],
+        'scope': 'one',
+        'filter': '(memberUid=' + uid + ')'
+    };
+
+
+    ldap.client.search(config.ldap.groupbase + ',' + config.ldap.basedn, opts, function(err, res){
+        if(err) callback(err);
+		
+		var groups = [];
+
+        res.on('searchEntry', function(entry){
+            groups.push(entry.object.cn);
+            
+        });
+        
+        //return group list
+        res.on('end', function(result){
+	        callback(null, groups);
         });
     });
 }

@@ -36,7 +36,15 @@ api.get('/userdata', jwtauth, requireAuth, function(req, res){
 });
 api.get('/user', jwtauth, requireAuth, usermanage.listusers);
 api.post('/user', jwtauth, requireAuth, usermanage.adduser);
+//api.put('/user', jwtauth, requireAuth, usermanage.edituser);
 
+
+
+//error handling
+api.use(function(err, req, res, next) {
+    console.error(err.stack);
+    res.status(err.status || 500).send(err.message);
+});
 
 
 //assign api router to /api
