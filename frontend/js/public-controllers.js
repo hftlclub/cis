@@ -11,8 +11,8 @@ clubAdminApp.controller('LoginController', function($scope, $http, $location, cl
 	function submit() {
 		//fixAutofillBug();
 		$http.post(apiPath+'/login', {
-			uid   : $scope.login.data.uid,
-			password: $scope.login.data.password
+			'username': $scope.login.data.username,
+			'password': $scope.login.data.password
 		}).
 			success(function(data){
 					setMessage('success');
