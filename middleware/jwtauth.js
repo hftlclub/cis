@@ -1,10 +1,10 @@
 var jwt = require('jwt-simple');
 var config = require('../config');
-var ldap = require('../ldap');
+var userservice = require('../services/userservice');
 
 module.exports = function(req, res, next){
 
-    var token = req.headers["x-access-token"];
+    var token = req.headers['x-access-token'];
 
     if(!token){
         return next();
@@ -17,7 +17,7 @@ module.exports = function(req, res, next){
             res.send('Access token has expired', 400);
         }
 
-        ldap.getUserByUid(decoded.uid, function(err, user){
+        userservice.getUserByUid(decoded.uid, function(err, user){
             if(err || !user){
                 return next();
             }

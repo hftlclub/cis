@@ -1,5 +1,5 @@
 var config = require('../config');
-var ldap = require('../ldap');
+var userservice = require('../services/userservice');
 var moment = require('moment');
 var jwt = require('jwt-simple');
 
@@ -12,7 +12,7 @@ exports.login = function(req, res, next){
     }
 
     //login user
-    ldap.userlogin(req.body.uid, req.body.password, function(err, success){
+    userservice.userlogin(req.body.uid, req.body.password, function(err, success){
         //error if login failed or error occured
         if(err || !success){
             res.send(null, 401);
@@ -20,7 +20,7 @@ exports.login = function(req, res, next){
         }
 
         //get user
-        ldap.getUserByUid(req.body.uid, function(err, user){
+        userservice.getUserByUid(req.body.uid, function(err, user){
             if(err || !user){
                 res.send(null, 401);
             }
