@@ -6,14 +6,21 @@ clubAdminApp.factory('clubAuth', function($http, $location, $rootScope) {
 
 	clubAuth.refresh = function() {
 
-		$http.get('json/auth/userdata.php').
+		var req = {
+ 			method: 'GET',
+			url: apiPath+'/userdata',
+			headers: {
+				'X-Access-Token': localStorage.getItem('accessToken')
+			},
+		};
+
+		$http(req).
 			success(function(data){
 				clubAuth.user = data;
 				$rootScope.$broadcast('clubAuthRefreshed');
 				$rootScope.clubUser = data;
 
-				if($location.path() == '/login')
-					$location.path('/');
+				if($location.path() == '/login') $location.path('/');
 
 			}).
 			error(function(data, status){
@@ -28,12 +35,16 @@ clubAdminApp.factory('clubAuth', function($http, $location, $rootScope) {
 
 	}
 
+
 	clubAuth.logout = function() {
+		/*
 		$http.get('json/auth/logout.php').
 			success(function(){
 				clubAuth.refresh();
 			});
-
+		*/
+		localStorage.removeItem("accessToken");
+		clubAuth.refresh();
 	}
 
 	$rootScope.$on('$locationChangeStart', function() {
@@ -44,8 +55,6 @@ clubAdminApp.factory('clubAuth', function($http, $location, $rootScope) {
 
 	function isPublicPage(path) {
 		if(path == '/login')
-			return true;
-		if(path == '/registerinstaller')
 			return true;
 		return false;
 	}
