@@ -18,7 +18,6 @@ clubAdminApp.controller('userFormController', function($scope, $routeParams, $ht
 	form.message = null;
 
 	form.submit = submit;
-	form.selectInstaller = selectInstaller;
 
 	refresh();
 
@@ -26,21 +25,27 @@ clubAdminApp.controller('userFormController', function($scope, $routeParams, $ht
 
 	function submit() {
 		var url = null;
-		if(clubAuth.user && clubAuth.user.type == 'user') {
-			url = 'json/settings/updateprofile.php';
-		} else {
-			url = 'json/'+clubAuth.user.type+'/setuser.php';
-			if(form.mode == 'edit')
-				url = url + '?id=' + form.id;
+
+		var req = {
+			url: apiPath+'/user',
+			data: {'user': $scope.form.data},
+			headers: {
+				'X-Access-Token': localStorage.getItem('accessToken')
+			},
+		};
+
+		if(form.mode == 'add'){
+			req.method = 'POST';
 		}
-		$http.post(url, $scope.form.data).
+
+		if(form.mode == 'edit'){
+			req.method = 'PUT';
+		}
+
+		$http(req).
 			success(function(data) {
-				if(clubAuth.user.type == 'user') {
-					form.message = 'success';
-				} else {
-					$scope.form.data = {};
-					$location.path("/users");
-				}
+				$scope.form.data = {};
+				$location.path("/users");
 			}).
 			error(function(data, status) {
 				if(status == 400 && data.error == 'form') {
@@ -72,44 +77,15 @@ clubAdminApp.controller('userFormController', function($scope, $routeParams, $ht
 		}
 	}
 
-	function selectInstaller() {
-		$http.get('json/superuser/getinstallers.php').
-			success(function(data){
-				$scope.installers = data;
-			});
-
-
-		var modal = $modal.open({
-			templateUrl: 'templates/usermanage/installermodal.html?wipecache=20140822',
-			scope: $scope,
-		});
-
-		modal.result.then(function(item){
-			if(item) {
-				form.data.installer = item.id;
-				form.data.inst_company = item.company;
-			} else {
-				form.data.installer = null;
-				form.data.inst_company = null;
-			}
-		});
-	}
-
 });
 
 clubAdminApp.controller('userListController', function($scope, $http, $routeParams, clubAuth, $modal) {
 
-	var installerId = $routeParams.id;
-
 	$scope.users = {};
 	$scope.users.data = null;
 	$scope.users.remove = remove;
-	$scope.users.activate = activate;
-	$scope.users.deactivate = deactivate;
 
 	refresh();
-
-
 
 	if($routeParams.filter) {
 		filter.params = $routeParams.filter.split('/');
@@ -128,13 +104,6 @@ clubAdminApp.controller('userListController', function($scope, $http, $routePara
 			} else {
 				url = 'json/superuser/getusers.php';
 			}
-
-		} else if(clubAuth.user.type == 'bank') {
-			url = 'json/bank/getusers.php';
-
-		} else if(clubAuth.user.type == 'installer') {
-			url = 'json/installer/getusers.php';
-
 		}
 		$http.get(url).
 			success(function(data){
@@ -157,38 +126,5 @@ clubAdminApp.controller('userListController', function($scope, $http, $routePara
 
 
 	}
-
-	function activate(user) {
-		var modal = $modal.open({
-			templateUrl: 'templates/usermanage/activestatemodal.html?wipecache=20140822',
-			controller: function($scope) {
-				$scope.user = user;
-				$scope.mode = 'activate';
-			}
-		});
-
-		modal.result.then(function(){
-			$http.get('json/'+clubAuth.user.type+'/setactivestate.php?mode=activate&id='+user.id).
-				success(refresh);
-		});
-	}
-
-
-	function deactivate(user) {
-		var modal = $modal.open({
-			templateUrl: 'templates/usermanage/activestatemodal.html?wipecache=20140822',
-			controller: function($scope) {
-				$scope.user = user;
-				$scope.mode = 'deactivate';
-			}
-		});
-
-		modal.result.then(function(){
-			$http.get('json/'+clubAuth.user.type+'/setactivestate.php?mode=deactivate&id='+user.id).
-				success(refresh);
-		});
-	}
-
-
 
 });

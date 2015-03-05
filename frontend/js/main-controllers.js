@@ -22,9 +22,9 @@ clubAdminApp.controller('MainController', function ($scope, $route, $routeParams
 	};
 
 	$scope.$on('clubAuthRefreshed', function(){
-		if(clubAuth.user && clubAuth.user.type) {
+		if(clubAuth.user && clubAuth.user.uid) {
 			$scope.nav.templateUrl = 'templates/navbar.html';
-			$scope.nav.name = clubAuth.user.email;
+			$scope.nav.name = clubAuth.user.uid;
 		} else {
 			$scope.nav.templateUrl = 'templates/navbar-public.html';
 			$scope.nav.name = null;
@@ -38,13 +38,7 @@ clubAdminApp.controller('MainController', function ($scope, $route, $routeParams
 clubAdminApp.controller('IndexController', function($location, clubAuth) {
 
 	if(clubAuth.user) {
-		switch(clubAuth.user.type) {
-			case 'user'    : $location.path('/status'); break;
-			case 'installer' : $location.path('/users');     break;
-			case 'superuser' : $location.path('/superuser');     break;
-			case 'bank'      : $location.path('/users');          break;
-			default          : $location.path('/login');
-		}
+		$location.path('/settings');
 	} else {
 		$location.path('/login');
 	}

@@ -19,8 +19,8 @@
 			<th>Adresse</th>
 			<th>E-Mail</th>
 			<th>Telefon</th>
-			<th ng-if="clubUser.type != 'installer'">Installateur</th>
-			<th ng-if="clubUser.type != 'bank'">SAB</th>
+			<th ng-if="clubUser.type != 'test'"></th>
+			<th ng-if="clubUser.type != 'test'"></th>
 			<th>CSV</th>
 			<th>Newsletter</th>
 			<th>Monitoring</th>
@@ -42,7 +42,7 @@
 				</span>
 				<span ng-if="!user.installer" class="glyphicon glyphicon-warning-sign text-danger"></span>
 			</td>
-			<td ng-if="clubUser.type != 'bank'">
+			<td ng-if="clubUser.type != 'test'">
 				<span ng-if="user.sab" class="glyphicon glyphicon-ok"></span>
 				<span ng-if="!user.sab" class="glyphicon glyphicon-remove"></span>
 			</td>

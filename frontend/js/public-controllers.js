@@ -7,43 +7,22 @@ clubAdminApp.controller('LoginController', function($scope, $http, $location, cl
 	$scope.login.status = null;
 
 	$scope.login.submit = submit;
-	$scope.login.passwordreset = passwordreset;
 
 	function submit() {
-		fixAutofillBug();
-		$http.post('json/auth/login.php', {
-			email   : $scope.login.data.email,
+		//fixAutofillBug();
+		$http.post(apiPath+'/login', {
+			uid   : $scope.login.data.uid,
 			password: $scope.login.data.password
 		}).
 			success(function(data){
-				if(data.success) {
 					setMessage('success');
+					localStorage.setItem('accessToken', data.token);
 					clubAuth.refresh();
-				} else {
-					setMessage('invalid');
-				}
 			}).
 			error(function(data, status){
-				setMessage('systemerror');
+				  setMessage('invalid');
 			});
 
-	}
-
-	function passwordreset() {
-		var modal = $modal.open({
-			templateUrl: '/templates/passwordresetmodal.html',
-
-		});
-
-		modal.result.then(function(email) {
-			$http.post('json/auth/passwordreset.php', { 'email': email, }).
-				success(function() {
-					setMessage('passwordresetsuccessfull');
-				}).
-				error(function(){
-					setMessage('passwordresetfailed');
-				});
-		});
 	}
 
 	var setMessagePromise;
