@@ -51,7 +51,7 @@ exports.userlogin = function(uid, password, callback){
 }
 
 
-
+//get one user by uid
 exports.getUserByUid = function(uid, callback){
     var opts = {
         'attributes': userLDAPAttrs()
@@ -69,7 +69,6 @@ exports.getUserByUid = function(uid, callback){
             
             //get groups for user
             exports.getGroupsByUid(uid, function(err, groups){
-				console.log(groups);
 				
 				user.superuser = (groups.indexOf('clubadmins') >= 0) ? true : false;
 				if(groups.indexOf('clubmembers') >= 0){
@@ -90,8 +89,10 @@ exports.getUserByUid = function(uid, callback){
 }
 
 
-
+//add a new user
 exports.addUser = function(data, callback){
+	console.log(data);
+	
 	var user = {
 		uid: data.username,
 		cn: data.username,
@@ -124,11 +125,26 @@ exports.addUser = function(data, callback){
 			'top'
 		]
 	};
-
+	
 	console.log(user);
 
 	ldap.client.add(uidtodn(user.uid), user, function(err) {
 		if(err) callback(err);
+		
+		
+		//set groups
+		if(data.superuser){
+			exports.addToGroup(data.username, 'clubadmins', function(err, success){});
+		}
+		
+		if(data.type == 'club'){
+			exports.addToGroup(data.username, 'clubmembers', function(err, success){});
+		}else if(data.type == 'other'){
+			exports.addToGroup(data.username, 'clubothers', function(err, success){});
+		}else{
+			exports.addToGroup(data.username, 'clubothers', function(err, success){});
+		}
+		
 		
 		callback(null, true);
 	});
@@ -136,6 +152,8 @@ exports.addUser = function(data, callback){
 
 
 
+
+//get all users
 exports.getAll = function(callback){
     var opts = {
         'attributes': userLDAPAttrs(),
@@ -166,6 +184,9 @@ exports.getAll = function(callback){
 }
 
 
+
+
+//get all groups for a user (uid)
 exports.getGroupsByUid = function(uid, callback){
     var opts = {
         'attributes': ['cn'],
@@ -192,6 +213,106 @@ exports.getGroupsByUid = function(uid, callback){
 }
 
 
+
+
+//get all members of a group (gid)
+exports.getGroupMembers = function(gid, callback){
+	var opts = {
+        'attributes': ['memberUid'],
+    };
+	
+	var groupdn = 'cn=' + gid + ',' + config.ldap.groupbase + ',' + config.ldap.basedn
+
+    ldap.client.search(groupdn, opts, function(err, res){
+        if(err) return callback(err);
+		
+		var members = [];
+
+        res.on('searchEntry', function(entry){
+            
+            //if value is just one string, push it to array
+            if(typeof entry.object.memberUid === "string"){
+	            members.push(entry.object.memberUid);
+			
+			//if value is an array/object, use this as array
+			}else if(typeof entry.object.memberUid === "object"){
+				members = entry.object.memberUid;
+			}
+        });
+        
+        //member list is completed
+        res.on('end', function(result){
+			callback(null, members, groupdn);
+		});
+	});
+}
+
+
+
+//add user (uid) to a group (gid)
+exports.addToGroup = function(uid, gid, callback){
+
+    exports.getGroupMembers(gid, function(err, members, groupdn){
+	    if(err) return callback(err);
+	        
+	    //check whether user is already member of this group
+	    if(members.indexOf(uid) >= 0){
+		    return callback(null, true); //is already member: finish here
+	        
+	    }else{
+		    //not a member: add
+		    members.push(uid); 
+		        
+		    //write new row to LDAP
+		    var change = new ldapjs.Change({
+				operation: 'replace',
+				modification: {
+					memberUid: members
+				}
+			});
+				
+			ldap.client.modify(groupdn, change, function(err){
+				if(err) return callback(err);
+					
+				return callback(null, true);
+            });
+        }
+    });
+
+}
+
+
+//remove user (uid) from a group (gid)
+exports.removeFromGroup = function(uid, gid, callback){
+	
+    exports.getGroupMembers(gid, function(err, members, groupdn){
+	    if(err) return callback(err);
+	        
+		//check whether user is member of this group
+		if(members.indexOf(uid) >= 0){
+			//remove element from array
+			members.splice(members.indexOf(uid), 1);
+				
+			//write new row to LDAP
+			var change = new ldapjs.Change({
+				operation: 'replace',
+				modification: {
+					memberUid: members
+				}
+			});
+				
+			ldap.client.modify(groupdn, change, function(err){
+				if(err) return callback(err);
+					
+				return callback(null, true);
+			});
+	        
+	    }else{
+			return callback(null, true); //is already member: finish here
+		}
+    });
+
+}
 
 
 

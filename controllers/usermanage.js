@@ -12,10 +12,10 @@ exports.adduser = function(req, res, next){
 	var data = req.body.user;
 	
 	//loginShell default to /bin/false
-	data.loginShell = data.loginShell || '/bin/false';
+	//data.loginShell = data.loginShell || '/bin/false';
 	
 	//random password
-	var password = randomString(5);
+	var password = randomString(4);
 	data.hashes = ldaphashes(password);
 	
 	//get next free unix ID

@@ -11,6 +11,8 @@ exports.login = function(req, res, next){
         res.send(null, 401);
     }
 
+	
+
     //login user
     userservice.userlogin(req.body.username, req.body.password, function(err, success){
         //error if login failed or error occured

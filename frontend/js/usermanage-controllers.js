@@ -5,11 +5,17 @@ clubAdminApp.controller('userFormController', function($scope, $routeParams, $ht
 	var form = {};
 	$scope.form = form;
 
-	$scope.usertypes = [
-		{ "id" : "club", "name" : "Clubmitglied" },
-		{ "id" : "other", "name" : "Extern" }
-	];
-	$scope.shells = [ "/bin/false", "/bin/bash", "/bin/zsh" ];
+	$scope.options = {
+		shells: [
+			{ label: '/bin/false', value: '/bin/false' },
+			{ label: '/bin/bash', value: '/bin/bash' },
+			{ label: '/bin/zsh', value: '/bin/zsh' }
+		],
+		usertypes: [
+			{ label: 'Clubmitglied', value: 'club' },
+			{ label: 'Extern', value: 'other' }
+		]
+	};
 
 	form.id = $routeParams.id;
 	form.mode = (form.id)?'edit':'add';
@@ -19,6 +25,8 @@ clubAdminApp.controller('userFormController', function($scope, $routeParams, $ht
 
 	form.submit = submit;
 
+	
+
 	refresh();
 
 	/*** functions ***/
@@ -27,7 +35,7 @@ clubAdminApp.controller('userFormController', function($scope, $routeParams, $ht
 		var url = null;
 
 		var req = {
-			url: apiPath+'/user',
+			url: apiPath + '/user',
 			data: {'user': $scope.form.data},
 			headers: {
 				'X-Access-Token': localStorage.getItem('accessToken')
@@ -36,9 +44,8 @@ clubAdminApp.controller('userFormController', function($scope, $routeParams, $ht
 
 		if(form.mode == 'add'){
 			req.method = 'POST';
-		}
 
-		if(form.mode == 'edit'){
+		}else if(form.mode == 'edit'){
 			req.method = 'PUT';
 		}
 
