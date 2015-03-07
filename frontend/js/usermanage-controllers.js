@@ -1,7 +1,6 @@
 
 
-clubAdminApp.controller('userFormController', function($scope, $routeParams, $http,
-		   $location, $modal, clubAuth) {
+clubAdminApp.controller('userFormController', function($scope, $rootScope, $routeParams, $http, $location, $modal, clubAuth) {
 	var form = {};
 	$scope.form = form;
 
@@ -36,10 +35,7 @@ clubAdminApp.controller('userFormController', function($scope, $routeParams, $ht
 
 		var req = {
 			url: apiPath + '/user',
-			data: {'user': $scope.form.data},
-			headers: {
-				'X-Access-Token': localStorage.getItem('accessToken')
-			},
+			data: {'user': $scope.form.data}
 		};
 
 		if(form.mode == 'add'){
@@ -52,7 +48,6 @@ clubAdminApp.controller('userFormController', function($scope, $routeParams, $ht
 		$http(req).
 			success(function(data) {
 				if(form.mode == 'add'){
-					console.log(data);
 					$scope.form.data.password = data.password;
 					$scope.form.message = 'successAdd';
 				}

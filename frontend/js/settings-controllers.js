@@ -25,7 +25,7 @@ clubAdminApp.controller('SettingsChangePasswordController', function($scope, $ht
 	$scope.form.submit = submit;
 
 	function submit() {
-		$http.post('json/settings/changepassword.php', $scope.form.data).
+		$http.post(apiPath + '/settings/changepassword', $scope.form.data).
 			success(function(data){
 				$scope.form.message = 'success';
 				$scope.form.data = {};

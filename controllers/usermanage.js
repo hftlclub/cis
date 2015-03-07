@@ -1,11 +1,9 @@
 var config = require('../config');
 var ldap = require('../modules/ldap');
 var userservice = require('../services/userservice');
-var smbhash = require('smbhash');
-var ssha = require('ssha');
 var crypto = require('crypto');
+var errors = require('common-errors');
 
-//var userattrs = ['uid', 'uidNumber', 'gidNumber', 'sn', 'givenName', 'street', 'postalCode', 'l', 'mail', 'telephoneNumber', 'loginShell', 'registeredAddress'];
 
 
 exports.adduser = function(req, res, next){
@@ -15,8 +13,7 @@ exports.adduser = function(req, res, next){
 	//data.loginShell = data.loginShell || '/bin/false';
 	
 	//random password
-	var password = randomString(4);
-	data.hashes = ldaphashes(password);
+	data.password = randomString(4);
 	
 	//get next free unix ID
 	userservice.nextFreeUnixID(1, function(err, uidnumber){
@@ -29,7 +26,7 @@ exports.adduser = function(req, res, next){
 			
 			//return new password
 			res.json({
-				'password': password
+				'password': data.password
 			}).end();
 		});
 
@@ -46,15 +43,6 @@ exports.listusers = function(req, res, next){
 }
 
 
-
-
-function ldaphashes(cleartext){
-	return {
-		'userPassword'   : ssha.create(cleartext),
-		'sambaNTPassword': smbhash.nthash(cleartext),
-		'sambaLMPassword': smbhash.lmhash(cleartext)
-	};
-}
 
 
 function randomString(bytes){

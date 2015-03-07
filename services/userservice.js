@@ -1,9 +1,13 @@
 var ldapjs = require('ldapjs');
+var ssha = require('ssha');
+var smbhash = require('smbhash');
 var ldap = require('../modules/ldap');
 var config = require('../config');
 
 
+
 var userattrs = {
+	//LDAPAttr : ClubAdminAttr
 	'uid'              : 'username',
 	'uidNumber'        : 'uidNumber',
 	'sn'               : 'lastname',
@@ -26,6 +30,31 @@ function userLDAPAttrs(){
 	
 	return keys;
 }
+
+
+//check password for user (uid)
+exports.checkpassword = function(uid, password, callback){
+	
+	var opts = {
+        'attributes': ['userPassword']
+    };
+
+    ldap.client.search(uidtodn(uid), opts, function(err, res){
+        if(err) callback(err, false);
+
+        res.on('searchEntry', function(entry){
+			
+			//verify password
+			if(ssha.verify(password, entry.object.userPassword)){
+				return callback(null, true);
+			}else{
+				return callback(null, false);
+			}
+        });
+    });
+}
+
+
 
 
 exports.userlogin = function(uid, password, callback){
@@ -81,9 +110,6 @@ exports.getUserByUid = function(uid, callback){
 				
 				callback(null, user);
 			});
-            
-            
-            
         });
     });
 }
@@ -91,6 +117,8 @@ exports.getUserByUid = function(uid, callback){
 
 //add a new user
 exports.addUser = function(data, callback){
+
+	var hashes = ldaphashes(data.password);
 
 	var user = {
 		uid: data.username,
@@ -106,9 +134,9 @@ exports.addUser = function(data, callback){
 		loginShell: data.loginShell,
 		employeeType: data.role,
 		
-		userPassword: data.hashes.userPassword,
-		sambaNTPassword: data.hashes.sambaNTPassword,
-		sambaLMPassword: data.hashes.sambaLMPassword,
+		userPassword: hashes.userPassword,
+		sambaNTPassword: hashes.sambaNTPassword,
+		sambaLMPassword: hashes.sambaLMPassword,
 		
 		uidNumber: data.uidnumber,
 		gidNumber: 100,
@@ -125,6 +153,7 @@ exports.addUser = function(data, callback){
 		]
 	};
 
+	//add user to LDAP tree
 	ldap.client.add(uidtodn(user.uid), user, function(err) {
 		if(err) callback(err);
 		
@@ -148,10 +177,36 @@ exports.addUser = function(data, callback){
 }
 
 
+//set new password for user (uid)
+exports.setPassword = function(uid, password, callback){
+
+	//build change objects for each of the three hash attributes
+	var hashes = ldaphashes(password);
+	var changes = [];
+	for(var key in hashes){
+		var mod = {};
+		mod[key] = hashes[key];
+		
+		changes.push(new ldapjs.Change({
+			operation: 'replace',
+			modification: mod
+		}));
+	}		
+		
+            
+	ldap.client.modify(uidtodn(uid), changes, function(err){
+		if(err) return callback(err);
+		return callback();
+	});
+}
+
+
+
 
 
 //get all users
 exports.getUsers = function(callback){
+    //get all groups and their members
     exports.getGroups(function(err, groups){
 	    if(err) return callback(err);
 	    
@@ -160,6 +215,7 @@ exports.getUsers = function(callback){
 	        'scope': 'one'
 	    };
 	
+		//get all users
 	    ldap.client.search(config.ldap.userbase + ',' + config.ldap.basedn, opts, function(err, res){
 	        if(err) callback(err);
 			
@@ -172,10 +228,11 @@ exports.getUsers = function(callback){
 					user[userattrs[key]] = entry.object[key];            
 	            }
 	            
+	            //negative default values for groups
 	            user.superuser = false;
 	            user.type = 'other';
 	            
-	            //go through groups
+	            //go through groups and assign params to user
 	            for(var i = 0; i < groups.length; i++){
 		            if(groups[i].memberUid.indexOf(entry.object.uid) >= 0){ //if user is group member
 			            //set params for user
@@ -193,7 +250,8 @@ exports.getUsers = function(callback){
 	            users.push(user);
 	            
 	        });
-	        
+
+
 	        //return user list
 	        res.on('end', function(result){
 		        return callback(null, users);
@@ -214,7 +272,7 @@ exports.getGroupsByUid = function(uid, callback){
         'filter': '(memberUid=' + uid + ')'
     };
 
-
+	//get groups
     ldap.client.search(config.ldap.groupbase + ',' + config.ldap.basedn, opts, function(err, res){
         if(err) return callback(err);
 		
@@ -234,7 +292,7 @@ exports.getGroupsByUid = function(uid, callback){
 
 
 
-//get all group and their members
+//get all groups and their members
 exports.getGroups = function(callback){
     var opts = {
         'attributes': ['cn', 'memberUid'],
@@ -373,7 +431,6 @@ exports.removeFromGroup = function(uid, gid, callback){
 
 
 
-
 exports.nextFreeUnixID = function(increment, callback){
 	var nfuidn = 'cn=NextFreeUnixId,' + config.ldap.basedn;
 	
@@ -409,4 +466,13 @@ exports.nextFreeUnixID = function(increment, callback){
 
 function uidtodn(uid){
     return 'uid=' + uid + ',' + config.ldap.userbase + ',' + config.ldap.basedn;
+}
+
+
+function ldaphashes(cleartext){
+	return {
+		'userPassword'   : ssha.create(cleartext),
+		'sambaNTPassword': smbhash.nthash(cleartext),
+		'sambaLMPassword': smbhash.lmhash(cleartext)
+	};
 }

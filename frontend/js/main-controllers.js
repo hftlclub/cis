@@ -2,6 +2,13 @@
 var clubAdminApp = angular.module('clubAdminApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.dropdown',
 		'ui.bootstrap.modal', 'ui.bootstrap.datepicker']);
 
+
+angular.module('clubAdminApp').run(function($http) {
+	var token = (localStorage.getItem('accessToken')) ? localStorage.getItem('accessToken') : null;
+	$http.defaults.headers.common['X-Access-Token'] = token;
+});
+
+
 /* hack to fix autofill bug (firefox triggers no event on autofilling forms) */
 function fixAutofillBug() {
 	$( 'input[ng-model], select[ng-model]' ).each( function() {
@@ -9,8 +16,7 @@ function fixAutofillBug() {
 	});
 }
 
-clubAdminApp.controller('MainController', function ($scope, $route, $routeParams,
-			$location, $interval, clubAuth, $timeout) {
+clubAdminApp.controller('MainController', function ($scope, $route, $routeParams, $location, $interval, clubAuth, $timeout) {
 	$scope.$route = $route;
 	$scope.$location = $location;
 	$scope.$routeParams = $routeParams;

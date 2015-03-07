@@ -2,7 +2,8 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var moment = require('moment');
 var jwt = require('jwt-simple');
-var cors = require('cors')
+var cors = require('cors');
+var errors = require('common-errors');
 
 var app = express();
 var api = express.Router();
@@ -12,6 +13,7 @@ var config = require('./config');
 
 var auth = require('./controllers/auth');
 var usermanage = require('./controllers/usermanage');
+var settings = require('./controllers/settings');
 
 
 var jwtauth = require('./middleware/jwtauth')
@@ -28,6 +30,8 @@ api.use(cors({ origin: '*' }));
 app.use(express.static(__dirname + '/frontend'));
 
 
+api.use(errors.middleware.crashProtector());
+
 
 //routes
 api.post('/login', auth.login);
@@ -36,14 +40,16 @@ api.get('/userdata', jwtauth, requireAuth, function(req, res){
 });
 api.get('/user', jwtauth, requireAuth, usermanage.listusers);
 api.post('/user', jwtauth, requireAuth, usermanage.adduser);
-//api.put('/user', jwtauth, requireAuth, usermanage.edituser);
+//api.put('/user/:id', jwtauth, requireAuth, usermanage.edituser);
+
+api.post('/settings/changepassword', jwtauth, requireAuth, settings.changepassword);
 
 
 
 //error handling
 api.use(function(err, req, res, next) {
-    console.error(err.stack);
-    res.status(err.status || 500).send(err.message);
+    console.error(err);
+    res.status(err.status || 500).json(err.toJSON());
 });
 
 

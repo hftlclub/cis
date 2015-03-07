@@ -17,6 +17,7 @@ clubAdminApp.controller('LoginController', function($scope, $http, $location, cl
 			success(function(data){
 					setMessage('success');
 					localStorage.setItem('accessToken', data.token);
+					$http.defaults.headers.common['X-Access-Token'] = data.token;
 					clubAuth.refresh();
 			}).
 			error(function(data, status){

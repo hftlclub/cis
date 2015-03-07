@@ -6,15 +6,7 @@ clubAdminApp.factory('clubAuth', function($http, $location, $rootScope) {
 
 	clubAuth.refresh = function() {
 
-		var req = {
- 			method: 'GET',
-			url: apiPath+'/userdata',
-			headers: {
-				'X-Access-Token': localStorage.getItem('accessToken')
-			},
-		};
-
-		$http(req).
+		$http.get(apiPath + '/userdata').
 			success(function(data){
 				clubAuth.user = data;
 				$rootScope.$broadcast('clubAuthRefreshed');
@@ -32,18 +24,18 @@ clubAdminApp.factory('clubAuth', function($http, $location, $rootScope) {
 					$location.path('/login');
 
 			});
-
 	}
 
 
 	clubAuth.logout = function() {
 		/*
-		$http.get('json/auth/logout.php').
+		$http.get('').
 			success(function(){
 				clubAuth.refresh();
 			});
 		*/
-		localStorage.removeItem("accessToken");
+		localStorage.removeItem('accessToken');
+		$http.defaults.headers.common['X-Access-Token'] = null;
 		clubAuth.refresh();
 	}
 
