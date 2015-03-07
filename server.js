@@ -53,5 +53,5 @@ app.use('/api', api);
 
 //start server
 app.listen(config.port, function(err){
-    console.log('Club Admin Backend Server started on port ' + config.port);
+    console.log('Club Admin started on port ' + config.port);
 });

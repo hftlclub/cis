@@ -7,9 +7,9 @@ clubAdminApp.controller('userFormController', function($scope, $routeParams, $ht
 
 	$scope.options = {
 		shells: [
-			{ label: '/bin/false', value: '/bin/false' },
-			{ label: '/bin/bash', value: '/bin/bash' },
-			{ label: '/bin/zsh', value: '/bin/zsh' }
+			{ label: '/bin/false (keine)', value: '/bin/false' },
+			{ label: '/bin/bash (Bash)', value: '/bin/bash' },
+			{ label: '/bin/zsh (Z-Shell)', value: '/bin/zsh' }
 		],
 		usertypes: [
 			{ label: 'Clubmitglied', value: 'club' },

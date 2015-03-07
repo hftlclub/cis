@@ -40,7 +40,7 @@ exports.adduser = function(req, res, next){
 
 
 exports.listusers = function(req, res, next){
-	userservice.getAll(function(err, users){
+	userservice.getUsers(function(err, users){
 		res.json(users).end();
 	});
 }

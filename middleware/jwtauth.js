@@ -10,7 +10,7 @@ module.exports = function(req, res, next){
         return next();
     }
 
-    try {
+    try{
         var decoded = jwt.decode(token, config.tokensecret);
 
         if (decoded.exp <= Date.now()) {

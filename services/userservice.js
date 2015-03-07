@@ -91,8 +91,7 @@ exports.getUserByUid = function(uid, callback){
 
 //add a new user
 exports.addUser = function(data, callback){
-	console.log(data);
-	
+
 	var user = {
 		uid: data.username,
 		cn: data.username,
@@ -125,8 +124,6 @@ exports.addUser = function(data, callback){
 			'top'
 		]
 	};
-	
-	console.log(user);
 
 	ldap.client.add(uidtodn(user.uid), user, function(err) {
 		if(err) callback(err);
@@ -154,32 +151,55 @@ exports.addUser = function(data, callback){
 
 
 //get all users
-exports.getAll = function(callback){
-    var opts = {
-        'attributes': userLDAPAttrs(),
-        'scope': 'one'
-    };
+exports.getUsers = function(callback){
+    exports.getGroups(function(err, groups){
+	    if(err) return callback(err);
+	    
+	    var opts = {
+	        'attributes': userLDAPAttrs(),
+	        'scope': 'one'
+	    };
+	
+	    ldap.client.search(config.ldap.userbase + ',' + config.ldap.basedn, opts, function(err, res){
+	        if(err) callback(err);
+			
+			var users = [];
+	
+	        res.on('searchEntry', function(entry){
+	            //rewrite attribute names
+	            var user = {};
+	            for(var key in userattrs){
+					user[userattrs[key]] = entry.object[key];            
+	            }
+	            
+	            user.superuser = false;
+	            user.type = 'other';
+	            
+	            //go through groups
+	            for(var i = 0; i < groups.length; i++){
+		            if(groups[i].memberUid.indexOf(entry.object.uid) >= 0){ //if user is group member
+			            //set params for user
+			            if(groups[i].cn == 'clubadmins'){
+				            user.superuser = true;
+			            }else if(groups[i].cn == 'clubmembers'){
+				            user.type = 'club';
+			            }else if(groups[i].cn == 'clubothers'){
+				            user.type = 'other';
+			            }			            
+		            }
+	            }
 
-    ldap.client.search(config.ldap.userbase + ',' + config.ldap.basedn, opts, function(err, res){
-        if(err) callback(err);
-		
-		var users = [];
-
-        res.on('searchEntry', function(entry){
-            //rewrite attribute names
-            var user = {};
-            for(var key in userattrs){
-				user[userattrs[key]] = entry.object[key];            
-            }
-            
-            users.push(user);
-            
-        });
-        
-        //return user list
-        res.on('end', function(result){
-	        callback(null, users);
-        });
+				//and finally submit this user object	            
+	            users.push(user);
+	            
+	        });
+	        
+	        //return user list
+	        res.on('end', function(result){
+		        return callback(null, users);
+	        });
+	    });
+    
     });
 }
 
@@ -196,7 +216,7 @@ exports.getGroupsByUid = function(uid, callback){
 
 
     ldap.client.search(config.ldap.groupbase + ',' + config.ldap.basedn, opts, function(err, res){
-        if(err) callback(err);
+        if(err) return callback(err);
 		
 		var groups = [];
 
@@ -207,7 +227,39 @@ exports.getGroupsByUid = function(uid, callback){
         
         //return group list
         res.on('end', function(result){
-	        callback(null, groups);
+	        return callback(null, groups);
+        });
+    });
+}
+
+
+
+//get all group and their members
+exports.getGroups = function(callback){
+    var opts = {
+        'attributes': ['cn', 'memberUid'],
+        'scope': 'one',
+        'filter': '(memberUid=*)' //only groups with members
+    };
+
+
+    ldap.client.search(config.ldap.groupbase + ',' + config.ldap.basedn, opts, function(err, res){
+        if(err) return callback(err);
+		
+		var groups = [];
+
+        res.on('searchEntry', function(entry){
+            
+            groups.push({
+	            cn: entry.object.cn,
+				memberUid: entry.object.memberUid
+	        });
+            
+        });
+        
+        //return group list
+        res.on('end', function(result){
+	        return callback(null, groups);
         });
     });
 }
@@ -242,10 +294,15 @@ exports.getGroupMembers = function(gid, callback){
         
         //member list is completed
         res.on('end', function(result){
-			callback(null, members, groupdn);
+			return callback(null, members, groupdn);
 		});
 	});
 }
+
+
+
+
+
 
 
 
