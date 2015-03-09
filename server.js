@@ -47,8 +47,9 @@ api.get('/userdata', jwtauth, requireAuth, function(req, res){
 });
 api.get('/user', jwtauth, requireAuth, usermanage.listusers);
 api.post('/user', jwtauth, requireAuth, usermanage.adduser);
-//api.put('/user/:uid', jwtauth, requireAuth, usermanage.edituser);
+api.put('/user/:uid', jwtauth, requireAuth, usermanage.edituser);
 api.delete('/user/:uid', jwtauth, requireAuth, usermanage.deleteuser);
+
 
 api.post('/settings/changepassword', jwtauth, requireAuth, settings.changepassword);
 

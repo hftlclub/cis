@@ -114,7 +114,7 @@ exports.getUserByUid = function(uid, callback){
 					user.type = null;
 				}
 
-				callback(null, user);
+				return callback(null, user);
 			});
         });
     });
@@ -192,6 +192,66 @@ exports.addUser = function(data, callback){
 
 
 
+
+//edit a user (uid)
+exports.editUser = function(uid, data, callback){
+	if(!uid){
+		return callback(new Error('uid missing'));
+	}
+	
+	var user = {
+		uid: data.username,
+		cn: data.username,
+		mail: data.email,
+		givenName: data.firstname,
+		sn: data.lastname,
+		street: data.street,
+		postalCode: data.zip,
+		l: data.city,
+		telephoneNumber: data.tel,
+		registeredAddress: data.teamdrive,
+		loginShell: data.loginShell,
+		employeeType: data.role
+	};
+
+	//add user to LDAP tree
+	var change = new ldapjs.Change({
+		  operation:'replace',
+		  modification: user
+	});
+
+	ldap.client.modify(uidtodn(user.uid), change, function(err) {
+		if(err) callback(err);
+
+		//set groups
+		if(data.superuser){
+			exports.addToGroup(data.username, 'clubadmins', function(err, success){});
+		}else{
+			exports.removeFromGroup(data.username, 'clubadmins', function(err, success){});
+		}
+
+		if(data.type == 'club'){
+			exports.addToGroup(data.username, 'clubmembers', function(err, success){
+				exports.removeFromGroup(data.username, 'clubother', function(err, success){});
+			});
+		}else if(data.type == 'other'){
+			exports.addToGroup(data.username, 'clubothers', function(err, success){
+				exports.removeFromGroup(data.username, 'clubmembers', function(err, success){});
+			});
+		}else{
+			exports.addToGroup(data.username, 'clubothers', function(err, success){
+				exports.removeFromGroup(data.username, 'clubmembers', function(err, success){});
+			});
+		}
+
+		return callback(null, true);
+	});
+
+}
+
+
+
+
 //delete a user (uid)
 exports.deleteUser = function(uid, callback){
 	if(!uid){
@@ -199,7 +259,7 @@ exports.deleteUser = function(uid, callback){
 		err.status = 400;
 		return callback(err);
 	}
-	
+
 	//remove user from LDAP tree
 	ldap.client.del(uidtodn(uid), function(err) {
 		if(err) return callback(err);
