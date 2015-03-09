@@ -73,16 +73,26 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 			// user profile
 			form.data = clubAuth.user;
 
-		} else if(form.mode == 'edit') {
+		} else if (form.mode == 'edit') {
+
+			var req = {
+				url: apiPath+'/user',
+				method: 'PUT',
+				headers: {
+					'X-Access-Token': localStorage.getItem('accessToken')
+				}
+			};
+
+/*
 			if(clubAuth.user.type == 'superuser') {
 				var url = 'json/superuser/getdata.php?type=user&id='+form.id;
 			} else {
 				var url = 'json/installer/getuser.php?id='+form.id;
 			}
-
-			$http.get(url).success(function(data){
+*/
+			$http(req).success(function(data){
 					form.data = data;
-				});
+			});
 		}
 	}
 

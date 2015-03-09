@@ -36,6 +36,16 @@ exports.adduser = function(req, res, next){
 
 
 
+exports.edituser = function(req, res, next){
+	req.checkBody('username', 'Benutzername ungueltig').notEmpty().isAlpha();
+	userservice.editUser(req.body, function(err, success){
+			if(err) next(err);
+			//send response to client
+			res.send('Edited successfully!');
+	});
+}
+
+
 
 
 exports.listusers = function(req, res, next){
