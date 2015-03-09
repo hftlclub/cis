@@ -5,6 +5,7 @@ var userservice = require('../services/userservice');
 
 
 
+
 exports.changepassword = function(req, res, next){
 	//all values set?
 	req.checkBody('oldPassword', 'Altes Passwort nicht angegeben').notEmpty();
@@ -13,23 +14,26 @@ exports.changepassword = function(req, res, next){
 		
 	req.checkBody('newPassword2', 'Passwoerter nicht identisch').equals(req.body.newPassword1);
 
-
-	var errors = req.validationErrors(true);
-	if(errors){
-		res.send(util.inspect(errors), 400);
-		return;
+	if(req.validationErrors()){
+		console.log('there are valerrors (from settings.js) next now');
+		return next();
 	}
 
+
+	console.log('far beyond my scope');
 	
 	//is old password correct?
 	userservice.checkpassword(req.user.username, req.body.oldPassword, function(err, success){
 		if(err) return next(err);
-		if(!success) return next(new Error('error yo'));
+		if(!success){
+			req.checkBody('oldPassword', 'Altes Passwort nicht korrekt').error(1);
+			next();
+		}
 		
 		
 		//SET new password!
 		userservice.setPassword(req.user.username, req.body.newPassword1, function(err){
-			if(err) return next(err);
+			if(err) next(err);
 			res.end();
 		});
 		

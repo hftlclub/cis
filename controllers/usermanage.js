@@ -9,11 +9,21 @@ var errors = require('common-errors');
 
 exports.adduser = function(req, res, next){
 	
-	//loginShell default to /bin/false
-	//data.loginShell = data.loginShell || '/bin/false';
+	req.checkBody('username', 'Benutzername ungueltig').notEmpty().isAlphanumeric();
+	req.checkBody('type', 'Nutzerechte ungueltig').notEmpty().isIn(['club', 'other']);
+
+	req.sanitize('superuser').toBoolean();
+	if(!req.body.loginShell) req.body.loginShell = '/bin/false';
+
+	req.checkBody('email', 'E-Mail ungueltig').notEmpty().isEmail();
+	req.checkBody('firstname', 'Vorname ungueltig').notEmpty();
+	req.checkBody('lastname', 'Nachname ungueltig').notEmpty();
 	
-	req.checkBody('username', 'Benutzername ungueltig').notEmpty().isAlpha();
-		
+	req.checkBody('street', 'Strasse ungueltig').notEmpty();
+	req.checkBody('zip', 'PLZ ungueltig').notEmpty().isNumeric();
+	req.checkBody('city', 'Stadt ungueltig').notEmpty();
+	req.checkBody('tel', 'Telefon ungueltig').notEmpty();
+
 	//random password
 	req.body.password = randomString(4);
 
@@ -49,18 +59,18 @@ exports.listusers = function(req, res, next){
 
 
 exports.deleteuser = function(req, res, next){
-	console.log('check:',req.params.uid, '?=', req.user.username);
+	//prevent users from deleting themselves...
 	if(req.params.uid == req.user.username) {
 		var err = new Error('You cannot delete yourself, bitch...');
 		err.status = 400;
 		return next(err);
 	}
 	
-	userservice.deleteUser(req.params.uid, function(err, success){
+	//delete user
+	userservice.deleteUser(req.params.uid, function(err){
 		if(err) next(err);
 		
-		//send status
-		res.send('deleted data: ', req.params.uid);
+		res.send();
 	});
 }
 

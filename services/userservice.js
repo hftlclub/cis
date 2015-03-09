@@ -34,7 +34,13 @@ function userLDAPAttrs(){
 
 //check password for user (uid)
 exports.checkpassword = function(uid, password, callback){
-
+	
+	console.log('check this:', password);
+	
+	if(!password){
+		return callback(new Error('no password given'));
+	}
+	
 	var opts = {
         'attributes': ['userPassword']
     };
@@ -130,10 +136,7 @@ exports.addUser = function(data, callback){
 		postalCode: data.zip,
 		l: data.city,
 		telephoneNumber: data.tel,
-		registeredAddress: data.teamdrive,
 		loginShell: data.loginShell,
-		employeeType: data.role,
-
 		userPassword: hashes.userPassword,
 		sambaNTPassword: hashes.sambaNTPassword,
 		sambaLMPassword: hashes.sambaLMPassword,
@@ -152,10 +155,21 @@ exports.addUser = function(data, callback){
 			'top'
 		]
 	};
+	
+	//set optional attributes
+	if(data.teamdrive){
+		user.registeredAddress = data.teamdrive;
+	}
+	
+	if(data.role){
+		user.employeeType = data.role;
+	}
+
+
 
 	//add user to LDAP tree
 	ldap.client.add(uidtodn(user.uid), user, function(err) {
-		if(err) callback(err);
+		if(err) return callback(err);
 
 
 		//set groups
@@ -172,7 +186,7 @@ exports.addUser = function(data, callback){
 		}
 
 
-		callback(null, true);
+		return callback(null, true);
 	});
 }
 
@@ -188,10 +202,8 @@ exports.deleteUser = function(uid, callback){
 	
 	//remove user from LDAP tree
 	ldap.client.del(uidtodn(uid), function(err) {
-		if(err) return callback(err, false);
-		
-		console.log('deleted user with id:', uid);
-		return callback(null, true);
+		if(err) return callback(err);
+		return callback();
 	});
 }
 
@@ -226,7 +238,7 @@ exports.setPassword = function(uid, password, callback){
 
 //get all users
 exports.getUsers = function(callback){
-    //get all groups and their members
+    //get all groups and their members - we will need all these data to assign it to the users later
     exports.getGroups(function(err, groups){
 	    if(err) return callback(err);
 

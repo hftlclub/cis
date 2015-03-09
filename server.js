@@ -4,7 +4,6 @@ var bodyParser = require('body-parser');
 var moment = require('moment');
 var jwt = require('jwt-simple');
 var cors = require('cors');
-var errors = require('common-errors');
 
 var app = express();
 var api = express.Router();
@@ -19,13 +18,22 @@ var settings = require('./controllers/settings');
 
 var jwtauth = require('./middleware/jwtauth')
 var requireAuth = require('./middleware/requireauth');
+var errorhandler = require('./middleware/errorhandler');
 
+api.use(cors({ origin: '*' }));
 api.use(bodyParser.json());
 api.use(bodyParser.urlencoded({
     extended: true
 }));
-app.use(expressValidator());
-api.use(cors({ origin: '*' }));
+
+app.use(expressValidator({
+	customValidators: {
+		error: function(value, error) {
+			return !error;
+    	}
+	}   
+}));
+
 
 //static frontend
 app.use(express.static(__dirname + '/frontend'));
@@ -39,18 +47,16 @@ api.get('/userdata', jwtauth, requireAuth, function(req, res){
 });
 api.get('/user', jwtauth, requireAuth, usermanage.listusers);
 api.post('/user', jwtauth, requireAuth, usermanage.adduser);
+//api.put('/user/:uid', jwtauth, requireAuth, usermanage.edituser);
 api.delete('/user/:uid', jwtauth, requireAuth, usermanage.deleteuser);
-//api.put('/user/:id', jwtauth, requireAuth, usermanage.edituser);
 
 api.post('/settings/changepassword', jwtauth, requireAuth, settings.changepassword);
 
 
 
 //error handling
-api.use(function(err, req, res, next) {
-    console.error(err);
-    res.status(err.status || 500).json({error: err.message});
-});
+api.use(errorhandler.validation);
+api.use(errorhandler.generic);
 
 
 //assign api router to /api
