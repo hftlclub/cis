@@ -27,14 +27,14 @@ var userattrs = {
 function userLDAPAttrs(){
 	var keys = [];
 	for(var k in userattrs) keys.push(k);
-	
+
 	return keys;
 }
 
 
 //check password for user (uid)
 exports.checkpassword = function(uid, password, callback){
-	
+
 	var opts = {
         'attributes': ['userPassword']
     };
@@ -43,7 +43,7 @@ exports.checkpassword = function(uid, password, callback){
         if(err) callback(err, false);
 
         res.on('searchEntry', function(entry){
-			
+
 			//verify password
 			if(ssha.verify(password, entry.object.userPassword)){
 				return callback(null, true);
@@ -92,13 +92,13 @@ exports.getUserByUid = function(uid, callback){
         res.on('searchEntry', function(entry){
             var user = {};
             for(var key in userattrs){
-				user[userattrs[key]] = entry.object[key];            
+				user[userattrs[key]] = entry.object[key];
             }
-            
-            
+
+
             //get groups for user
             exports.getGroupsByUid(uid, function(err, groups){
-				
+
 				user.superuser = (groups.indexOf('clubadmins') >= 0) ? true : false;
 				if(groups.indexOf('clubmembers') >= 0){
 					user.type = 'club';
@@ -107,7 +107,7 @@ exports.getUserByUid = function(uid, callback){
 				}else{
 					user.type = null;
 				}
-				
+
 				callback(null, user);
 			});
         });
@@ -133,11 +133,11 @@ exports.addUser = function(data, callback){
 		registeredAddress: data.teamdrive,
 		loginShell: data.loginShell,
 		employeeType: data.role,
-		
+
 		userPassword: hashes.userPassword,
 		sambaNTPassword: hashes.sambaNTPassword,
 		sambaLMPassword: hashes.sambaLMPassword,
-		
+
 		uidNumber: data.uidnumber,
 		gidNumber: 100,
 		homeDirectory: '/home/' + data.username,
@@ -156,13 +156,13 @@ exports.addUser = function(data, callback){
 	//add user to LDAP tree
 	ldap.client.add(uidtodn(user.uid), user, function(err) {
 		if(err) callback(err);
-		
-		
+
+
 		//set groups
 		if(data.superuser){
 			exports.addToGroup(data.username, 'clubadmins', function(err, success){});
 		}
-		
+
 		if(data.type == 'club'){
 			exports.addToGroup(data.username, 'clubmembers', function(err, success){});
 		}else if(data.type == 'other'){
@@ -170,11 +170,26 @@ exports.addUser = function(data, callback){
 		}else{
 			exports.addToGroup(data.username, 'clubothers', function(err, success){});
 		}
-		
-		
+
+
 		callback(null, true);
 	});
 }
+
+
+
+//delete a user
+exports.deleteUser = function(uid, callback){
+	//var hashes = ldaphashes(data.password);
+	if(!uid) callback(new Error('no uid received'));
+	//remove user from LDAP tree
+	ldap.client.del(uidtodn(uid), function(err) {
+		if(err) callback(err);
+		console.log('delted user with id:', uid);
+		callback(null, true);
+	});
+}
+
 
 
 //set new password for user (uid)
@@ -186,14 +201,14 @@ exports.setPassword = function(uid, password, callback){
 	for(var key in hashes){
 		var mod = {};
 		mod[key] = hashes[key];
-		
+
 		changes.push(new ldapjs.Change({
 			operation: 'replace',
 			modification: mod
 		}));
-	}		
-		
-            
+	}
+
+
 	ldap.client.modify(uidtodn(uid), changes, function(err){
 		if(err) return callback(err);
 		return callback();
@@ -209,29 +224,29 @@ exports.getUsers = function(callback){
     //get all groups and their members
     exports.getGroups(function(err, groups){
 	    if(err) return callback(err);
-	    
+
 	    var opts = {
 	        'attributes': userLDAPAttrs(),
 	        'scope': 'one'
 	    };
-	
+
 		//get all users
 	    ldap.client.search(config.ldap.userbase + ',' + config.ldap.basedn, opts, function(err, res){
 	        if(err) callback(err);
-			
+
 			var users = [];
-	
+
 	        res.on('searchEntry', function(entry){
 	            //rewrite attribute names
 	            var user = {};
 	            for(var key in userattrs){
-					user[userattrs[key]] = entry.object[key];            
+					user[userattrs[key]] = entry.object[key];
 	            }
-	            
+
 	            //negative default values for groups
 	            user.superuser = false;
 	            user.type = 'other';
-	            
+
 	            //go through groups and assign params to user
 	            for(var i = 0; i < groups.length; i++){
 		            if(groups[i].memberUid.indexOf(entry.object.uid) >= 0){ //if user is group member
@@ -242,13 +257,13 @@ exports.getUsers = function(callback){
 				            user.type = 'club';
 			            }else if(groups[i].cn == 'clubothers'){
 				            user.type = 'other';
-			            }			            
+			            }
 		            }
 	            }
 
-				//and finally submit this user object	            
+				//and finally submit this user object
 	            users.push(user);
-	            
+
 	        });
 
 
@@ -257,7 +272,7 @@ exports.getUsers = function(callback){
 		        return callback(null, users);
 	        });
 	    });
-    
+
     });
 }
 
@@ -275,14 +290,14 @@ exports.getGroupsByUid = function(uid, callback){
 	//get groups
     ldap.client.search(config.ldap.groupbase + ',' + config.ldap.basedn, opts, function(err, res){
         if(err) return callback(err);
-		
+
 		var groups = [];
 
         res.on('searchEntry', function(entry){
             groups.push(entry.object.cn);
-            
+
         });
-        
+
         //return group list
         res.on('end', function(result){
 	        return callback(null, groups);
@@ -303,18 +318,18 @@ exports.getGroups = function(callback){
 
     ldap.client.search(config.ldap.groupbase + ',' + config.ldap.basedn, opts, function(err, res){
         if(err) return callback(err);
-		
+
 		var groups = [];
 
         res.on('searchEntry', function(entry){
-            
+
             groups.push({
 	            cn: entry.object.cn,
 				memberUid: entry.object.memberUid
 	        });
-            
+
         });
-        
+
         //return group list
         res.on('end', function(result){
 	        return callback(null, groups);
@@ -330,26 +345,26 @@ exports.getGroupMembers = function(gid, callback){
 	var opts = {
         'attributes': ['memberUid'],
     };
-	
+
 	var groupdn = 'cn=' + gid + ',' + config.ldap.groupbase + ',' + config.ldap.basedn
 
     ldap.client.search(groupdn, opts, function(err, res){
         if(err) return callback(err);
-		
+
 		var members = [];
 
         res.on('searchEntry', function(entry){
-            
+
             //if value is just one string, push it to array
             if(typeof entry.object.memberUid === "string"){
 	            members.push(entry.object.memberUid);
-			
+
 			//if value is an array/object, use this as array
 			}else if(typeof entry.object.memberUid === "object"){
 				members = entry.object.memberUid;
 			}
         });
-        
+
         //member list is completed
         res.on('end', function(result){
 			return callback(null, members, groupdn);
@@ -369,15 +384,15 @@ exports.addToGroup = function(uid, gid, callback){
 
     exports.getGroupMembers(gid, function(err, members, groupdn){
 	    if(err) return callback(err);
-	        
+
 	    //check whether user is already member of this group
 	    if(members.indexOf(uid) >= 0){
 		    return callback(null, true); //is already member: finish here
-	        
+
 	    }else{
 		    //not a member: add
-		    members.push(uid); 
-		        
+		    members.push(uid);
+
 		    //write new row to LDAP
 		    var change = new ldapjs.Change({
 				operation: 'replace',
@@ -385,10 +400,10 @@ exports.addToGroup = function(uid, gid, callback){
 					memberUid: members
 				}
 			});
-				
+
 			ldap.client.modify(groupdn, change, function(err){
 				if(err) return callback(err);
-					
+
 				return callback(null, true);
             });
         }
@@ -399,15 +414,15 @@ exports.addToGroup = function(uid, gid, callback){
 
 //remove user (uid) from a group (gid)
 exports.removeFromGroup = function(uid, gid, callback){
-	
+
     exports.getGroupMembers(gid, function(err, members, groupdn){
 	    if(err) return callback(err);
-	        
+
 		//check whether user is member of this group
 		if(members.indexOf(uid) >= 0){
 			//remove element from array
 			members.splice(members.indexOf(uid), 1);
-				
+
 			//write new row to LDAP
 			var change = new ldapjs.Change({
 				operation: 'replace',
@@ -415,13 +430,13 @@ exports.removeFromGroup = function(uid, gid, callback){
 					memberUid: members
 				}
 			});
-				
+
 			ldap.client.modify(groupdn, change, function(err){
 				if(err) return callback(err);
-					
+
 				return callback(null, true);
 			});
-	        
+
 	    }else{
 			return callback(null, true); //is already member: finish here
 		}
@@ -433,18 +448,18 @@ exports.removeFromGroup = function(uid, gid, callback){
 
 exports.nextFreeUnixID = function(increment, callback){
 	var nfuidn = 'cn=NextFreeUnixId,' + config.ldap.basedn;
-	
+
 	ldap.client.search(nfuidn, function(err, res){
         if(err) callback(err);
 
         res.on('searchEntry', function(entry){
             var uidNumber = parseInt(entry.object.uidNumber);
-            
+
             //do not increment, just return uidNumber
             if(!increment){
 	            return callback(null, uidNumber);
             }
-            
+
 			//increment uidNumber
             var change = new ldapjs.Change({
 				operation: 'replace',
@@ -452,7 +467,7 @@ exports.nextFreeUnixID = function(increment, callback){
 					uidNumber: (uidNumber + 1)
 				}
 			});
-            
+
             ldap.client.modify(nfuidn, change, function(err){
 	            //and return OLD uidNumber
 	            return callback(null, uidNumber);
