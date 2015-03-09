@@ -8,22 +8,22 @@ var errors = require('common-errors');
 
 exports.adduser = function(req, res, next){
 	var data = req.body.user;
-	
+
 	//loginShell default to /bin/false
 	//data.loginShell = data.loginShell || '/bin/false';
-	
+
 	//random password
 	data.password = randomString(4);
-	
+
 	//get next free unix ID
 	userservice.nextFreeUnixID(1, function(err, uidnumber){
-		
+
 		data.uidnumber = uidnumber;
-		
+
 		//add new user
 		userservice.addUser(data, function(err, success){
 			if(err) next(err);
-			
+
 			//return new password
 			res.json({
 				'password': data.password
@@ -42,6 +42,19 @@ exports.listusers = function(req, res, next){
 	});
 }
 
+
+
+exports.deleteuser = function(req, res, next){
+	console.log('check:',req.params.uid, '?=', req.user.username);
+	if (req.params.uid == req.user.username) {
+		next(new Error());
+	}
+	userservice.deleteUser(req.params.uid, function(err){
+		if(err) next(err);
+		//send status
+		res.send('deleted data: ', req.params.uid);
+	});
+}
 
 
 

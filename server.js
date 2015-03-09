@@ -40,6 +40,7 @@ api.get('/userdata', jwtauth, requireAuth, function(req, res){
 });
 api.get('/user', jwtauth, requireAuth, usermanage.listusers);
 api.post('/user', jwtauth, requireAuth, usermanage.adduser);
+api.delete('/user/:uid', jwtauth, requireAuth, usermanage.deleteuser);
 //api.put('/user/:id', jwtauth, requireAuth, usermanage.edituser);
 
 api.post('/settings/changepassword', jwtauth, requireAuth, settings.changepassword);
