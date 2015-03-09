@@ -20,7 +20,7 @@ exports.adduser = function(req, res, next){
 	//get next free unix ID
 	userservice.nextFreeUnixID(1, function(err, uidnumber){
 
-		data.uidnumber = uidnumber;
+		req.body.uidnumber = uidnumber;
 
 		//add new user
 		userservice.addUser(req.body, function(err, success){
@@ -36,6 +36,8 @@ exports.adduser = function(req, res, next){
 
 
 
+
+
 exports.listusers = function(req, res, next){
 	userservice.getUsers(function(err, users){
 		res.json(users).end();
@@ -44,13 +46,19 @@ exports.listusers = function(req, res, next){
 
 
 
+
+
 exports.deleteuser = function(req, res, next){
 	console.log('check:',req.params.uid, '?=', req.user.username);
-	if (req.params.uid == req.user.username) {
-		next(new Error());
+	if(req.params.uid == req.user.username) {
+		var err = new Error('You cannot delete yourself, bitch...');
+		err.status = 400;
+		return next(err);
 	}
-	userservice.deleteUser(req.params.uid, function(err){
+	
+	userservice.deleteUser(req.params.uid, function(err, success){
 		if(err) next(err);
+		
 		//send status
 		res.send('deleted data: ', req.params.uid);
 	});

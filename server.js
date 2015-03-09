@@ -49,7 +49,7 @@ api.post('/settings/changepassword', jwtauth, requireAuth, settings.changepasswo
 //error handling
 api.use(function(err, req, res, next) {
     console.error(err);
-    res.status(err.status || 500).json(err.toJSON());
+    res.status(err.status || 500).json({error: err.message});
 });
 
 

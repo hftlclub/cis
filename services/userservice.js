@@ -178,15 +178,20 @@ exports.addUser = function(data, callback){
 
 
 
-//delete a user
+//delete a user (uid)
 exports.deleteUser = function(uid, callback){
-	//var hashes = ldaphashes(data.password);
-	if(!uid) callback(new Error('no uid received'));
+	if(!uid){
+		var err = new Error('uid missing');
+		err.status = 400;
+		return callback(err);
+	}
+	
 	//remove user from LDAP tree
 	ldap.client.del(uidtodn(uid), function(err) {
-		if(err) callback(err);
-		console.log('delted user with id:', uid);
-		callback(null, true);
+		if(err) return callback(err, false);
+		
+		console.log('deleted user with id:', uid);
+		return callback(null, true);
 	});
 }
 
