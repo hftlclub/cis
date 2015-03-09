@@ -8,12 +8,12 @@ var errors = require('common-errors');
 
 
 exports.adduser = function(req, res, next){
-	
+
 	//loginShell default to /bin/false
 	//data.loginShell = data.loginShell || '/bin/false';
-	
+
 	req.checkBody('username', 'Benutzername ungueltig').notEmpty().isAlpha();
-		
+
 	//random password
 	req.body.password = randomString(4);
 
@@ -55,10 +55,10 @@ exports.deleteuser = function(req, res, next){
 		err.status = 400;
 		return next(err);
 	}
-	
+
 	userservice.deleteUser(req.params.uid, function(err, success){
 		if(err) next(err);
-		
+
 		//send status
 		res.send('deleted data: ', req.params.uid);
 	});

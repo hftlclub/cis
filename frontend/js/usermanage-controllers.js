@@ -24,7 +24,7 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 
 	form.submit = submit;
 
-	
+
 
 	refresh();
 
@@ -88,7 +88,7 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 
 });
 
-clubAdminApp.controller('userListController', function($scope, $http, $routeParams, clubAuth, $modal) {
+clubAdminApp.controller('userListController', function($scope, $rootScope, $http, $routeParams, clubAuth, $modal) {
 
 	$scope.users = {};
 	$scope.users.data = null;
@@ -134,17 +134,36 @@ clubAdminApp.controller('userListController', function($scope, $http, $routePara
 	function remove(user) {
 		var modal = $modal.open({
 			templateUrl: 'templates/usermanage/deletemodal.html?wipecache=20140822',
-			controller: function($scope) {
-				$scope.user = user;
-			},
+			controller: 'delModalController',
+			resolve: {
+        user: function () {
+          return $rootScope.user = user;
+        }
+      }
 		});
 
 		modal.result.then(function(){
-			$http.get('json/superuser/deletelogin.php?type=user&id='+user.id).
+			console.log("USER Object:", $rootScope.user);
+			var req = {
+				url: apiPath + '/user/'+ $scope.user.username,
+				method: 'DELETE'
+			};
+
+			$http(req).
 				success(refresh);
 		});
 
 
 	}
 
+});
+
+
+clubAdminApp.controller('delModalController', function ($scope, $modalInstance, user) {
+	$scope.ok = function () {
+    $modal.close(user);
+  };
+  $scope.cancel = function () {
+    $modal.dismiss('cancel');
+	};
 });
