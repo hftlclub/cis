@@ -1,4 +1,5 @@
 var express = require('express');
+var expressValidator = require('express-validator');
 var bodyParser = require('body-parser');
 var moment = require('moment');
 var jwt = require('jwt-simple');
@@ -23,14 +24,12 @@ api.use(bodyParser.json());
 api.use(bodyParser.urlencoded({
     extended: true
 }));
-
+app.use(expressValidator());
 api.use(cors({ origin: '*' }));
 
 //static frontend
 app.use(express.static(__dirname + '/frontend'));
 
-
-api.use(errors.middleware.crashProtector());
 
 
 //routes

@@ -35,7 +35,7 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 
 		var req = {
 			url: apiPath + '/user',
-			data: {'user': $scope.form.data}
+			data: $scope.form.data
 		};
 
 		if(form.mode == 'add'){

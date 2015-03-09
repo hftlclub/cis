@@ -1,3 +1,4 @@
+var util = require('util');
 var config = require('../config');
 var ldap = require('../modules/ldap');
 var userservice = require('../services/userservice');
@@ -7,13 +8,20 @@ var errors = require('common-errors');
 
 
 exports.adduser = function(req, res, next){
-	var data = req.body.user;
 	
 	//loginShell default to /bin/false
 	//data.loginShell = data.loginShell || '/bin/false';
 	
+	req.checkBody('username', 'Benutzername ungueltig').notEmpty().isAlpha();
+	
+	
+	
+	
+	
+	
+	
 	//random password
-	data.password = randomString(4);
+	req.body.password = randomString(4);
 	
 	//get next free unix ID
 	userservice.nextFreeUnixID(1, function(err, uidnumber){
@@ -21,17 +29,15 @@ exports.adduser = function(req, res, next){
 		data.uidnumber = uidnumber;
 		
 		//add new user
-		userservice.addUser(data, function(err, success){
+		userservice.addUser(req.body, function(err, success){
 			if(err) next(err);
 			
 			//return new password
 			res.json({
-				'password': data.password
+				'password': req.body.password
 			}).end();
 		});
-
 	});
-
 }
 
 
