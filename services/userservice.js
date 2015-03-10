@@ -31,6 +31,20 @@ function userLDAPAttrs(){
 	return keys;
 }
 
+//get LDAP attribute name for club admin attribute name
+function getLDAPAttrName(clubadminattr){
+    for(var attr in userattr) {
+		if(this.hasOwnProperty(attr)){
+			if(userattr[attr] === clubadminattr){
+				return attr;
+        	}
+        }
+	}
+	return false;
+}
+
+
+
 
 //check password for user (uid)
 exports.checkpassword = function(uid, password, callback){
@@ -195,35 +209,46 @@ exports.addUser = function(data, callback){
 
 //edit a user (uid)
 exports.editUser = function(uid, data, callback){
+	
+	//error if no UID given
 	if(!uid){
 		return callback(new Error('uid missing'));
 	}
 	
-	var user = {
-		uid: data.username,
-		cn: data.username,
-		mail: data.email,
-		givenName: data.firstname,
-		sn: data.lastname,
-		street: data.street,
-		postalCode: data.zip,
-		l: data.city,
-		telephoneNumber: data.tel,
-		registeredAddress: data.teamdrive,
-		loginShell: data.loginShell,
-		employeeType: data.role
-	};
+	//I will go through all sent data now and see whether I find those attributes in the 'userattr' object of allowed user attributes.
+	//After this I will get the correct LDAP attribute name 8from 'userattr') and build an array of change objects I commit to the server.
 
-	//add user to LDAP tree
-	var change = new ldapjs.Change({
-		  operation:'replace',
-		  modification: user
-	});
 
-	ldap.client.modify(uidtodn(user.uid), change, function(err) {
-		if(err) callback(err);
+	//this will contain all my changes objects
+	var changes = [];
 
-		//set groups
+	//go through sent data
+	for(var key in data){
+		//find LDAP key name
+		var ldapattr = getLDAPAttrName(key);
+		if(!ldapattr) continue;
+		
+		//modification
+		var mod = {};
+		mod[ldapattr] = data[key];
+		
+		//create and push change object
+		changes.push(new ldapjs.Change({
+			operation: 'replace',
+			modification: mod
+		}));
+	}
+
+	//error if there are no attributes to change
+	if(changes.length == 0){
+		return callback(new Error('no attributes to change'));
+	}
+
+	//commit changes to the server
+	ldap.client.modify(uidtodn(uid), changes, function(err) {
+		if(err) return callback(err);
+
+		//set groups: add user to given group but also remove them from the other groups
 		if(data.superuser){
 			exports.addToGroup(data.username, 'clubadmins', function(err, success){});
 		}else{
