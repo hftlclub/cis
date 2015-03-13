@@ -35,11 +35,6 @@ app.use(expressValidator({
 }));
 
 
-//static frontend
-app.use(express.static(__dirname + '/frontend'));
-
-
-
 //routes
 api.post('/login', auth.login);
 api.get('/userdata', jwtauth, requireAuth, function(req, res){
@@ -47,6 +42,7 @@ api.get('/userdata', jwtauth, requireAuth, function(req, res){
 });
 api.get('/user', jwtauth, requireAuth, usermanage.listusers);
 api.post('/user', jwtauth, requireAuth, usermanage.adduser);
+api.get('/user/:uid', jwtauth, requireAuth, usermanage.getuser);
 api.put('/user/:uid', jwtauth, requireAuth, usermanage.edituser);
 api.delete('/user/:uid', jwtauth, requireAuth, usermanage.deleteuser);
 
@@ -62,6 +58,10 @@ api.use(errorhandler.generic);
 
 //assign api router to /api
 app.use('/api', api);
+
+
+//static frontend
+app.use(express.static(__dirname + '/frontend'));
 
 
 //start server

@@ -3,7 +3,7 @@ clubAdminApp.factory('clubAuth', function($http, $location, $rootScope) {
 	var clubAuth = {};
 
 	$rootScope.clubAuth = clubAuth;
-
+	
 	clubAuth.refresh = function() {
 
 		$http.get(apiPath + '/userdata').
@@ -26,7 +26,6 @@ clubAdminApp.factory('clubAuth', function($http, $location, $rootScope) {
 			});
 	}
 
-
 	clubAuth.logout = function() {
 		/*
 		$http.get('').
@@ -42,6 +41,8 @@ clubAdminApp.factory('clubAuth', function($http, $location, $rootScope) {
 	$rootScope.$on('$locationChangeStart', function() {
 		clubAuth.refresh();
 	});
+
+	
 
 	return clubAuth;
 

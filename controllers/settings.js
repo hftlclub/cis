@@ -15,7 +15,6 @@ exports.changepassword = function(req, res, next){
 	req.checkBody('newPassword2', 'Passwoerter nicht identisch').equals(req.body.newPassword1);
 
 	if(req.validationErrors()){
-		console.log('there are valerrors (from settings.js) next now');
 		return next();
 	}
 

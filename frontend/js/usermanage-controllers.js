@@ -24,8 +24,6 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 
 	form.submit = submit;
 
-
-
 	refresh();
 
 	/*** functions ***/
@@ -34,15 +32,16 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 		var url = null;
 
 		var req = {
-			url: apiPath + '/user',
 			data: $scope.form.data
 		};
 
 		if(form.mode == 'add'){
 			req.method = 'POST';
+			req.url = apiPath + '/user';
 
 		}else if(form.mode == 'edit'){
 			req.method = 'PUT';
+			req.url = apiPath + '/user/' + form.id;
 		}
 
 		$http(req).
@@ -69,30 +68,22 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 	}
 
 	function refresh() {
-		if(clubAuth.user && clubAuth.user.type == 'user') {
-			// user profile
+		if(!clubAuth.user){
+			return false;
+		}
+		
+		console.log(form.id);
+		
+		if(clubAuth.user.type == 'user'){
 			form.data = clubAuth.user;
 
-		} else if (form.mode == 'edit') {
-
-			var req = {
-				url: apiPath+'/user',
-				method: 'PUT',
-				headers: {
-					'X-Access-Token': localStorage.getItem('accessToken')
-				}
-			};
-
-/*
-			if(clubAuth.user.type == 'superuser') {
-				var url = 'json/superuser/getdata.php?type=user&id='+form.id;
-			} else {
-				var url = 'json/installer/getuser.php?id='+form.id;
-			}
-*/
-			$http(req).success(function(data){
+		}else if(clubAuth.user.superuser && form.mode == 'edit'){
+			
+			$http.get(apiPath + '/user/' + form.id).
+				success(function(data){
 					form.data = data;
-			});
+				});
+
 		}
 	}
 
@@ -111,16 +102,7 @@ clubAdminApp.controller('userListController', function($scope, $rootScope, $http
 	/*** functions ***/
 
 	function refresh() {
-		var req = {
-			url: apiPath+'/user',
-			method: 'GET',
-			headers: {
-				'X-Access-Token': localStorage.getItem('accessToken')
-			}
-		};
-
-
-		$http(req).
+		$http.get(apiPath + '/user').
 			success(function(data){
 				console.log('received user data:', data);
 				$scope.users.data = data;

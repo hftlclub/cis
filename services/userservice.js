@@ -33,9 +33,9 @@ function userLDAPAttrs(){
 
 //get LDAP attribute name for club admin attribute name
 function getLDAPAttrName(clubadminattr){
-    for(var attr in userattr) {
-		if(this.hasOwnProperty(attr)){
-			if(userattr[attr] === clubadminattr){
+    for(var attr in userattrs) {
+		if(userattrs.hasOwnProperty(attr)){
+			if(userattrs[attr] === clubadminattr){
 				return attr;
         	}
         }
@@ -49,7 +49,7 @@ function getLDAPAttrName(clubadminattr){
 //check password for user (uid)
 exports.checkpassword = function(uid, password, callback){
 	
-	console.log('check this:', password);
+	console.log('check this:', uid, password);
 	
 	if(!password){
 		return callback(new Error('no password given'));
@@ -58,6 +58,8 @@ exports.checkpassword = function(uid, password, callback){
 	var opts = {
         'attributes': ['userPassword']
     };
+
+	console.log(uidtodn(uid));
 
     ldap.client.search(uidtodn(uid), opts, function(err, res){
         if(err) callback(err, false);
@@ -75,31 +77,6 @@ exports.checkpassword = function(uid, password, callback){
 }
 
 
-
-
-exports.userlogin = function(uid, password, callback){
-    //create temporary client
-    var userclient = ldapjs.createClient({
-        url: 'ldap://' + config.ldap.server + ':' + config.ldap.port
-    });
-
-    //bind to server
-    userclient.bind(uidtodn(uid), password, function(err){
-
-        //unbind from server
-        /*client.unbind(function(err){
-            if(err) return callback(err);
-        });*/
-
-        if(err){
-            return callback(err, false);
-        }
-
-        return callback(null, true);
-    });
-}
-
-
 //get one user by uid
 exports.getUserByUid = function(uid, callback){
     var opts = {
@@ -107,7 +84,7 @@ exports.getUserByUid = function(uid, callback){
     };
 
     ldap.client.search(uidtodn(uid), opts, function(err, res){
-        if(err) callback(err);
+        if(err) return callback(err);
 
         res.on('searchEntry', function(entry){
             var user = {};
@@ -216,7 +193,7 @@ exports.editUser = function(uid, data, callback){
 	}
 	
 	//I will go through all sent data now and see whether I find those attributes in the 'userattr' object of allowed user attributes.
-	//After this I will get the correct LDAP attribute name 8from 'userattr') and build an array of change objects I commit to the server.
+	//After this I will get the correct LDAP attribute name (from 'userattr') and build an array of change objects I commit to the server.
 
 
 	//this will contain all my changes objects
@@ -230,15 +207,17 @@ exports.editUser = function(uid, data, callback){
 		
 		//modification
 		var mod = {};
+		if(!data[key]) data[key] = []; //make empty array of empty string
 		mod[ldapattr] = data[key];
-		
+
+			
 		//create and push change object
 		changes.push(new ldapjs.Change({
 			operation: 'replace',
 			modification: mod
 		}));
 	}
-
+	
 	//error if there are no attributes to change
 	if(changes.length == 0){
 		return callback(new Error('no attributes to change'));
@@ -250,22 +229,22 @@ exports.editUser = function(uid, data, callback){
 
 		//set groups: add user to given group but also remove them from the other groups
 		if(data.superuser){
-			exports.addToGroup(data.username, 'clubadmins', function(err, success){});
+			exports.addToGroup(uid, 'clubadmins', function(err, success){});
 		}else{
-			exports.removeFromGroup(data.username, 'clubadmins', function(err, success){});
+			exports.removeFromGroup(uid, 'clubadmins', function(err, success){});
 		}
 
 		if(data.type == 'club'){
-			exports.addToGroup(data.username, 'clubmembers', function(err, success){
-				exports.removeFromGroup(data.username, 'clubother', function(err, success){});
+			exports.addToGroup(uid, 'clubmembers', function(err, success){
+				exports.removeFromGroup(uid, 'clubothers', function(err, success){});
 			});
 		}else if(data.type == 'other'){
-			exports.addToGroup(data.username, 'clubothers', function(err, success){
-				exports.removeFromGroup(data.username, 'clubmembers', function(err, success){});
+			exports.addToGroup(uid, 'clubothers', function(err, success){
+				exports.removeFromGroup(uid, 'clubmembers', function(err, success){});
 			});
 		}else{
-			exports.addToGroup(data.username, 'clubothers', function(err, success){
-				exports.removeFromGroup(data.username, 'clubmembers', function(err, success){});
+			exports.addToGroup(uid, 'clubothers', function(err, success){
+				exports.removeFromGroup(uid, 'clubmembers', function(err, success){});
 			});
 		}
 
