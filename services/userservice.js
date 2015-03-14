@@ -49,8 +49,6 @@ function getLDAPAttrName(clubadminattr){
 //check password for user (uid)
 exports.checkpassword = function(uid, password, callback){
 	
-	console.log('check this:', uid, password);
-	
 	if(!password){
 		return callback(new Error('no password given'));
 	}
@@ -228,24 +226,28 @@ exports.editUser = function(uid, data, callback){
 		if(err) return callback(err);
 
 		//set groups: add user to given group but also remove them from the other groups
-		if(data.superuser){
-			exports.addToGroup(uid, 'clubadmins', function(err, success){});
-		}else{
-			exports.removeFromGroup(uid, 'clubadmins', function(err, success){});
+		if('superuser' in data){
+			if(data.superuser){
+				exports.addToGroup(uid, 'clubadmins', function(err, success){});
+			}else{
+				exports.removeFromGroup(uid, 'clubadmins', function(err, success){});
+			}
 		}
 
-		if(data.type == 'club'){
-			exports.addToGroup(uid, 'clubmembers', function(err, success){
-				exports.removeFromGroup(uid, 'clubothers', function(err, success){});
-			});
-		}else if(data.type == 'other'){
-			exports.addToGroup(uid, 'clubothers', function(err, success){
-				exports.removeFromGroup(uid, 'clubmembers', function(err, success){});
-			});
-		}else{
-			exports.addToGroup(uid, 'clubothers', function(err, success){
-				exports.removeFromGroup(uid, 'clubmembers', function(err, success){});
-			});
+		if('type' in data){
+			if(data.type == 'club'){
+				exports.addToGroup(uid, 'clubmembers', function(err, success){
+					exports.removeFromGroup(uid, 'clubothers', function(err, success){});
+				});
+			}else if(data.type == 'other'){
+				exports.addToGroup(uid, 'clubothers', function(err, success){
+					exports.removeFromGroup(uid, 'clubmembers', function(err, success){});
+				});
+			}else{
+				exports.addToGroup(uid, 'clubothers', function(err, success){
+					exports.removeFromGroup(uid, 'clubmembers', function(err, success){});
+				});
+			}
 		}
 
 		return callback(null, true);
@@ -267,6 +269,12 @@ exports.deleteUser = function(uid, callback){
 	//remove user from LDAP tree
 	ldap.client.del(uidtodn(uid), function(err) {
 		if(err) return callback(err);
+		
+		//remove user from groups
+		exports.removeFromGroup(uid, 'clubmembers', function(err, success){});
+		exports.removeFromGroup(uid, 'clubothers', function(err, success){});
+		exports.removeFromGroup(uid, 'clubadmins', function(err, success){});
+		
 		return callback();
 	});
 }

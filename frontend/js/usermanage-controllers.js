@@ -1,6 +1,6 @@
 
 
-clubAdminApp.controller('userFormController', function($scope, $rootScope, $routeParams, $http, $location, $modal, clubAuth) {
+clubAdminApp.controller('userFormController', function($scope, $rootScope, $routeParams, $route, $http, $location, $modal, clubAuth) {
 	var form = {};
 	$scope.form = form;
 
@@ -16,9 +16,11 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 		]
 	};
 
+	console.log();
+
 	form.id = $routeParams.id;
-	form.mode = (form.id)?'edit':'add';
-	form.data = form.mode=='add'?{}:null; // 'cause form is hidden when data is null
+	form.mode = $route.current.locals.clubMode;//(form.id)?'edit':'add';
+	form.data = (form.mode == 'add') ? {} : null; // 'cause form is hidden when data is null
 	form.errors = {};
 	form.message = null;
 
@@ -42,6 +44,10 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 		}else if(form.mode == 'edit'){
 			req.method = 'PUT';
 			req.url = apiPath + '/user/' + form.id;
+		
+		}else if(form.mode == 'profile'){
+			req.method = 'PUT';
+			req.url = apiPath + '/settings/profile';
 		}
 
 		$http(req).
@@ -49,8 +55,11 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 				if(form.mode == 'add'){
 					$scope.form.data.password = data.password;
 					$scope.form.message = 'successAdd';
-				}
-				if(form.mode == 'edit'){
+				
+				}else if(form.mode == 'edit'){
+					console.log(data);
+				
+				}else if(form.mode == 'profile'){
 					console.log(data);
 				}
 				//$scope.form.data = {};
@@ -72,11 +81,11 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 			return false;
 		}
 		
-		console.log(form.id);
-		
-		if(clubAuth.user.type == 'user'){
+		//user edits his own profile
+		if(form.mode == 'profile'){
 			form.data = clubAuth.user;
-
+		
+		//superuser edits other user
 		}else if(clubAuth.user.superuser && form.mode == 'edit'){
 			
 			$http.get(apiPath + '/user/' + form.id).
@@ -84,6 +93,9 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 					form.data = data;
 				});
 
+		//probably superuser adds new user. Nothing to do here
+		}else{
+			return false;
 		}
 	}
 

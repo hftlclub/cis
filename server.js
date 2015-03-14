@@ -48,6 +48,7 @@ api.delete('/user/:uid', jwtauth, requireAuth, usermanage.deleteuser);
 
 
 api.post('/settings/changepassword', jwtauth, requireAuth, settings.changepassword);
+api.put('/settings/profile', jwtauth, requireAuth, settings.changeprofile);
 
 
 

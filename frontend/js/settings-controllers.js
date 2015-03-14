@@ -9,7 +9,7 @@ clubAdminApp.controller('SettingsIndexController', function($scope, clubAuth){
 
 	function refresh(){
 		if(clubAuth.user && clubAuth.user.type) {
-			$scope.settings.templateUrl = 'templates/settings/index-'+clubAuth.user.type+'.html';
+			$scope.settings.templateUrl = 'templates/settings/index-user.html';
 		}
 	}
 

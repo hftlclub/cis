@@ -22,19 +22,19 @@
       <div class="form-group" ng-class="{'has-error': form.errors.username}">
         <label for="inputUsername" class="col-sm-3 control-label">Benutzername</label>
         <div class="col-sm-9">
-          <input type="text" ng-model="form.data.username" ng-disabled="form.mode == 'edit'" class="form-control" id="inputUsername" placeholder="Benutzername"  tooltip-placement="right" tooltip-trigger="focus" tooltip="Dein Benutzername">
+          <input type="text" ng-model="form.data.username" ng-disabled="(form.mode != 'add')" class="form-control" id="inputUsername" placeholder="Benutzername"  tooltip-placement="right" tooltip-trigger="focus" tooltip="Dein Benutzername">
         </div>
       </div>
 
       <div class="form-group" ng-class="{'has-error': form.errors.type}">
         <label class="col-sm-3 control-label">Nutzerrechte</label>
         <div class="col-sm-7">
-					<select class="form-control" ng-options="opt.value as opt.label for opt in options.usertypes" ng-model="form.data.type" ng-disabled="!clubUser.superuser"></select>
+					<select class="form-control" ng-options="opt.value as opt.label for opt in options.usertypes" ng-model="form.data.type" ng-disabled="(form.mode == 'profile')"></select>
 				</div>
 				<div class="col-sm-2">
 					<div class="checkbox">
 						<label>
-							<input ng-model="form.data.superuser" ng-disabled="!clubUser.superuser" type="checkbox"> Superuser
+							<input ng-model="form.data.superuser" ng-disabled="(form.mode == 'profile')" type="checkbox"> Superuser
 						</label>
 					</div>
         </div>
@@ -43,7 +43,7 @@
 	  <div class="form-group" ng-class="{'has-error': form.errors.loginShell}" ng-if="form.data.superuser">
 			<label for="inputLoginShell" class="col-sm-3 control-label">Login-Shell</label>
 			<div class="col-sm-9">
-				<select class="form-control" ng-options="opt.value as opt.label for opt in options.shells" ng-model="form.data.loginShell" ng-disabled="!clubUser.superuser">
+				<select class="form-control" ng-options="opt.value as opt.label for opt in options.shells" ng-model="form.data.loginShell" ng-disabled="(form.mode == 'profile')">
 					<option ng-repeat="shell in shells" value="{{shell}}" >{{shell}}</option>
 				</select>
 			</div>
@@ -62,7 +62,7 @@
       <div class="form-group" ng-class="{'has-error': form.errors.email}">
         <label for="inputEmail" class="col-sm-3 control-label">E-Mail</label>
         <div class="col-sm-9">
-          <input type="text" ng-model="form.data.email" class="form-control" id="inputEmail" placeholder="E-Mail"  tooltip-placement="right" tooltip-trigger="focus" tooltip="Deine E-Mail Adresse für Club E-Mails">
+          <input type="text" ng-model="form.data.email" class="form-control" id="inputEmail" placeholder="E-Mail"  tooltip-placement="right" tooltip-trigger="focus" tooltip="Deine E-Mail Adresse für Club-Mails">
         </div>
       </div>
 
@@ -111,18 +111,19 @@
       <div class="form-group" ng-class="{'has-error': form.errors.teamdrive}">
         <label for="inputTD" class="col-sm-3 control-label">Teamdrive Account</label>
         <div class="col-sm-9">
-          <input type="text" ng-model="form.data.teamdrive" class="form-control" id="inputTD" placeholder="(z.B. Stecker02)" tooltip-placement="right" tooltip-trigger="focus" tooltip="Dein Teamdrive Benutzername">
+          <input type="text" ng-model="form.data.teamdrive" class="form-control" id="inputTD" placeholder="(z.B. Stecker02)" tooltip-placement="right" tooltip-trigger="focus" tooltip="Dein Teamdrive-Benutzername">
         </div>
       </div>
 
       <div class="form-group">
         <div class="col-sm-offset-3">
-          <button type="submit" ng-if="form.mode=='edit' || clubUser.type == 'user'" class="btn btn-default">Speichern</button>
-          <button type="submit" ng-if="form.mode=='add' && clubUser.type != 'user'" class="btn btn-default">Hinzufügen</button>
+          <button type="submit" ng-if="(form.mode == 'edit') || (form.mode == 'profile')" class="btn btn-default">Speichern</button>
+          <button type="submit" ng-if="(form.mode == 'add')" class="btn btn-default">Hinzufügen</button>
 
-          <a ng-if="clubUser.type == 'user'" class="btn btn-danger" href="#/settings">Abbrechen</a>
-          <a ng-if="clubUser.type != 'user'" class="btn btn-danger" href="#/users">Abbrechen</a>
+          <a ng-if="(form.mode == 'profile')" class="btn btn-danger" href="#/settings">Abbrechen</a>
+          <a ng-if="(form.mode == 'edit') || (form.mode == 'add')" class="btn btn-danger" href="#/users">Abbrechen</a>
         </div>
+
 
       </div>
     </form>
