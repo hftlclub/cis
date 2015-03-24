@@ -17,3 +17,7 @@ span.largeicon {
   margin-left: auto;
   margin-right: auto;
 }
+
+.btn-xl{
+  height: 100px;
+}
