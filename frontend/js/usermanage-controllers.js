@@ -53,8 +53,9 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 		$http(req).
 			success(function(data) {
 				if(form.mode == 'add'){
-					$scope.form.data.password = data.password;
+					$scope.form.msgdata = data;					
 					$scope.form.message = 'successAdd';
+					$scope.form.data = {};
 
 				}else if(form.mode == 'edit'){
 					$location.path('/users');
