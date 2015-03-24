@@ -7,21 +7,21 @@ var crypto = require('crypto');
 
 //add user function for superusers
 exports.adduser = function(req, res, next){
-	
-	req.checkBody('username', 'Benutzername ungültig').notEmpty().isAlphanumeric();
-	req.checkBody('type', 'Nutzerechte ungültig').notEmpty().isIn(['club', 'other']);
+
+	req.checkBody('username', 'Benutzername ungÃ¼ltig').notEmpty().isAlphanumeric();
+	req.checkBody('type', 'Nutzerechte ungÃ¼ltig').notEmpty().isIn(['club', 'other']);
 
 	req.sanitize('superuser').toBoolean();
 	if(!req.body.loginShell) req.body.loginShell = '/bin/false';
 
-	req.checkBody('email', 'E-Mail ungültig').notEmpty().isEmail();
-	req.checkBody('firstname', 'Vorname ungültig').notEmpty();
-	req.checkBody('lastname', 'Nachname ungültig').notEmpty();
-	
-	req.checkBody('street', 'Strasse ungültig').notEmpty();
-	req.checkBody('zip', 'PLZ ungültig').notEmpty().isNumeric();
-	req.checkBody('city', 'Stadt ungültig').notEmpty();
-	req.checkBody('tel', 'Telefon ungültig').notEmpty();
+	req.checkBody('email', 'E-Mail ungÃ¼ltig').notEmpty().isEmail();
+	req.checkBody('firstname', 'Vorname ungÃ¼ltig').notEmpty();
+	req.checkBody('lastname', 'Nachname ungÃ¼ltig').notEmpty();
+
+	//req.checkBody('street', 'Strasse ungÃ¼ltig').notEmpty();
+	//req.checkBody('zip', 'PLZ ungÃ¼ltig').notEmpty().isNumeric();
+	//req.checkBody('city', 'Stadt ungÃ¼ltig').notEmpty();
+	req.checkBody('tel', 'Telefon ungÃ¼ltig').notEmpty();
 
 	if(req.validationErrors()){
 		return next();
@@ -42,7 +42,7 @@ exports.adduser = function(req, res, next){
 				if(err.name == 'EntryAlreadyExistsError'){
 					req.checkBody('username', 'Benutzername wird schon verwendet').error(1);
 					next();
-				}else{			
+				}else{
 					next(err);
 				}
 			}
@@ -58,7 +58,7 @@ exports.adduser = function(req, res, next){
 
 
 //edit user function for superusers
-exports.edituser = function(req, res, next){	
+exports.edituser = function(req, res, next){
 	var uid = req.params.uid;
 
 	//no uid given
@@ -68,19 +68,19 @@ exports.edituser = function(req, res, next){
 		return next(err);
 	}
 
-	req.checkBody('type', 'Nutzerechte ungültig').notEmpty().isIn(['club', 'other']);
+	req.checkBody('type', 'Nutzerechte ungÃ¼ltig').notEmpty().isIn(['club', 'other']);
 
 	req.sanitize('superuser').toBoolean();
 
-	req.checkBody('email', 'E-Mail ungültig').notEmpty().isEmail();
-	req.checkBody('firstname', 'Vorname ungültig').notEmpty();
-	req.checkBody('lastname', 'Nachname ungültig').notEmpty();
-	
-	req.checkBody('street', 'Strasse ungültig').notEmpty();
-	req.checkBody('zip', 'PLZ ungültig').notEmpty().isNumeric();
-	req.checkBody('city', 'Stadt ungültig').notEmpty();
-	req.checkBody('tel', 'Telefon ungültig').notEmpty();
-	
+	req.checkBody('email', 'E-Mail ungÃ¼ltig').notEmpty().isEmail();
+	req.checkBody('firstname', 'Vorname ungÃ¼ltig').notEmpty();
+	req.checkBody('lastname', 'Nachname ungÃ¼ltig').notEmpty();
+
+	req.checkBody('street', 'Strasse ungÃ¼ltig').notEmpty();
+	req.checkBody('zip', 'PLZ ungÃ¼ltig').notEmpty().isNumeric();
+	req.checkBody('city', 'Stadt ungÃ¼ltig').notEmpty();
+	req.checkBody('tel', 'Telefon ungÃ¼ltig').notEmpty();
+
 	if(req.validationErrors()){
 		return next();
 	}
@@ -104,14 +104,14 @@ exports.edituser = function(req, res, next){
 	if(uid != req.user.username){
 		data.superuser = req.body.superuser;
 	}
-	
+
 	//loginShell only for superusers
 	if(data.superuser){
 		data.loginShell = req.body.loginShell;
 	}else{
 		data.loginShell = '/bin/false';
 	}
-	
+
 	//edit user!
 	userservice.editUser(uid, data, function(err, success){
 		if(err) next(err);
@@ -143,7 +143,7 @@ exports.getuser = function(req, res, next){
 		err.status = 400;
 		return next(err);
 	}
-	
+
 	userservice.getUserByUid(uid, function(err, user){
 		if(err) return next(err);
 		res.json(user).end();
@@ -161,11 +161,11 @@ exports.deleteuser = function(req, res, next){
 		err.status = 400;
 		return next(err);
 	}
-	
+
 	//delete user
 	userservice.deleteUser(req.params.uid, function(err){
 		if(err) next(err);
-		
+
 		res.send();
 	});
 }
