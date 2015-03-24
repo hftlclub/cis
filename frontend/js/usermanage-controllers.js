@@ -120,40 +120,21 @@ clubAdminApp.controller('userListController', function($scope, $rootScope, $http
 			success(function(data){
 				$scope.users.data = data;
 		});
-
-		/*
-		if(clubAuth.user.type == 'superuser') {
-			if(installerId) {
-				url = 'json/superuser/getusers.php?installer=' + installerId;
-			} else {
-				url = 'json/superuser/getusers.php';
-			}
-		}
-		$http.get(url).
-			success(function(data){
-				$scope.users.data = data;
-			});
-		*/
 	}
 
 	function remove(user) {
 		var modal = $modal.open({
-			templateUrl: 'templates/usermanage/deletemodal.html?wipecache=20140822',
+			templateUrl: 'templates/usermanage/deletemodal.html',
 			controller: 'delModalController',
 			resolve: {
-        user: function () {
-          return $rootScope.user = user;
-        }
-      }
+				user: function(){
+					return $rootScope.user = user;
+				}
+			}
 		});
 
 		modal.result.then(function(){
-			var req = {
-				url: apiPath + '/user/'+ $scope.user.username,
-				method: 'DELETE'
-			};
-
-			$http(req).
+			$http.delete(apiPath + '/user/'+ user.username).
 				success(refresh);
 		});
 
