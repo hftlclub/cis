@@ -19,5 +19,6 @@ span.largeicon {
 }
 
 .btn-xl{
-  height: 100px;
+  height: 60px;
+  font-size: 2em;
 }
