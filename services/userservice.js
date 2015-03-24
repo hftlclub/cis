@@ -57,8 +57,6 @@ exports.checkpassword = function(uid, password, callback){
         'attributes': ['userPassword']
     };
 
-	console.log(uidtodn(uid));
-
     ldap.client.search(uidtodn(uid), opts, function(err, res){
         if(err) callback(err, false);
 
