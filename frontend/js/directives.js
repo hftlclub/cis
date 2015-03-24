@@ -17,9 +17,8 @@ clubAdminApp.directive('clubActiveState', function($location) {
 			refresh();
 
 			function refresh() {
-				var href = a.attr('href');
 				var curr = '#' + $location.path();
-
+				var href = a.attr('href');
 				if(curr.indexOf(href) == 0)
 					attr.$addClass('active');
 				else
