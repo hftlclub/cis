@@ -234,17 +234,16 @@ exports.editUser = function(uid, data, callback){
 
 		if('type' in data){
 			if(data.type == 'club'){
-				exports.addToGroup(uid, 'clubmembers', function(err, success){
-					exports.removeFromGroup(uid, 'clubothers', function(err, success){});
-				});
+				exports.addToGroup(uid, 'clubmembers', function(err, success){});
+				exports.removeFromGroup(uid, 'clubothers', function(err, success){});
+			
 			}else if(data.type == 'other'){
-				exports.addToGroup(uid, 'clubothers', function(err, success){
-					exports.removeFromGroup(uid, 'clubmembers', function(err, success){});
-				});
+				exports.addToGroup(uid, 'clubothers', function(err, success){});
+				exports.removeFromGroup(uid, 'clubmembers', function(err, success){});
+			
 			}else{
-				exports.addToGroup(uid, 'clubothers', function(err, success){
-					exports.removeFromGroup(uid, 'clubmembers', function(err, success){});
-				});
+				exports.addToGroup(uid, 'clubothers', function(err, success){});
+				exports.removeFromGroup(uid, 'clubmembers', function(err, success){});
 			}
 		}
 
