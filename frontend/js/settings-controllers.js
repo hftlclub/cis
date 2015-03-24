@@ -13,7 +13,7 @@ clubAdminApp.controller('SettingsIndexController', function($scope, clubAuth){
 
 });
 
-clubAdminApp.controller('SettingsChangePasswordController', function($scope, $http){
+clubAdminApp.controller('SettingsChangePasswordController', function($scope, $http, $timeout, $location){
 
 	$scope.form = {};
 	$scope.form.data = {};
@@ -28,6 +28,9 @@ clubAdminApp.controller('SettingsChangePasswordController', function($scope, $ht
 				$scope.form.message = 'success';
 				$scope.form.data = {};
 				$scope.form.errors = {};
+				$timeout(function() {
+					$location.path('/settings');
+				}, 3000);
 			}).
 			error(function(data, status){
 				if(status == 400 && data.validationerror) {
