@@ -22,14 +22,15 @@
 
     <form class="form-horizontal" role="form" ng-submit="form.submit()" ng-if="form.data">
 
-      <div class="form-group" ng-class="{'has-error': form.errors.username}">
+      <div class="form-group" ng-class="{'has-error has-feedback': form.errors.username}">
         <label for="inputUsername" class="col-sm-3 control-label">Benutzername</label>
         <div class="col-sm-9">
           <input type="text" ng-model="form.data.username" ng-disabled="(form.mode != 'add')" class="form-control" id="inputUsername" placeholder="Benutzername"  tooltip-placement="right" tooltip-trigger="focus" tooltip="Dein Benutzername">
+          <span ng-if="form.errors.username" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
         </div>
       </div>
 
-      <div class="form-group" ng-class="{'has-error': form.errors.type}">
+      <div class="form-group" ng-class="{'has-error has-feedback': form.errors.type}">
         <label class="col-sm-3 control-label">Nutzerrechte</label>
         <div class="col-sm-7">
 					<select class="form-control" ng-options="opt.value as opt.label for opt in options.usertypes" ng-model="form.data.type" ng-disabled="(form.mode == 'profile')"></select>
@@ -43,7 +44,7 @@
         </div>
       </div>
 
-	  <div class="form-group" ng-class="{'has-error': form.errors.loginShell}" ng-if="form.data.superuser">
+	  <div class="form-group" ng-class="{'has-error has-feedback': form.errors.loginShell}" ng-if="form.data.superuser">
 			<label for="inputLoginShell" class="col-sm-3 control-label">Login-Shell</label>
 			<div class="col-sm-9">
 				<select class="form-control" ng-options="opt.value as opt.label for opt in options.shells" ng-model="form.data.loginShell" ng-disabled="(form.mode == 'profile')">
@@ -53,68 +54,77 @@
 		</div>
 
 
-      <div class="form-group" ng-class="{'has-error': form.errors.role}">
+      <div class="form-group" ng-class="{'has-error has-feedback': form.errors.role}">
         <label for="inputRole" class="col-sm-3 control-label">Position</label>
         <div class="col-sm-9">
           <input type="text" ng-model="form.data.role" class="form-control" id="inputRole" placeholder="Position" tooltip-placement="right" tooltip-trigger="focus" tooltip="zusätzliche Position (z.B. Vorstandsmitglied, etc.)">
+          <span ng-if="form.errors.role" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
         </div>
       </div>
 
 
 
-      <div class="form-group" ng-class="{'has-error': form.errors.email}">
+      <div class="form-group" ng-class="{'has-error has-feedback': form.errors.email}">
         <label for="inputEmail" class="col-sm-3 control-label">E-Mail</label>
         <div class="col-sm-9">
           <input type="text" ng-model="form.data.email" class="form-control" id="inputEmail" placeholder="E-Mail" tooltip-placement="right" tooltip-trigger="focus" tooltip="Deine E-Mail Adresse für Club-Mails">
+          <span ng-if="form.errors.email" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
         </div>
       </div>
 
-      <div class="form-group" ng-class="{'has-error': form.errors.firstname}">
+      <div class="form-group" ng-class="{'has-error has-feedback': form.errors.firstname}">
         <label for="inputFirstname" class="col-sm-3 control-label">Vorname</label>
         <div class="col-sm-9">
           <input type="text" ng-model="form.data.firstname" class="form-control" id="inputFirstname" placeholder="Vorname" tooltip-placement="right" tooltip-trigger="focus" tooltip="Wer bist du?">
+          <span ng-if="form.errors.firstname" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
         </div>
       </div>
 
-      <div class="form-group" ng-class="{'has-error': form.errors.lastname}">
+      <div class="form-group" ng-class="{'has-error has-feedback': form.errors.lastname}">
         <label for="inputLastname" class="col-sm-3 control-label">Nachname</label>
         <div class="col-sm-9">
           <input type="text" ng-model="form.data.lastname" class="form-control" id="inputLastname" placeholder="Nachname" tooltip-placement="right" tooltip-trigger="focus" tooltip="Wer bist du?">
+          <span ng-if="form.errors.lastname" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
         </div>
       </div>
 
-      <div class="form-group" ng-class="{'has-error': form.errors.street}">
+      <div class="form-group" ng-class="{'has-error has-feedback': form.errors.street}">
         <label for="inputStreet" class="col-sm-3 control-label">Straße, Hausnummer</label>
         <div class="col-sm-9">
           <input type="text" ng-model="form.data.street" class="form-control" id="inputStreet" placeholder="Straße, Hausnummer" tooltip-placement="right" tooltip-trigger="focus" tooltip="Wo wohnst du?">
+          <span ng-if="form.errors.street" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
         </div>
       </div>
 
-      <div class="form-group" ng-class="{'has-error': form.errors.zip}">
+      <div class="form-group" ng-class="{'has-error has-feedback': form.errors.zip}">
         <label for="inputZip" class="col-sm-3 control-label">PLZ</label>
         <div class="col-sm-9">
           <input type="text" ng-model="form.data.zip" class="form-control" id="inputZip" placeholder="PLZ" tooltip-placement="right" tooltip-trigger="focus" tooltip="Wo wohnst du?">
+          <span ng-if="form.errors.zip" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
         </div>
       </div>
 
-      <div class="form-group" ng-class="{'has-error': form.errors.city}">
+      <div class="form-group" ng-class="{'has-error has-feedback': form.errors.city}">
         <label for="inputCity" class="col-sm-3 control-label">Stadt</label>
         <div class="col-sm-9">
           <input type="text" ng-model="form.data.city" class="form-control" id="inputCity" placeholder="Stadt" tooltip-placement="right" tooltip-trigger="focus" tooltip="Wo wohnst du?">
+          <span ng-if="form.errors.city" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
         </div>
       </div>
 
-      <div class="form-group" ng-class="{'has-error': form.errors.tel}">
+      <div class="form-group" ng-class="{'has-error has-feedback': form.errors.tel}">
         <label for="inputTel" class="col-sm-3 control-label">Telefon</label>
         <div class="col-sm-9">
           <input type="text" ng-model="form.data.tel" class="form-control" id="inputTel" placeholder="Telefon" tooltip-placement="right" tooltip-trigger="focus" tooltip="Unter welcher Nummer kann man dich erreichen?">
+          <span ng-if="form.errors.tel" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
         </div>
       </div>
 
-      <div class="form-group" ng-class="{'has-error': form.errors.teamdrive}">
+      <div class="form-group" ng-class="{'has-error has-feedback': form.errors.teamdrive}">
         <label for="inputTD" class="col-sm-3 control-label">Teamdrive Account</label>
         <div class="col-sm-9">
           <input type="text" ng-model="form.data.teamdrive" class="form-control" id="inputTD" placeholder="(z.B. Stecker02)" tooltip-placement="right" tooltip-trigger="focus" tooltip="Dein Teamdrive-Benutzername">
+          <span ng-if="form.errors.teamdrive" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
         </div>
       </div>
 
