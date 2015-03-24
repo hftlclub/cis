@@ -12,7 +12,7 @@ exports.changepassword = function(req, res, next){
 	req.checkBody('newPassword1', 'Neues Passwort nicht angegeben').notEmpty();
 	req.checkBody('newPassword2', 'Neues Passwort (Wdhlg.) nicht angegeben').notEmpty();
 		
-	req.checkBody('newPassword2', 'Passwoerter nicht identisch').equals(req.body.newPassword1);
+	req.checkBody('newPassword2', 'Passwörter nicht identisch').equals(req.body.newPassword1);
 
 	if(req.validationErrors()){
 		return next();
@@ -42,14 +42,14 @@ exports.changepassword = function(req, res, next){
 exports.changeprofile = function(req, res, next){
 	var uid = req.user.username; //me
 
-	req.checkBody('email', 'E-Mail ungueltig').notEmpty().isEmail();
-	req.checkBody('firstname', 'Vorname ungueltig').notEmpty();
-	req.checkBody('lastname', 'Nachname ungueltig').notEmpty();
+	req.checkBody('email', 'E-Mail ungültig').notEmpty().isEmail();
+	req.checkBody('firstname', 'Vorname ungültig').notEmpty();
+	req.checkBody('lastname', 'Nachname ungültig').notEmpty();
 	
-	req.checkBody('street', 'Strasse ungueltig').notEmpty();
-	req.checkBody('zip', 'PLZ ungueltig').notEmpty().isNumeric();
-	req.checkBody('city', 'Stadt ungueltig').notEmpty();
-	req.checkBody('tel', 'Telefon ungueltig').notEmpty();
+	req.checkBody('street', 'Strasse ungültig').notEmpty();
+	req.checkBody('zip', 'PLZ ungültig').notEmpty().isNumeric();
+	req.checkBody('city', 'Stadt ungültig').notEmpty();
+	req.checkBody('tel', 'Telefon ungültig').notEmpty();
 	
 	if(req.validationErrors()){
 		return next();

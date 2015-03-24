@@ -8,20 +8,20 @@ var crypto = require('crypto');
 //add user function for superusers
 exports.adduser = function(req, res, next){
 	
-	req.checkBody('username', 'Benutzername ungueltig').notEmpty().isAlphanumeric();
-	req.checkBody('type', 'Nutzerechte ungueltig').notEmpty().isIn(['club', 'other']);
+	req.checkBody('username', 'Benutzername ungültig').notEmpty().isAlphanumeric();
+	req.checkBody('type', 'Nutzerechte ungültig').notEmpty().isIn(['club', 'other']);
 
 	req.sanitize('superuser').toBoolean();
 	if(!req.body.loginShell) req.body.loginShell = '/bin/false';
 
-	req.checkBody('email', 'E-Mail ungueltig').notEmpty().isEmail();
-	req.checkBody('firstname', 'Vorname ungueltig').notEmpty();
-	req.checkBody('lastname', 'Nachname ungueltig').notEmpty();
+	req.checkBody('email', 'E-Mail ungültig').notEmpty().isEmail();
+	req.checkBody('firstname', 'Vorname ungültig').notEmpty();
+	req.checkBody('lastname', 'Nachname ungültig').notEmpty();
 	
-	req.checkBody('street', 'Strasse ungueltig').notEmpty();
-	req.checkBody('zip', 'PLZ ungueltig').notEmpty().isNumeric();
-	req.checkBody('city', 'Stadt ungueltig').notEmpty();
-	req.checkBody('tel', 'Telefon ungueltig').notEmpty();
+	req.checkBody('street', 'Strasse ungültig').notEmpty();
+	req.checkBody('zip', 'PLZ ungültig').notEmpty().isNumeric();
+	req.checkBody('city', 'Stadt ungültig').notEmpty();
+	req.checkBody('tel', 'Telefon ungültig').notEmpty();
 
 	if(req.validationErrors()){
 		return next();
@@ -68,18 +68,18 @@ exports.edituser = function(req, res, next){
 		return next(err);
 	}
 
-	req.checkBody('type', 'Nutzerechte ungueltig').notEmpty().isIn(['club', 'other']);
+	req.checkBody('type', 'Nutzerechte ungültig').notEmpty().isIn(['club', 'other']);
 
 	req.sanitize('superuser').toBoolean();
 
-	req.checkBody('email', 'E-Mail ungueltig').notEmpty().isEmail();
-	req.checkBody('firstname', 'Vorname ungueltig').notEmpty();
-	req.checkBody('lastname', 'Nachname ungueltig').notEmpty();
+	req.checkBody('email', 'E-Mail ungültig').notEmpty().isEmail();
+	req.checkBody('firstname', 'Vorname ungültig').notEmpty();
+	req.checkBody('lastname', 'Nachname ungültig').notEmpty();
 	
-	req.checkBody('street', 'Strasse ungueltig').notEmpty();
-	req.checkBody('zip', 'PLZ ungueltig').notEmpty().isNumeric();
-	req.checkBody('city', 'Stadt ungueltig').notEmpty();
-	req.checkBody('tel', 'Telefon ungueltig').notEmpty();
+	req.checkBody('street', 'Strasse ungültig').notEmpty();
+	req.checkBody('zip', 'PLZ ungültig').notEmpty().isNumeric();
+	req.checkBody('city', 'Stadt ungültig').notEmpty();
+	req.checkBody('tel', 'Telefon ungültig').notEmpty();
 	
 	if(req.validationErrors()){
 		return next();
