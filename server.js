@@ -11,13 +11,14 @@ var api = express.Router();
 var ldap = require('./modules/ldap');
 var config = require('./config');
 
-var auth = require('./controllers/auth');
+var auth       = require('./controllers/auth');
 var usermanage = require('./controllers/usermanage');
-var settings = require('./controllers/settings');
+var settings   = require('./controllers/settings');
 
 
-var jwtauth = require('./middleware/jwtauth')
-var requireAuth = require('./middleware/requireauth');
+var jwtauth      = require('./middleware/jwtauth')
+var requireAuth  = require('./middleware/requireauth');
+var requireSu    = require('./middleware/requiresu');
 var errorhandler = require('./middleware/errorhandler');
 
 api.use(cors({ origin: '*' }));
@@ -35,20 +36,30 @@ app.use(expressValidator({
 }));
 
 
-//routes
+/****************************************
+	ROUTES
+*****************************************/
+
+//generic routes
 api.post('/login', auth.login);
 api.get('/userdata', jwtauth, requireAuth, function(req, res){
     res.json(req.user);
 });
-api.get('/user', jwtauth, requireAuth, usermanage.listusers);
-api.post('/user', jwtauth, requireAuth, usermanage.adduser);
-api.get('/user/:uid', jwtauth, requireAuth, usermanage.getuser);
-api.put('/user/:uid', jwtauth, requireAuth, usermanage.edituser);
-api.delete('/user/:uid', jwtauth, requireAuth, usermanage.deleteuser);
 
-
+//user settings
 api.post('/settings/changepassword', jwtauth, requireAuth, settings.changepassword);
 api.put('/settings/profile', jwtauth, requireAuth, settings.changeprofile);
+
+
+//superuser actions
+api.get('/user', jwtauth, requireAuth, requireSu, usermanage.listusers);
+api.post('/user', jwtauth, requireAuth, requireSu, usermanage.adduser);
+api.get('/user/:uid', jwtauth, requireAuth, requireSu, usermanage.getuser);
+api.put('/user/:uid', jwtauth, requireAuth, requireSu, usermanage.edituser);
+api.delete('/user/:uid', jwtauth, requireAuth, requireSu, usermanage.deleteuser);
+
+
+
 
 
 
