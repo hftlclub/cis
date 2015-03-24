@@ -1,13 +1,13 @@
 <div class="page-header">
-  <h3 ng-if="clubUser.type == 'user'">Profil bearbeiten</h3>
-  <h3 ng-if="clubUser.type != 'user' && form.mode=='add'">Benutzer hinzufügen</h3>
-  <h3 ng-if="clubUser.type != 'user' && form.mode=='edit'">Benutzer bearbeiten</h3>
+  <h3 ng-if="form.mode=='profile'">Profil bearbeiten</h3>
+  <h3 ng-if="form.mode=='add'">Benutzer hinzufügen</h3>
+  <h3 ng-if="form.mode=='edit'">Benutzer bearbeiten</h3>
 </div>
 
 <div class="row">
   <div class="col-md-8 col-md-offset-2">
     <alert ng-if="form.message == 'error'" type="alert alert-danger">
-      Systemfehler
+      Systemfehler ({{form.data.errormessage}})
     </alert>
     <alert ng-if="form.message == 'invalid'" type="alert alert-warning">
       Einige Felder sind fehlerhaft.
@@ -57,7 +57,7 @@
         </div>
       </div>
 
-			
+
 
       <div class="form-group" ng-class="{'has-error': form.errors.email}">
         <label for="inputEmail" class="col-sm-3 control-label">E-Mail</label>

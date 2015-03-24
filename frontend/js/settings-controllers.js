@@ -8,9 +8,7 @@ clubAdminApp.controller('SettingsIndexController', function($scope, clubAuth){
 	refresh();
 
 	function refresh(){
-		if(clubAuth.user && clubAuth.user.type) {
-			$scope.settings.templateUrl = 'templates/settings/index-user.html';
-		}
+			// $scope.settings.templateUrl = 'templates/settings/index.html';
 	}
 
 });
@@ -36,6 +34,7 @@ clubAdminApp.controller('SettingsChangePasswordController', function($scope, $ht
 					$scope.form.message = 'invalid';
 					$scope.form.errors = data.highlight;
 				} else {
+					$scope.form.data.errormessage = data;
 					$scope.form.message = 'error';
 					$scope.form.errors = null;
 				}
