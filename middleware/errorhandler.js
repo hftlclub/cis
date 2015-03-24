@@ -2,7 +2,7 @@ exports.validation = function(req, res, next){
 	var valerrors = req.validationErrors(true);
 	if(valerrors){
 		console.log(valerrors);
-		res.status(400).json({error: valerrors}).end();
+		res.status(400).json({validationerror: valerrors}).end();
 	}
 }
 

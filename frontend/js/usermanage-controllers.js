@@ -72,9 +72,9 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 				//$scope.form.data = {};
 			}).
 			error(function(data, status) {
-				if(status == 400 && data.error == 'form') {
+				if(status == 400 && data.validationerror) {
 					$scope.form.message = 'invalid';
-					$scope.form.errors = data.highlight;
+					$scope.form.errors = data.validationerror;
 				} else {
 					$scope.form.data.errormessage = data;
 					$scope.form.message = 'error';
