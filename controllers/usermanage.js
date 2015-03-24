@@ -41,6 +41,7 @@ exports.adduser = function(req, res, next){
 
 			//return new password
 			res.json({
+				'username': req.body.username,
 				'password': req.body.password
 			}).end();
 		});
