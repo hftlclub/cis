@@ -19,7 +19,7 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 	console.log();
 
 	form.id = $routeParams.id;
-	form.mode = $route.current.locals.clubMode;//(form.id)?'edit':'add';
+	form.mode = $route.current.locals.clubMode;
 	form.data = (form.mode == 'add') ? {} : null; // 'cause form is hidden when data is null
 	form.errors = {};
 	form.message = null;
@@ -118,7 +118,6 @@ clubAdminApp.controller('userListController', function($scope, $rootScope, $http
 	function refresh() {
 		$http.get(apiPath + '/user').
 			success(function(data){
-				console.log('received user data:', data);
 				$scope.users.data = data;
 		});
 
@@ -149,7 +148,6 @@ clubAdminApp.controller('userListController', function($scope, $rootScope, $http
 		});
 
 		modal.result.then(function(){
-			console.log("USER Object:", $rootScope.user);
 			var req = {
 				url: apiPath + '/user/'+ $scope.user.username,
 				method: 'DELETE'
