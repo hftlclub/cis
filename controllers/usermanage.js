@@ -37,7 +37,15 @@ exports.adduser = function(req, res, next){
 
 		//add new user
 		userservice.addUser(req.body, function(err, success){
-			if(err) next(err);
+			if(err){
+				//throw validation error if entry already exists
+				if(err.name == 'EntryAlreadyExistsError'){
+					req.checkBody('username', 'Benutzername wird schon verwendet').error(1);
+					next();
+				}else{			
+					next(err);
+				}
+			}
 
 			//return new password
 			res.json({
