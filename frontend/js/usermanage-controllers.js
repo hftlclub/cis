@@ -44,7 +44,7 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 		}else if(form.mode == 'edit'){
 			req.method = 'PUT';
 			req.url = apiPath + '/user/' + form.id;
-		
+
 		}else if(form.mode == 'profile'){
 			req.method = 'PUT';
 			req.url = apiPath + '/settings/profile';
@@ -55,12 +55,12 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 				if(form.mode == 'add'){
 					$scope.form.data.password = data.password;
 					$scope.form.message = 'successAdd';
-				
+
 				}else if(form.mode == 'edit'){
-					console.log(data);
-				
+					$location.path('/users');
+
 				}else if(form.mode == 'profile'){
-					console.log(data);
+					$location.path('/settings');
 				}
 				//$scope.form.data = {};
 			}).
@@ -81,14 +81,14 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 		if(!clubAuth.user){
 			return false;
 		}
-		
+
 		//user edits his own profile
 		if(form.mode == 'profile'){
 			form.data = clubAuth.user;
-		
+
 		//superuser edits other user
 		}else if(clubAuth.user.superuser && form.mode == 'edit'){
-			
+
 			$http.get(apiPath + '/user/' + form.id).
 				success(function(data){
 					form.data = data;

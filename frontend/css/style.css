@@ -11,3 +11,9 @@ span.largeicon {
 .centering{
   text-align: center;
 }
+
+.center-block {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
