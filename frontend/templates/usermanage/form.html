@@ -15,6 +15,9 @@
     <alert ng-if="form.message == 'successAdd'" type="alert alert-success">
       Der Benutzer <b>{{form.msgdata.username}}</b> wurde erfolgreich hinzugefügt! Das Passwort lautet: <b>{{form.msgdata.password}}</b>
     </alert>
+    <alert ng-if="form.message == 'successEdit'" type="alert alert-success">
+      Der Benutzer <b>{{form.data.username}}</b> wurde erfolgreich bearbeitet!
+    </alert>
 
 
     <form class="form-horizontal" role="form" ng-submit="form.submit()" ng-if="form.data">

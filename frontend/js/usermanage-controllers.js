@@ -1,6 +1,6 @@
 
 
-clubAdminApp.controller('userFormController', function($scope, $rootScope, $routeParams, $route, $http, $location, $modal, clubAuth) {
+clubAdminApp.controller('userFormController', function($scope, $rootScope, $routeParams, $route, $http, $location, $modal, $timeout, clubAuth) {
 	var form = {};
 	$scope.form = form;
 
@@ -58,10 +58,16 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 					$scope.form.data = {};
 
 				}else if(form.mode == 'edit'){
-					$location.path('/users');
+					$scope.form.message = 'successEdit';
+					$timeout(function() {
+						$location.path('/users');
+			    }, 3000);
 
 				}else if(form.mode == 'profile'){
-					$location.path('/settings');
+					$scope.form.message = 'successEdit';
+					$timeout(function() {
+						$location.path('/settings');
+			    }, 3000);
 				}
 				//$scope.form.data = {};
 			}).
