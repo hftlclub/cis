@@ -21,7 +21,7 @@ exports.adduser = function(req, res, next){
 	//req.checkBody('street', 'Strasse ungültig').notEmpty();
 	//req.checkBody('zip', 'PLZ ungültig').notEmpty().isNumeric();
 	//req.checkBody('city', 'Stadt ungültig').notEmpty();
-	req.checkBody('tel', 'Telefon ungültig').notEmpty();
+	//req.checkBody('tel', 'Telefon ungültig').notEmpty();
 
 	if(req.validationErrors()){
 		return next();

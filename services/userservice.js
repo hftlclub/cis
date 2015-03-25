@@ -119,15 +119,10 @@ exports.addUser = function(data, callback){
 		mail: data.email,
 		givenName: data.firstname,
 		sn: data.lastname,
-		street: data.street,
-		postalCode: data.zip,
-		l: data.city,
-		telephoneNumber: data.tel,
 		loginShell: data.loginShell,
 		userPassword: hashes.userPassword,
 		sambaNTPassword: hashes.sambaNTPassword,
 		sambaLMPassword: hashes.sambaLMPassword,
-
 		uidNumber: data.uidnumber,
 		gidNumber: 100,
 		homeDirectory: '/home/' + data.username,
@@ -144,6 +139,22 @@ exports.addUser = function(data, callback){
 	};
 	
 	//set optional attributes
+	if(data.street){
+		user.street = data.street;
+	}
+
+	if(data.zip){
+		user.postalCode = data.zip;
+	}
+	
+	if(data.city){
+		user.l = data.city;
+	}
+	
+	if(data.tel){
+		user.telephoneNumber = data.tel;
+	}
+	
 	if(data.teamdrive){
 		user.registeredAddress = data.teamdrive;
 	}
