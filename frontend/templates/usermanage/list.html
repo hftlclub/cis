@@ -17,27 +17,30 @@
         <th>Adresse</th>
         <th>E-Mail</th>
         <th>Telefon</th>
-        <th>Rechte</th>
-        <th>Rolle</th>
+        <th>Rolle/Position</th>
         <th>TeamDrive</th>
+        <th>Rechte</th>
         <th class="text-center"><span class="glyphicon glyphicon-cog"></span></th>
       </tr>
     </thead>
     <tbody>
       <tr ng-repeat="user in users.data | filter:users.filter.fn | orderBy:'lastname'">
         <td>{{ user.username }}
-          <span ng-if="user.superuser" class="glyphicon glyphicon-user" title="Admin"></span>
+          <span ng-if="user.superuser" class="glyphicon glyphicon-user" title="Superuser"></span>
         </td>
         <td>{{ user.lastname}}, {{ user.firstname}}</td>
         <td>{{ user.street }}
           <br>{{ user.zip }} {{ user.city }}</td>
-        <td><a href="mailto:{{ user.email }}">{{ user.email }}</a>
+        <td><a ng-if="user.email" href="mailto:{{ user.email }}">{{ user.email }}</a>
         </td>
-        <td><a href="tel:{{ user.tel }}">{{ user.tel }}</a>
+        <td><a ng-if="user.tel" href="tel:{{ user.tel }}">{{ user.tel }}</a>
         </td>
-        <td>{{ user.type }}</td>
         <td>{{ user.role }}</td>
-        <td><a href="android-app://com.teamdrive.android.client" />{{ user.teamdrive }}</a></td>
+        <td>{{ user.teamdrive }}</td>
+        <td>
+	        <span ng-if="user.type == 'club'" class="label label-success">Club</span>
+	        <span ng-if="user.type == 'other'" class="label label-default">Extern</span>
+		</td>
         <td class="text-center" style="width: 33px">
           <div class="btn-group" dropdown>
             <button type="button" class="btn btn-xs btn-default dropdown-toggle" dropdown-toggle>
