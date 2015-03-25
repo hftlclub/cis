@@ -66,9 +66,16 @@
 
       <div class="form-group" ng-class="{'has-error has-feedback': form.errors.email}">
         <label for="inputEmail" class="col-sm-3 control-label">E-Mail</label>
-        <div class="col-sm-9">
+        <div  ng-class="form.mode == 'add' ? 'col-sm-5' : 'col-sm-9'">
           <input type="text" ng-model="form.data.email" class="form-control" id="inputEmail" placeholder="E-Mail" tooltip-placement="right" tooltip-trigger="focus" tooltip="Deine E-Mail Adresse für Club-Mails">
           <span ng-if="form.errors.email" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        </div>
+        <div class="col-sm-4" ng-if="(form.mode == 'add')">
+					<div class="checkbox">
+						<label>
+							<input ng-model="form.data.sendPassword" type="checkbox">Passwort per E-Mail senden
+						</label>
+					</div>
         </div>
       </div>
 

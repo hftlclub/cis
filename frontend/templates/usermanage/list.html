@@ -26,7 +26,6 @@
     <tbody>
       <tr ng-repeat="user in users.data | filter:users.filter.fn | orderBy:'lastname'">
         <td>{{ user.username }}
-          <span ng-if="user.superuser" class="glyphicon glyphicon-user" title="Superuser"></span>
         </td>
         <td>{{ user.lastname}}, {{ user.firstname}}</td>
         <td>{{ user.street }}
@@ -40,7 +39,8 @@
         <td>
 	        <span ng-if="user.type == 'club'" class="label label-success">Club</span>
 	        <span ng-if="user.type == 'other'" class="label label-default">Extern</span>
-		</td>
+          <span ng-if="user.superuser" class="glyphicon glyphicon-user pull-right" title="Superuser"></span>
+		    </td>
         <td class="text-center" style="width: 33px">
           <div class="btn-group" dropdown>
             <button type="button" class="btn btn-xs btn-default dropdown-toggle" dropdown-toggle>
