@@ -1,6 +1,7 @@
 var util = require('util');
 var config = require('../config');
 var ldap = require('../modules/ldap');
+var smtp = require('../modules/smtp');
 var userservice = require('../services/userservice');
 var crypto = require('crypto');
 
@@ -46,6 +47,19 @@ exports.adduser = function(req, res, next){
 					next(err);
 				}
 			}
+
+			if(req.body.sendPassword){
+				var replace = {
+					'username': req.body.username,
+					'password': req.body.password,
+					'firstname': req.body.firstname
+				}
+				
+				smtp.mail(req.body.email, 'sendPwAdd', replace, function(err, success){
+					if(err) console.log(err);
+				});
+			}
+			
 
 			//return new password
 			res.json({

@@ -14,3 +14,19 @@ exports.ldap = {
     "admindn"  : "cn=admin,dc=club,dc=hft-leipzig,dc=de",
     "adminpw"  : ""
 };
+
+//SMTP settings
+exports.smtp = {
+    "host": "securemail.hft-leipzig.de",
+    "port": 465,
+    "secure": true,
+    "auth": {
+        "user": "",
+        "pass": ""
+    }
+};
+
+exports.mailsettings = {
+	"from": "HfTL Club <club@hft-leipzig.de>",
+	"tplpath": "templates/email/"
+};

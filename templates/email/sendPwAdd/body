@@ -1,0 +1,24 @@
+Hallo {firstname},
+mit dieser Mail erhältst Du Deinen persönlichen Account für das Clubnetzwerk:
+
+Benutzername: {username}
+Passwort: {password}
+
+Den Account brauchst Du für:
+1) das Club-WLAN (hftl_club)
+2) das Clubinformationssystem: https://intern.hftl.club
+3) die Netzwerkdosen im Club
+
+Bitte logge dich in das Clubsystem ein (siehe unten) und ändere dein Passwort!
+Der Account ist persönlich, darf also nicht weitergegeben werden.
+
+Der alte WLAN-Benutzer "clubteam" entfällt damit.
+Solltet ihr Fehler bemerken oder weitere Ideen haben, schreibt bitte an Ferdinand oder Danny.
+
+
+Technische Infos:
+- Passwörter werden als SSHA- und NTLM-Hashes im LDAP-Baum gespeichert
+- Konstruktives Kaputtspielen ist erlaubt, wenn es der Verbesserung dient ;-)
+- es werden keine Accounting-Daten erhoben
+- LAN und WLAN: 802.1X, PEAP, MSCHAPv2
+- https://github.com/hftlclub/club-admin
