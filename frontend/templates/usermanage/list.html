@@ -27,7 +27,7 @@
       <tr ng-repeat="user in users.data | filter:users.filter.fn | orderBy:'lastname'">
         <td>{{ user.username }}
         </td>
-        <td>{{ user.lastname}}, {{ user.firstname}}</td>
+        <td>{{ user.lastname }}, {{ user.firstname }}</td>
         <td>{{ user.street }}
           <br>{{ user.zip }} {{ user.city }}</td>
         <td><a ng-if="user.email" href="mailto:{{ user.email }}">{{ user.email }}</a>

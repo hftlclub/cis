@@ -46,10 +46,10 @@ exports.changeprofile = function(req, res, next){
 	req.checkBody('firstname', 'Vorname ungültig').notEmpty();
 	req.checkBody('lastname', 'Nachname ungültig').notEmpty();
 	
-	req.checkBody('street', 'Strasse ungültig').notEmpty();
-	req.checkBody('zip', 'PLZ ungültig').notEmpty().isNumeric();
-	req.checkBody('city', 'Stadt ungültig').notEmpty();
-	req.checkBody('tel', 'Telefon ungültig').notEmpty();
+	//req.checkBody('street', 'Strasse ungültig').notEmpty();
+	//req.checkBody('zip', 'PLZ ungültig').notEmpty().isNumeric();
+	//req.checkBody('city', 'Stadt ungültig').notEmpty();
+	//req.checkBody('tel', 'Telefon ungültig').notEmpty();
 	
 	if(req.validationErrors()){
 		return next();
