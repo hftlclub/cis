@@ -11,7 +11,7 @@ exports.adduser = function(req, res, next){
 
 	req.checkBody('username', 'Benutzername ungültig').notEmpty().isAlphanumeric();
 	req.checkBody('type', 'Nutzerechte ungültig').notEmpty().isIn(['club', 'other']);
-
+	
 	req.sanitize('superuser').toBoolean();
 	if(!req.body.loginShell) req.body.loginShell = '/bin/false';
 
@@ -117,6 +117,8 @@ exports.edituser = function(req, res, next){
 	//you can only change superuser state of others
 	if(uid != req.user.username){
 		data.superuser = req.body.superuser;
+	}else{
+		data.superuser = req.user.superuser;
 	}
 
 	//loginShell only for superusers
