@@ -30,3 +30,6 @@ exports.mailsettings = {
 	"from": "HfTL Club <club@hft-leipzig.de>",
 	"tplpath": "templates/email/"
 };
+
+
+exports.feedbackmail = "ferdinand.malcher@hft-leipzig.de";

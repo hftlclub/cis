@@ -14,6 +14,7 @@ var config = require('./config');
 var auth       = require('./controllers/auth');
 var usermanage = require('./controllers/usermanage');
 var settings   = require('./controllers/settings');
+var feedback   = require('./controllers/feedback');
 
 
 var jwtauth      = require('./middleware/jwtauth')
@@ -42,6 +43,7 @@ app.use(expressValidator({
 
 //generic routes
 api.post('/login', auth.login);
+api.post('/feedback', feedback.sendFeedback);
 api.get('/userdata', jwtauth, requireAuth, function(req, res){
     res.json(req.user);
 });
