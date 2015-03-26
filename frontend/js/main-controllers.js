@@ -16,7 +16,7 @@ function fixAutofillBug() {
 	});
 }
 
-clubAdminApp.controller('MainController', function ($scope, $route, $routeParams, $location, $interval, clubAuth, $timeout) {
+clubAdminApp.controller('MainController', function ($scope, $route, $routeParams, $location, $interval, clubAuth, $timeout, $modal, $http) {
 	$scope.$route = $route;
 	$scope.$location = $location;
 	$scope.$routeParams = $routeParams;
@@ -27,7 +27,7 @@ clubAdminApp.controller('MainController', function ($scope, $route, $routeParams
 		name: null,
 	};
 
-	$scope.$on('clubAuthRefreshed', function(){
+	$scope.$on('clubAuthRefreshed', function() {
 		if(clubAuth.user && clubAuth.user.username) {
 			$scope.nav.templateUrl = 'templates/navbar.html';
 			$scope.user = clubAuth.user;
@@ -39,6 +39,21 @@ clubAdminApp.controller('MainController', function ($scope, $route, $routeParams
 
 	clubAuth.refresh();
 
+	$scope.openFeedbackModal = function() {
+
+		var modalInstance = $modal.open({
+			templateUrl: 'templates/feedbackModal.html',
+			controller: 'FeedbackModalController'
+		});
+
+		modalInstance.result.then(function (data) {
+			$http.post(apiPath + '/feedback', data).
+				success( function() {
+					console.log('sent');
+				});
+		});
+	};
+
 });
 
 clubAdminApp.controller('IndexController', function($location, clubAuth) {
@@ -49,5 +64,16 @@ clubAdminApp.controller('IndexController', function($location, clubAuth) {
 		$location.path('/login');
 	}
 
+});
 
+clubAdminApp.controller('FeedbackModalController', function ($scope, $modalInstance, $rootScope) {
+	$scope.data = {};
+	$scope.data.name = ($rootScope.clubUser) ? $rootScope.clubUser.firstname + " " + $rootScope.clubUser.lastname : "";
+
+	$scope.ok = function () {
+    $modal.close();
+  };
+  $scope.cancel = function () {
+    $modal.dismiss('cancel');
+	};
 });
