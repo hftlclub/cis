@@ -1,0 +1,21 @@
+  <div class="modal-header">
+  	<h3 class="modal-title">Feedback geben</h3>
+  </div>
+  <div class="modal-body">
+
+    <form>
+      <div class="form-group">
+        <label for="feedbackInputName">Name</label>
+        <input ng-model="data.name" type="text" class="form-control" id="inputName" placeholder="Dein Name">
+      </div>
+      <div class="form-group">
+        <label for="feedbackInputText">Deine Nachricht</label>
+        <textarea ng-model="data.text" class="form-control" id="exampleInputPassword1" placeholder="Schreib uns eine Nachricht" rows="5"></textarea>
+      </div>
+    </form>
+
+  </div>
+  <div class="modal-footer">
+  	<button class="btn btn-primary" ng-click="$close(data)">Senden</button>
+  	<button class="btn btn-default" ng-click="$dismiss()">Abbrechen</button>
+  </div>

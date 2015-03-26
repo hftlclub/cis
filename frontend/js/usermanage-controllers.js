@@ -53,7 +53,7 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 		$http(req).
 			success(function(data) {
 				if(form.mode == 'add'){
-					$scope.form.msgdata = data;					
+					$scope.form.msgdata = data;
 					$scope.form.message = 'successAdd';
 					$scope.form.data = {};
 
