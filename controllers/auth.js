@@ -8,7 +8,8 @@ exports.login = function(req, res, next){
 
     //error if uid or password not set
     if (!req.body.username || !req.body.password){
-        res.send(null, 401);
+        res.send(null, 400);
+        return;
     }
 
 	
@@ -25,6 +26,7 @@ exports.login = function(req, res, next){
         userservice.getUserByUid(req.body.username, function(err, user){
             if(err || !user){
                 res.send(null, 401);
+                return;
             }
 
             //user is authenticated and fetched --> send token
@@ -41,6 +43,49 @@ exports.login = function(req, res, next){
                 expires: expires,
                 username: user.username
             });
+
+        });
+    });
+}
+
+
+
+
+
+
+
+exports.externallogin = function(req, res, next){
+
+    //error if uid or password not set
+    if (!req.body.username || !req.body.password){
+        res.send(null, 400);
+        return;
+    }
+	
+
+    //login user
+    userservice.checkpassword(req.body.username, req.body.password, function(err, success){
+        //error if login failed or error occured
+        if(err || !success){
+            res.send('failed', 401);
+            return;
+        }
+
+        //get user
+        userservice.getUserByUid(req.body.username, function(err, user){
+            if(err || !user){
+                res.send('could not find user', 401);
+                return;
+            }
+			
+			//if not all types are allowed and user is not of allowed type
+			if(req.params.type != 'all' && user.type != req.params.type){
+				res.send('user type is not allowed', 401);
+				return;
+			}
+			
+            res.send('success', 200);
+            return;
 
         });
     });

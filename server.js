@@ -48,6 +48,8 @@ api.get('/userdata', jwtauth, requireAuth, function(req, res){
     res.json(req.user);
 });
 
+api.post('/login/external/:type', auth.externallogin);
+
 //user settings
 api.post('/settings/changepassword', jwtauth, requireAuth, settings.changepassword);
 api.put('/settings/profile', jwtauth, requireAuth, settings.changeprofile);
