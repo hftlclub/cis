@@ -28,7 +28,7 @@ exports.smtp = {
 
 exports.mailsettings = {
 	"from": "HfTL Club <club@hft-leipzig.de>",
-	"tplpath": process.env.PWD + "/templates/email/"
+	"tplpath": require('path').dirname(process.mainModule.filename) + "/templates/email/"
 };
 
 
