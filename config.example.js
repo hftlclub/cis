@@ -28,8 +28,8 @@ exports.smtp = {
 
 exports.mailsettings = {
 	"from": "HfTL Club <club@hft-leipzig.de>",
-	"tplpath": "templates/email/"
+	"tplpath": process.env.PWD + "/templates/email/"
 };
 
 
-exports.feedbackmail = "ferdinand.malcher@hft-leipzig.de";
+exports.feedbackmail = "ferdinand.malcher@hft-leipzig.de, mail@d-koppenhagen.de";

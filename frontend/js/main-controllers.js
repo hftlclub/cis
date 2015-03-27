@@ -46,11 +46,8 @@ clubAdminApp.controller('MainController', function ($scope, $route, $routeParams
 			controller: 'FeedbackModalController'
 		});
 
-		modalInstance.result.then(function (data) {
-			$http.post(apiPath + '/feedback', data).
-				success( function() {
-					console.log('sent');
-				});
+		modalInstance.result.then(function(data) {
+			$http.post(apiPath + '/feedback', data);
 		});
 	};
 
@@ -68,7 +65,13 @@ clubAdminApp.controller('IndexController', function($location, clubAuth) {
 
 clubAdminApp.controller('FeedbackModalController', function ($scope, $modalInstance, $rootScope) {
 	$scope.data = {};
-	$scope.data.name = ($rootScope.clubUser) ? $rootScope.clubUser.firstname + " " + $rootScope.clubUser.lastname : "";
+	$scope.nameSet = false;
+	
+	//fill in name if user is logged in
+	if($rootScope.clubUser.firstname && $rootScope.clubUser.lastname){
+		$scope.data.name = $rootScope.clubUser.firstname + " " + $rootScope.clubUser.lastname;
+		$scope.nameSet = true;
+	}	
 
 	$scope.ok = function () {
     $modal.close();

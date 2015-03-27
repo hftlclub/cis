@@ -2,11 +2,15 @@
   	<h3 class="modal-title">Feedback geben</h3>
   </div>
   <div class="modal-body">
+  Funktioniert etwas nicht oder hast Du Probleme, Verbesserungsvorschläge, Ideen, ...?
+  Bitte sende uns eine Nachricht!
+  <br>
+  <br>
 
     <form>
       <div class="form-group">
         <label for="feedbackInputName">Name</label>
-        <input ng-model="data.name" type="text" class="form-control" id="inputName" placeholder="Dein Name">
+        <input ng-model="data.name" ng-disabled="nameSet" type="text" class="form-control" id="inputName" placeholder="Dein Name">
       </div>
       <div class="form-group">
         <label for="feedbackInputText">Deine Nachricht</label>
