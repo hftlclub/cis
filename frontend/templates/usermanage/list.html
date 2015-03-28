@@ -14,28 +14,24 @@
       <tr>
         <th>User</th>
         <th>Name</th>
-        <th>Adresse</th>
-        <th>E-Mail</th>
         <th>Telefon</th>
+        <th>E-Mail</th>
         <th>Rolle/Position</th>
         <th>TeamDrive</th>
+        <th>Adresse</th>
         <th>Rechte</th>
         <th class="text-center"><span class="glyphicon glyphicon-cog"></span></th>
       </tr>
     </thead>
     <tbody>
       <tr ng-repeat="user in users.data | filter:users.filter.fn | orderBy:'lastname'">
-        <td>{{ user.username }}
-        </td>
+        <td>{{ user.username }}</td>
         <td>{{ user.lastname }}, {{ user.firstname }}</td>
-        <td>{{ user.street }}
-          <br>{{ user.zip }} {{ user.city }}</td>
-        <td><a ng-if="user.email" href="mailto:{{ user.email }}">{{ user.email }}</a>
-        </td>
-        <td><a ng-if="user.tel" href="tel:{{ user.tel }}">{{ user.tel }}</a>
-        </td>
+        <td><a ng-if="user.tel" href="tel:{{ user.tel }}">{{ user.tel }}</a></td>
+        <td><a ng-if="user.email" href="mailto:{{ user.email }}">{{ user.email }}</a></td>
         <td>{{ user.role }}</td>
         <td>{{ user.teamdrive }}</td>
+        <td>{{ user.street }}<br>{{ user.zip }} {{ user.city }}</td>
         <td>
 	        <span ng-if="user.type == 'club'" class="label label-success">Club</span>
 	        <span ng-if="user.type == 'other'" class="label label-default">Extern</span>

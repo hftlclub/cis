@@ -2,6 +2,7 @@
 <ul class="nav navbar-nav">
 	<li club-active-state><a href="#/settings">Einstellungen</a></li>
 	<li ng-if="user.superuser" club-active-state><a href="#/users">Benutzer</a></li>
+	<li ng-if="user.type=='club'" club-active-state><a href="#/userlist">Mitgliederliste</a></li>
 </ul>
 
 <div class="navbar-right">

@@ -61,6 +61,11 @@ clubAdminApp.config(function($routeProvider) {
 			}
 		}).
 
+		/* user list */
+		when('/userlist', {
+			templateUrl: 'templates/userlist.html?wipecache='+wipecache,
+			controller: 'userListController',
+		}).
 
 		/* superuser */
 

@@ -1,3 +1,8 @@
+/* for navbar bottom: */
+body {
+  padding-bottom: 70px;
+}
+
 a {
   cursor: pointer;
 }
