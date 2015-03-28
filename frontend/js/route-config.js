@@ -68,10 +68,13 @@ clubAdminApp.config(function($routeProvider) {
 		}).
 
 		/* superuser */
-
 		when('/superuser', {
 			templateUrl: 'templates/superuser/index.html?wipecache='+wipecache,
-		});
+		}).
 
+		/* about section */
+		when('/about', {
+			templateUrl: 'templates/about.html?wipecache='+wipecache,
+		});
 
 });
