@@ -13,6 +13,7 @@ var config = require('./config');
 
 var auth       = require('./controllers/auth');
 var usermanage = require('./controllers/usermanage');
+var members = require('./controllers/members');
 var settings   = require('./controllers/settings');
 var feedback   = require('./controllers/feedback');
 
@@ -20,7 +21,9 @@ var feedback   = require('./controllers/feedback');
 var jwtauth      = require('./middleware/jwtauth')
 var requireAuth  = require('./middleware/requireauth');
 var requireSu    = require('./middleware/requiresu');
+var requireClub    = require('./middleware/requireclub');
 var errorhandler = require('./middleware/errorhandler');
+
 
 api.use(cors({ origin: '*' }));
 api.use(bodyParser.json());
@@ -53,6 +56,8 @@ api.post('/login/external/:type', auth.externallogin);
 //user settings
 api.post('/settings/changepassword', jwtauth, requireAuth, settings.changepassword);
 api.put('/settings/profile', jwtauth, requireAuth, settings.changeprofile);
+
+api.get('/members', jwtauth, requireAuth, requireClub, members.listmembers);
 
 
 //superuser actions
