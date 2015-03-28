@@ -163,7 +163,7 @@
       </div>
 
       <div class="form-group" ng-class="{'has-error has-feedback': form.errors.teamdrive}">
-        <label for="inputTD" class="col-sm-3 control-label">Teamdrive Account</label>
+        <label for="inputTD" class="col-sm-3 control-label">Teamdrive-Account</label>
         <div class="col-sm-9">
           <input type="text" ng-model="form.data.teamdrive" class="form-control" id="inputTD" placeholder="(z.B. Stecker02)" tooltip-placement="right" tooltip-trigger="focus" tooltip="Dein Teamdrive-Benutzername">
           <span ng-if="form.errors.teamdrive" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
@@ -173,7 +173,7 @@
       <div class="form-group" ng-class="{'has-error has-feedback': form.errors.birthday}">
         <label for="inputBirthday" class="col-sm-3 control-label">Geburtstag</label>
         <div ng-class="birthdayPicker ? 'col-sm-4' : 'col-sm-9'">
-          <input ng-focus="birthdayPicker = true" type="text" class="form-control" ng-model="form.data.birthday" datepicker-popup="{{format}}" ng-required="true" placeholder="dd.mm.yyyy" tooltip-placement="right" tooltip-trigger="focus" tooltip="Hier kannst du dein Geburtstag eintragen." />
+          <input ng-focus="birthdayPicker = true" type="text" class="form-control" ng-model="form.data.birthday" datepicker-popup="{{format}}" placeholder="dd.mm.yyyy" tooltip-placement="right" tooltip-trigger="focus" tooltip="Hier kannst du deinen Geburtstag eintragen." />
           <span ng-if="form.errors.birthday" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
         </div>
         <div ng-if="birthdayPicker" class="col-sm-5">

@@ -52,8 +52,11 @@ exports.adduser = function(req, res, next){
 				var replace = {
 					'username': req.body.username,
 					'password': req.body.password,
-					'firstname': req.body.firstname
+					'name': req.body.firstname
 				}
+				
+				//use alias name instead of firstname if set
+				if(req.body.alias) replace.name = req.body.alias;
 				
 				smtp.mail(req.body.email, 'sendPwAdd', replace, function(err, success){
 					if(err) console.log(err);
