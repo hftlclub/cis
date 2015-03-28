@@ -33,6 +33,7 @@
           <th ng-if="attrs.birthday.state">{{attrs.birthday.label}}</th>
           <th ng-if="attrs.accDate.state">{{attrs.accDate.label}}</th>
           <th ng-if="attrs.status.state">{{attrs.status.label}}</th>
+          <th ng-if="isSuperuser" class="text-center"><span class="glyphicon glyphicon-cog"></span></th>
         </tr>
       </thead>
       <tbody>
@@ -52,6 +53,11 @@
             <span ng-if="!member.former" class="label label-success">Aktiv</span>
             <span ng-if="member.former" class="label label-default">Ehemalig</span>
             <span ng-if="member.honorary" class="pull-right glyphicon glyphicon-star text-danger" title="Ehrenmitglied"></span>
+          </td>
+          <td ng-if="isSuperuser" class="text-center" style="width: 33px">
+              <a ng-href="#/users/edit/{{member.username}}" type="button" class="btn btn-xs btn-default">
+                <span class="glyphicon glyphicon-pencil"></span>
+              </a>
           </td>
         </tr>
       </tbody>

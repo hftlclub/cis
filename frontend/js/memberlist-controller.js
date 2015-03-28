@@ -3,6 +3,8 @@ clubAdminApp.controller('memberListController', function($scope, $rootScope, $ht
 	$scope.members = {};
 	$scope.members.data = null;
 
+	$scope.isSuperuser = $rootScope.clubUser.superuser;
+
 	refresh();
 
 	/*** functions ***/
