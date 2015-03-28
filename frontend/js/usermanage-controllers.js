@@ -107,6 +107,24 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 		}
 	}
 
+	/* Date picker */
+	$scope.today = function() {
+    $scope.form.data.accessiondate = new Date();
+  };
+  $scope.today();
+
+  $scope.minDate = $scope.minDate ? null : new Date(2012,(10-1),25);
+  $scope.maxDate = $scope.maxDate ? null : new Date();
+
+	$scope.dateOptions = {
+    'startingDay': 1,
+  };
+
+  $scope.format = 'dd.MM.yyyy';
+
+	$scope.datepicker = true;
+	$scope.birthdayPicker = false;
+
 });
 
 clubAdminApp.controller('userListController', function($scope, $rootScope, $http, $routeParams, clubAuth, $modal) {

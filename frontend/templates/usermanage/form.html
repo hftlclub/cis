@@ -56,12 +56,39 @@
 
       <div class="form-group" ng-class="{'has-error has-feedback': form.errors.role}">
         <label for="inputRole" class="col-sm-3 control-label">Position</label>
-        <div class="col-sm-9">
+        <div ng-class="form.data.type == 'club' ? 'col-sm-5' : 'col-sm-9'">
           <input type="text" ng-model="form.data.role" class="form-control" id="inputRole" placeholder="Position" tooltip-placement="right" tooltip-trigger="focus" tooltip="zusätzliche Position (z.B. Vorstandsmitglied, etc.)">
           <span ng-if="form.errors.role" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
         </div>
+        <div ng-if="form.data.type == 'club'" class="col-sm-2">
+					<div class="checkbox">
+						<label>
+							<input ng-model="form.data.honorary" ng-disabled="(form.mode == 'profile')" type="checkbox"> Ehrenmitglied
+						</label>
+					</div>
+        </div>
+        <div ng-if="form.data.type == 'club'" class="col-sm-2">
+					<div class="checkbox">
+						<label>
+							<input ng-model="form.data.former" ng-disabled="(form.mode == 'profile')" type="checkbox"> Ehemalig
+						</label>
+					</div>
+        </div>
       </div>
 
+
+      <div ng-if="form.data.type == 'club' && form.mode != 'profile'" class="form-group" ng-class="{'has-error has-feedback': form.errors.accessiondate}">
+        <label for="inputAccessiondate" class="col-sm-3 control-label">Eintrittsdatum</label>
+        <div ng-class="datepicker ? 'col-sm-4' : 'col-sm-9'">
+          <input ng-focus="datepicker = true" type="text" class="form-control" ng-disabled="(form.mode == 'profile')" ng-model="form.data.accessiondate" datepicker-popup="{{format}}" ng-required="true" tooltip-placement="right" tooltip-trigger="focus" tooltip="Wann ist der Nutzer dem Club beigetreten?" />
+          <span ng-if="form.errors.accessiondate" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        </div>
+        <div class="col-sm-5">
+          <div class="pull-right" style="display:inline-block; min-height:200px;">
+            <datepicker ng-model="form.data.accessiondate" min-date="minDate" datepicker-options="dateOptions" max-date="maxDate" class="well well-sm"></datepicker>
+          </div>
+        </div>
+      </div>
 
 
       <div class="form-group" ng-class="{'has-error has-feedback': form.errors.email}">
@@ -92,6 +119,14 @@
         <div class="col-sm-9">
           <input type="text" ng-model="form.data.lastname" class="form-control" id="inputLastname" placeholder="Nachname" tooltip-placement="right" tooltip-trigger="focus" tooltip="Wer bist du?">
           <span ng-if="form.errors.lastname" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        </div>
+      </div>
+
+      <div class="form-group" ng-class="{'has-error has-feedback': form.errors.alias}">
+        <label for="inputAlias" class="col-sm-3 control-label">Spitzname</label>
+        <div class="col-sm-9">
+          <input type="text" ng-model="form.data.alias" class="form-control" id="inputAlias" placeholder="Spitzname" tooltip-placement="right" tooltip-trigger="focus" tooltip="Wie möchtest du angesprochen werden?">
+          <span ng-if="form.errors.alias" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
         </div>
       </div>
 
@@ -132,6 +167,19 @@
         <div class="col-sm-9">
           <input type="text" ng-model="form.data.teamdrive" class="form-control" id="inputTD" placeholder="(z.B. Stecker02)" tooltip-placement="right" tooltip-trigger="focus" tooltip="Dein Teamdrive-Benutzername">
           <span ng-if="form.errors.teamdrive" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        </div>
+      </div>
+
+      <div class="form-group" ng-class="{'has-error has-feedback': form.errors.birthday}">
+        <label for="inputBirthday" class="col-sm-3 control-label">Geburtstag</label>
+        <div ng-class="birthdayPicker ? 'col-sm-4' : 'col-sm-9'">
+          <input ng-focus="birthdayPicker = true" type="text" class="form-control" ng-model="form.data.birthday" datepicker-popup="{{format}}" ng-required="true" placeholder="dd.mm.yyyy" tooltip-placement="right" tooltip-trigger="focus" tooltip="Hier kannst du dein Geburtstag eintragen." />
+          <span ng-if="form.errors.birthday" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        </div>
+        <div ng-if="birthdayPicker" class="col-sm-5">
+          <div class="pull-right" style="display:inline-block; min-height:200px;">
+            <datepicker ng-model="form.data.birthday" datepicker-options="dateOptions" max-date="maxDate" class="well well-sm"></datepicker>
+          </div>
         </div>
       </div>
 
