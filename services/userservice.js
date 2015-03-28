@@ -1,6 +1,7 @@
 var ldapjs = require('ldapjs');
 var ssha = require('ssha');
 var smbhash = require('smbhash');
+var moment = require('moment');
 var ldap = require('../modules/ldap');
 var config = require('../config');
 
@@ -8,18 +9,21 @@ var config = require('../config');
 
 var userattrs = {
 	//LDAPAttr : ClubAdminAttr
-	'uid'              : 'username',
-	'uidNumber'        : 'uidNumber',
-	'sn'               : 'lastname',
-	'givenName'        : 'firstname',
-	'street'           : 'street',
-	'postalCode'       : 'zip',
-	'l'                : 'city',
-	'mail'             : 'email',
-	'telephoneNumber'  : 'tel',
-	'loginShell'       : 'loginShell',
-	'registeredAddress': 'teamdrive',
-	'employeeType'     : 'role'
+	'uid'                       : 'username',
+	'uidNumber'                 : 'uidNumber',
+	'sn'                        : 'lastname',
+	'givenName'                 : 'firstname',
+	'street'                    : 'street',
+	'postalCode'                : 'zip',
+	'l'                         : 'city',
+	'mail'                      : 'email',
+	'telephoneNumber'           : 'tel',
+	'loginShell'                : 'loginShell',
+	'registeredAddress'         : 'teamdrive',
+	'employeeType'              : 'role',
+	'title'                     : 'alias',
+	'dialupAccess'              : 'birthday',
+	'physicalDeliveryOfficeName': 'accessiondate'
 }
 
 
@@ -88,11 +92,13 @@ exports.getUserByUid = function(uid, callback){
 				user[userattrs[key]] = entry.object[key];
             }
 
-
             //get groups for user
             exports.getGroupsByUid(uid, function(err, groups){
 
 				user.superuser = (groups.indexOf('clubadmins') >= 0) ? true : false;
+				user.former    = (groups.indexOf('clubformer') >= 0) ? true : false;
+				user.honorary  = (groups.indexOf('clubhonorary') >= 0) ? true : false;
+				
 				if(groups.indexOf('clubmembers') >= 0){
 					user.type = 'club';
 				}else if(groups.indexOf('clubothers') >= 0){
@@ -119,7 +125,6 @@ exports.addUser = function(data, callback){
 		mail: data.email,
 		givenName: data.firstname,
 		sn: data.lastname,
-		loginShell: data.loginShell,
 		userPassword: hashes.userPassword,
 		sambaNTPassword: hashes.sambaNTPassword,
 		sambaLMPassword: hashes.sambaLMPassword,
@@ -138,32 +143,51 @@ exports.addUser = function(data, callback){
 		]
 	};
 	
-	//set optional attributes
+	
+	//loginShell for superusers only
+	if(data.loginShell && data.superuser){
+		user[getLDAPAttrName('loginShell')] = data.loginShell;
+	}else{
+		user[getLDAPAttrName('loginShell')] = '/bin/false';
+	}
+
+
 	if(data.street){
-		user.street = data.street;
+		user[getLDAPAttrName('street')] = data.street;
 	}
 
 	if(data.zip){
-		user.postalCode = data.zip;
+		user[getLDAPAttrName('zip')] = data.zip;
 	}
 	
 	if(data.city){
-		user.l = data.city;
+		user[getLDAPAttrName('city')] = data.city;
 	}
 	
 	if(data.tel){
-		user.telephoneNumber = data.tel;
+		user[getLDAPAttrName('tel')] = data.tel;
 	}
 	
 	if(data.teamdrive){
-		user.registeredAddress = data.teamdrive;
+		user[getLDAPAttrName('teamdrive')] = data.teamdrive;
 	}
 	
 	if(data.role){
-		user.employeeType = data.role;
+		user[getLDAPAttrName('role')] = data.role;
 	}
-
-
+	
+	if(data.alias){
+		user[getLDAPAttrName('alias')] = data.alias;
+	}
+	
+	if(data.birthday){
+		user[getLDAPAttrName('birthday')] = data.birthday;
+	}
+	
+	//accessiondate for clubmembers only
+	if(data.accessiondate && data.type == 'club'){
+		user[getLDAPAttrName('accessiondate')] = data.accessiondate;
+	}
 
 	//add user to LDAP tree
 	ldap.client.add(uidtodn(user.uid), user, function(err) {
@@ -174,9 +198,12 @@ exports.addUser = function(data, callback){
 		if(data.superuser){
 			exports.addToGroup(data.username, 'clubadmins', function(err, success){});
 		}
-
+		
 		if(data.type == 'club'){
 			exports.addToGroup(data.username, 'clubmembers', function(err, success){});
+			if(data.former)   exports.addToGroup(data.username, 'clubformer', function(err, success){});
+			if(data.honorary) exports.addToGroup(data.username, 'clubhonorary', function(err, success){});
+		
 		}else if(data.type == 'other'){
 			exports.addToGroup(data.username, 'clubothers', function(err, success){});
 		}else{
@@ -245,16 +272,30 @@ exports.editUser = function(uid, data, callback){
 
 		if('type' in data){
 			if(data.type == 'club'){
+				//general club group
 				exports.addToGroup(uid, 'clubmembers', function(err, success){});
 				exports.removeFromGroup(uid, 'clubothers', function(err, success){});
+				
+				//former group
+				if(data.former) exports.addToGroup(uid, 'clubformer', function(err, success){});
+				else exports.removeFromGroup(uid, 'clubformer', function(err, success){});
+				
+				//honorary group
+				if(data.honorary) exports.addToGroup(uid, 'clubhonorary', function(err, success){});
+				else exports.removeFromGroup(uid, 'clubhonorary', function(err, success){});
+				
 			
 			}else if(data.type == 'other'){
 				exports.addToGroup(uid, 'clubothers', function(err, success){});
 				exports.removeFromGroup(uid, 'clubmembers', function(err, success){});
+				exports.removeFromGroup(uid, 'clubformer', function(err, success){});
+				exports.removeFromGroup(uid, 'clubhonorary', function(err, success){});
 			
 			}else{
 				exports.addToGroup(uid, 'clubothers', function(err, success){});
 				exports.removeFromGroup(uid, 'clubmembers', function(err, success){});
+				exports.removeFromGroup(uid, 'clubformer', function(err, success){});
+				exports.removeFromGroup(uid, 'clubhonorary', function(err, success){});
 			}
 		}
 
@@ -282,6 +323,8 @@ exports.deleteUser = function(uid, callback){
 		exports.removeFromGroup(uid, 'clubmembers', function(err, success){});
 		exports.removeFromGroup(uid, 'clubothers', function(err, success){});
 		exports.removeFromGroup(uid, 'clubadmins', function(err, success){});
+		exports.removeFromGroup(uid, 'clubformer', function(err, success){});
+		exports.removeFromGroup(uid, 'clubhonorary', function(err, success){});
 		
 		return callback();
 	});
@@ -347,14 +390,22 @@ exports.getUsers = function(callback){
 	            //go through groups and assign params to user
 	            for(var i = 0; i < groups.length; i++){
 		            if(groups[i].memberUid.indexOf(entry.object.uid) >= 0){ //if user is group member
+			            
 			            //set params for user
 			            if(groups[i].cn == 'clubadmins'){
 				            user.superuser = true;
 			            }else if(groups[i].cn == 'clubmembers'){
 				            user.type = 'club';
+				            
 			            }else if(groups[i].cn == 'clubothers'){
 				            user.type = 'other';
-			            }
+			            
+			            }else if(groups[i].cn == 'clubformer'){
+				            user.former = true;
+				        
+				        }else if(groups[i].cn == 'clubhonorary'){
+				            user.honorary = true;
+				        }
 		            }
 	            }
 

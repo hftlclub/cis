@@ -58,6 +58,7 @@ exports.changeprofile = function(req, res, next){
 
 	//assemble data object. we have to make sure here you just edit those attributes you are allowed to
 	var data = {
+		alias:      req.body.alias,
 		email:      req.body.email,
 		firstname:  req.body.firstname,
 		lastname:   req.body.lastname,
@@ -66,7 +67,7 @@ exports.changeprofile = function(req, res, next){
 		city:       req.body.city,
 		tel:        req.body.tel,
 		teamdrive:  req.body.teamdrive,
-		role:       req.body.role
+		birthday:   req.body.birthday
 	};
 	
 	//edit user!

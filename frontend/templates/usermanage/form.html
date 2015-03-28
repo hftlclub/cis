@@ -57,7 +57,7 @@
       <div class="form-group" ng-class="{'has-error has-feedback': form.errors.role}">
         <label for="inputRole" class="col-sm-3 control-label">Position</label>
         <div ng-class="form.data.type == 'club' ? 'col-sm-5' : 'col-sm-9'">
-          <input type="text" ng-model="form.data.role" class="form-control" id="inputRole" placeholder="Position" tooltip-placement="right" tooltip-trigger="focus" tooltip="zusätzliche Position (z.B. Vorstandsmitglied, etc.)">
+          <input type="text" ng-model="form.data.role" ng-disabled="(form.mode != 'add')" class="form-control" id="inputRole" placeholder="Position" tooltip-placement="right" tooltip-trigger="focus" tooltip="zusätzliche Position (z.B. Vorstandsmitglied, etc.)">
           <span ng-if="form.errors.role" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
         </div>
         <div ng-if="form.data.type == 'club'" class="col-sm-2">
@@ -80,7 +80,7 @@
       <div ng-if="form.data.type == 'club' && form.mode != 'profile'" class="form-group" ng-class="{'has-error has-feedback': form.errors.accessiondate}">
         <label for="inputAccessiondate" class="col-sm-3 control-label">Eintrittsdatum</label>
         <div ng-class="datepicker ? 'col-sm-4' : 'col-sm-9'">
-          <input ng-focus="datepicker = true" type="text" class="form-control" ng-disabled="(form.mode == 'profile')" ng-model="form.data.accessiondate" datepicker-popup="{{format}}" ng-required="true" tooltip-placement="right" tooltip-trigger="focus" tooltip="Wann ist der Nutzer dem Club beigetreten?" />
+          <input ng-focus="datepicker = true" type="text" class="form-control" ng-disabled="(form.mode == 'profile')" ng-model="form.data.accessiondate" datepicker-popup="{{format}}" tooltip-placement="right" tooltip-trigger="focus" tooltip="Wann ist der Nutzer dem Club beigetreten?" />
           <span ng-if="form.errors.accessiondate" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
         </div>
         <div class="col-sm-5">

@@ -16,8 +16,6 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 		]
 	};
 
-	console.log();
-
 	form.id = $routeParams.id;
 	form.mode = $route.current.locals.clubMode;
 	form.data = (form.mode == 'add') ? {} : null; // 'cause form is hidden when data is null
@@ -98,7 +96,7 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 
 			$http.get(apiPath + '/user/' + form.id).
 				success(function(data){
-					form.data = data;
+					form.data = data;					
 				});
 
 		//probably superuser adds new user. Nothing to do here
@@ -108,13 +106,12 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 	}
 
 	/* Date picker */
-	$scope.today = function() {
-    $scope.form.data.accessiondate = new Date();
-  };
-  $scope.today();
-
-  $scope.minDate = $scope.minDate ? null : new Date(2012,(10-1),25);
-  $scope.maxDate = $scope.maxDate ? null : new Date();
+	//only create new datepicker if there's no data expected
+	if(form.mode == 'add'){
+	    $scope.form.data.accessiondate = new Date();
+	}
+	$scope.minDate = $scope.minDate ? null : new Date(2012,(10-1),25);
+	$scope.maxDate = $scope.maxDate ? null : new Date();
 
 	$scope.dateOptions = {
     'startingDay': 1,

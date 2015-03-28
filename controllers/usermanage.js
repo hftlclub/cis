@@ -1,4 +1,5 @@
 var util = require('util');
+var moment = require('moment');
 var config = require('../config');
 var ldap = require('../modules/ldap');
 var smtp = require('../modules/smtp');
@@ -11,8 +12,7 @@ exports.adduser = function(req, res, next){
 
 	req.checkBody('username', 'Benutzername ungültig').notEmpty().isAlphanumeric();
 	req.checkBody('type', 'Nutzerechte ungültig').notEmpty().isIn(['club', 'other']);
-	
-	req.sanitize('superuser').toBoolean();
+
 	if(!req.body.loginShell) req.body.loginShell = '/bin/false';
 
 	req.checkBody('email', 'E-Mail ungültig').notEmpty().isEmail();
@@ -84,8 +84,6 @@ exports.edituser = function(req, res, next){
 
 	req.checkBody('type', 'Nutzerechte ungültig').notEmpty().isIn(['club', 'other']);
 
-	req.sanitize('superuser').toBoolean();
-
 	req.checkBody('email', 'E-Mail ungültig').notEmpty().isEmail();
 	req.checkBody('firstname', 'Vorname ungültig').notEmpty();
 	req.checkBody('lastname', 'Nachname ungültig').notEmpty();
@@ -99,10 +97,12 @@ exports.edituser = function(req, res, next){
 		return next();
 	}
 
-
 	//assemble data object. we have to make sure here you just edit those attributes you are allowed to
 	var data = {
 		type:       req.body.type,
+		former:     req.body.former,
+		honorary:   req.body.honorary,
+		alias:      req.body.alias,
 		email:      req.body.email,
 		firstname:  req.body.firstname,
 		lastname:   req.body.lastname,
@@ -111,8 +111,21 @@ exports.edituser = function(req, res, next){
 		city:       req.body.city,
 		tel:        req.body.tel,
 		teamdrive:  req.body.teamdrive,
-		role:       req.body.role
+		role:       req.body.role,
+		birthday:   req.body.birthday
 	};
+	
+	//accession date only for club members
+	if(data.type == 'club' && req.body.accessiondate){
+		data.accessiondate = moment(req.body.accessiondate).toJSON();
+	}else{
+		data.accessiondate = null;
+	}
+	
+	//sanitize date
+	if(data.birthday) data.birthday = moment(data.birthday).toJSON();
+	
+
 
 	//you can only change superuser state of others
 	if(uid != req.user.username){
