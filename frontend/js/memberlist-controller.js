@@ -14,6 +14,14 @@ clubAdminApp.controller('memberListController', function($scope, $rootScope, $ht
 		});
 	}
 
+	$scope.orderBy = function(field){
+		$scope.orderByField = field;
+		$scope.reverseSort = !$scope.reverseSort;
+	}
+
+	$scope.orderByField = 'former';
+	$scope.reverseSort = true;
+	
 	$scope.attrs = {
 
 		'alias': {
@@ -47,10 +55,6 @@ clubAdminApp.controller('memberListController', function($scope, $rootScope, $ht
 		'accDate': {
 			'state': false,
 			'label': 'Eintrittsdatum'
-		},
-		'status': {
-			'state': true,
-			'label': 'Status'
 		}
 	}
 
