@@ -67,7 +67,7 @@
 						</label>
 					</div>
         </div>
-        <div ng-if="form.data.type == 'club'" class="col-sm-2">
+        <div ng-if="form.data.type == 'club' && !(form.mode == 'profile' && form.data.former)" class="col-sm-2">
 					<div class="checkbox">
 						<label>
 							<input ng-model="form.data.former" ng-disabled="(form.mode == 'profile')" type="checkbox"> Ehemalig
