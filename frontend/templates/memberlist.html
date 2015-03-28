@@ -1,0 +1,60 @@
+<div ng-if="user.type=='club'">
+  <div class="page-header">
+<!--
+    <div class="pull-right">
+      <a href="#/members/add" class="btn btn-success">
+        <span class="glyphicon glyphicon-file"></span>
+        PDF anzeigen
+      </a>
+    </div>
+-->
+    <h2>Mitgliederliste</h2>
+  </div>
+
+  <div class="row">
+      <h4>Filter</h4>
+      <div class="btn-group btn-group-justified">
+        <label ng-repeat="(attribut, value) in attrs" class="btn btn-success" ng-model="value.state" btn-checkbox>{{value.label}}</label>
+      </div>
+  </div>
+  <span class="help-block"></span>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered table-condensed table-hover" ng-if="members.data">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th ng-if="attrs.alias.state">{{attrs.alias.label}}</th>
+          <th ng-if="attrs.tel.state">{{attrs.tel.label}}</th>
+          <th ng-if="attrs.email.state">{{attrs.email.label}}</th>
+          <th ng-if="attrs.role.state">{{attrs.role.label}}</th>
+          <th ng-if="attrs.td.state">{{attrs.td.label}}</th>
+          <th ng-if="attrs.addr.state">{{attrs.addr.label}}</th>
+          <th ng-if="attrs.birthday.state">{{attrs.birthday.label}}</th>
+          <th ng-if="attrs.accDate.state">{{attrs.accDate.label}}</th>
+          <th ng-if="attrs.status.state">{{attrs.status.label}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-if="member.type != 'other'" ng-repeat="member in members.data | filter:member.filter.fn | orderBy:'lastname'" ng-class="{'text-muted': member.former}">
+          <td>{{ member.lastname }}, {{ member.firstname }}</td>
+          <td ng-if="attrs.alias.state">{{ member.alias }}</td>
+          <td ng-if="attrs.tel.state"><a ng-if="member.tel" href="tel:{{ member.tel }}">{{ member.tel }}</a></td>
+          <td ng-if="attrs.email.state"><a ng-if="member.email" href="mailto:{{ member.email }}">{{ member.email }}</a></td>
+          <td ng-if="attrs.role.state">{{ member.role }}</td>
+          <td ng-if="attrs.td.state">{{ member.teamdrive }}</td>
+          <td ng-if="attrs.addr.state">{{ member.street }}<br>{{ member.zip }} {{ member.city }}</td>
+          <td ng-if="attrs.birthday.state" ng-class="{'text-warning': isBirthday(member.birthday)}">{{ member.birthday | date:fulldate }}
+            <span ng-if="isBirthday(member.birthday)" class="glyphicon glyphicon-gift pull-right"></span>
+          </td>
+          <td ng-if="attrs.accDate.state">{{ member.accessiondate | date:fulldate }}</td>
+          <td ng-if="attrs.status.state">
+            <span ng-if="!member.former" class="label label-success">Aktiv</span>
+            <span ng-if="member.former" class="label label-default">Ehemalig</span>
+            <span ng-if="member.honorary" class="pull-right glyphicon glyphicon-star text-danger" title="Ehrenmitglied"></span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
