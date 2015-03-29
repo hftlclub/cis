@@ -27,3 +27,9 @@ span.largeicon {
   height: 60px;
   font-size: 2em;
 }
+
+.tooltip-inner {
+    width: 150px;
+    /* If max-width does not work, try using width instead */
+    /*width: 100px;*/
+}
