@@ -11,12 +11,15 @@
     <h2>Mitgliederliste</h2>
   </div>
 
-  <div class="row">
-    <h5>Angezeigte Felder:</h5>
-    <div class="btn-group btn-group-justified">
-      <label ng-repeat="(attribut, value) in attrs" class="btn btn-success" ng-model="value.state" btn-checkbox>{{value.label}}</label>
-    </div>
-  </div>
+
+
+  <label>Angezeigte Spalten:</label>
+  <span class="pull-right">
+    <label ng-repeat="(attribut, value) in attrs" class="checkbox-inline">
+      <input ng-model="value.state" type="checkbox"> {{value.label}}
+    </label>
+  </span>
+
   <span class="help-block"></span>
 
   <div class="table-responsive">
@@ -87,9 +90,9 @@
             </span>
           </th>
 
-          <th ng-click="orderBy('former')">
+          <th ng-click="orderBy(['-former','lastname'])">
             Status
-            <span ng-show="orderByField == 'former'">
+            <span ng-show="orderByField == ['-former','lastname']">
               <span ng-show="!reverseSort" class="glyphicon glyphicon-chevron-up"></span>
               <span ng-show="reverseSort" class="glyphicon glyphicon-chevron-down"></span>
             </span>

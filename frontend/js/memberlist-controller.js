@@ -23,7 +23,7 @@ clubAdminApp.controller('memberListController', function($scope, $rootScope, $ht
 
 	$scope.orderByField = 'former';
 	$scope.reverseSort = true;
-	
+
 	$scope.attrs = {
 
 		'alias': {
