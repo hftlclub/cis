@@ -58,6 +58,7 @@ api.post('/settings/changepassword', jwtauth, requireAuth, settings.changepasswo
 api.put('/settings/profile', jwtauth, requireAuth, settings.changeprofile);
 
 api.get('/members', jwtauth, requireAuth, requireClub, members.listmembers);
+api.get('/members/xlsx', jwtauth, requireAuth, requireClub, members.makexlsx);
 
 
 //superuser actions

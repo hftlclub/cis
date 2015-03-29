@@ -21,7 +21,8 @@
 		"cors": "*",
 		"ssha": "~1.0.1",
 		"nodemailer": ">=1.3.2",
-		"nodemailer-smtp-transport": "~1.0.2"
+		"nodemailer-smtp-transport": "~1.0.2",
+		"node-xlsx": "0.5.1"
 	},
 
 	"scripts": {
