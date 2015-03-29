@@ -14,34 +14,34 @@ clubAdminApp.controller('memberListController', function($scope, $rootScope, $ht
 		});
 	}
 
-	
-	
-	
+
+
+
 	//order stuff
 	$scope.orderBy = function(col){
 		//do not order if not desired for this column
-		
+
 		console.log($scope.attrs[col]);
-		
+
 		if(!$scope.attrs[col].hasOwnProperty('order')){
 			return false;
 		}
-		
+
 		//if col not changed, flip reversesort
-		if(col == $scope.orderByCol){ 
+		if(col == $scope.orderByCol){
 			$scope.reverseSort = !$scope.reverseSort;
-		
+
 		//if col changed, sort ascending
 		}else{
 			$scope.reverseSort = 0;
 		}
-		
+
 		$scope.orderByCol = col;
 	}
 
 	$scope.orderByCol = 'status';
 	$scope.reverseSort = 0;
-	
+
 	$scope.attrlist = ['name', 'alias', 'tel', 'email', 'role', 'td', 'addr', 'birthday', 'accdate', 'status'];
 	$scope.attrs = {
 		'name': {
@@ -96,5 +96,7 @@ clubAdminApp.controller('memberListController', function($scope, $rootScope, $ht
 		if (!birthday) return false;
 		return (new Date(birthday).toDateString() == new Date().toDateString());
 	};
+
+	$scope.date = new Date();
 
 });
