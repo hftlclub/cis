@@ -57,8 +57,14 @@
         <tr ng-if="member.type != 'other'" ng-repeat="member in members.data | orderBy:attrs[orderByCol].order:reverseSort" ng-class="{'text-muted': member.former}">
           <td>{{ member.lastname }}, {{ member.firstname }}</td>
           <td ng-if="attrs.alias.state">{{ member.alias }}</td>
-          <td ng-if="attrs.tel.state"><a ng-if="member.tel" href="tel:{{ member.tel }}">{{ member.tel }}</a></td>
-          <td ng-if="attrs.email.state"><a ng-if="member.email" href="mailto:{{ member.email }}">{{ member.email }}</a></td>
+          <td ng-if="attrs.tel.state">
+            <a ng-if="member.tel" href="tel:{{ member.tel }}" class="hidden-print">{{ member.tel }}</a>
+            <span ng-if="member.tel" class="visible-print">{{ member.tel }}</span>
+          </td>
+          <td ng-if="attrs.email.state">
+            <a ng-if="member.email" href="mailto:{{ member.email }}" class="hidden-print">{{ member.email }}</a>
+            <span ng-if="member.email" class="visible-print">{{ member.email }}</span>
+          </td>
           <td ng-if="attrs.role.state">{{ member.role }}</td>
           <td ng-if="attrs.td.state">{{ member.teamdrive }}</td>
           <td ng-if="attrs.addr.state">{{ member.street }}
