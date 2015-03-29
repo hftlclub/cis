@@ -7,8 +7,6 @@ clubAdminApp.controller('memberListController', function($scope, $rootScope, $ht
 
 	refresh();
 
-	/*** functions ***/
-
 	function refresh() {
 		$http.get(apiPath + '/members').
 			success(function(data){
@@ -16,17 +14,42 @@ clubAdminApp.controller('memberListController', function($scope, $rootScope, $ht
 		});
 	}
 
-	$scope.orderBy = function(field){
-		$scope.orderByField = field;
-		$scope.reverseSort = !$scope.reverseSort;
+	
+	
+	
+	//order stuff
+	$scope.orderBy = function(col){
+		//do not order if not desired for this column
+		
+		console.log($scope.attrs[col]);
+		
+		if(!$scope.attrs[col].hasOwnProperty('order')){
+			return false;
+		}
+		
+		//if col not changed, flip reversesort
+		if(col == $scope.orderByCol){ 
+			$scope.reverseSort = !$scope.reverseSort;
+		
+		//if col changed, sort ascending
+		}else{
+			$scope.reverseSort = 0;
+		}
+		
+		$scope.orderByCol = col;
 	}
 
-	$scope.orderByField = 'former';
-	$scope.reverseSort = true;
-
+	$scope.orderByCol = 'status';
+	$scope.reverseSort = 0;
+	
+	$scope.attrlist = ['name', 'alias', 'tel', 'email', 'role', 'td', 'addr', 'birthday', 'accdate', 'status'];
 	$scope.attrs = {
-
+		'name': {
+			'order': 'lastname',
+			'label': 'Name'
+		},
 		'alias': {
+			'order': 'alias',
 			'state': true,
 			'label': 'Spitzname'
 		},
@@ -35,14 +58,17 @@ clubAdminApp.controller('memberListController', function($scope, $rootScope, $ht
 			'label': 'Telefon'
 		},
 		'email': {
+			'order': 'alias',
 			'state': true,
 			'label': 'E-Mail'
 		},
 		'role': {
+			'order': 'alias',
 			'state': true,
 			'label': 'Rolle/Position'
 		},
 		'td': {
+			'order': 'teamdrive',
 			'state': false,
 			'label': 'TeamDrive'
 		},
@@ -51,12 +77,18 @@ clubAdminApp.controller('memberListController', function($scope, $rootScope, $ht
 			'label': 'Adresse'
 		},
 		'birthday': {
+			'order': 'birthday',
 			'state': false,
 			'label': 'Geburtstag'
 		},
-		'accDate': {
+		'accdate': {
+			'order': 'accessiondate',
 			'state': false,
 			'label': 'Eintrittsdatum'
+		},
+		'status': {
+			'order': ['-former','lastname'],
+			'label': 'Status'
 		}
 	}
 
