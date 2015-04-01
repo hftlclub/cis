@@ -63,7 +63,7 @@ clubAdminApp.controller('memberListController', function($scope, $rootScope, $ht
 			'label': 'E-Mail'
 		},
 		'role': {
-			'order': 'alias',
+			'order': 'role',
 			'state': true,
 			'label': 'Rolle/Position'
 		},
