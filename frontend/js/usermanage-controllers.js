@@ -18,11 +18,20 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 
 	form.id = $routeParams.id;
 	form.mode = $route.current.locals.clubMode;
-	form.data = (form.mode == 'add') ? {} : null; // 'cause form is hidden when data is null
 	form.errors = {};
 	form.message = null;
 
 	form.submit = submit;
+
+	//default values
+	if(form.mode == 'add'){
+		form.data = {
+			sendPassword: true
+		};
+	}else{
+		form.data = null; // 'cause form is hidden when data is null
+	}
+
 
 	refresh();
 
