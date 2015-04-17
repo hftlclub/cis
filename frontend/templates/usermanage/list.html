@@ -46,17 +46,17 @@
             </button>
             <ul class="dropdown-menu pull-right" role="menu">
 
-              <!--<li>
-                <a ng-href="#/users/password/{{user.username}}">
-                  <span class="glyphicon glyphicon-lock"></span>
-                  Passwort ändern
-                </a>
-              </li>-->
-
               <li>
                 <a ng-href="#/users/edit/{{user.username}}">
                   <span class="glyphicon glyphicon-pencil"></span>
                   Bearbeiten
+                </a>
+              </li>
+
+			  <li>
+                <a ng-click="users.resetpw(user)">
+                  <span class="glyphicon glyphicon-lock"></span>
+                  Passwort zurücksetzen 
                 </a>
               </li>
 

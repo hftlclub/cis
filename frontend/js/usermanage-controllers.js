@@ -133,11 +133,16 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 
 });
 
+
+
+
+
 clubAdminApp.controller('userListController', function($scope, $rootScope, $http, $routeParams, clubAuth, $modal) {
 
 	$scope.users = {};
 	$scope.users.data = null;
 	$scope.users.remove = remove;
+	$scope.users.resetpw = resetpw;
 
 	refresh();
 
@@ -170,8 +175,31 @@ clubAdminApp.controller('userListController', function($scope, $rootScope, $http
 
 
 	}
+	
+	
+	
+	
+	function resetpw(user) {
+		var modal = $modal.open({
+			templateUrl: 'templates/usermanage/passwordresetmodal.html',
+			controller: 'resetpwModalController',
+			resolve: {
+				user: function(){
+					return $rootScope.user = user;
+				}
+			}
+		});
+
+		modal.result.then(function(){
+			$http.get(apiPath + '/user/'+ user.username + '/resetPw').success(function(){});
+		});
+
+	}
+	
 
 });
+
+
 
 
 clubAdminApp.controller('delModalController', function ($scope, $modalInstance, user) {
@@ -182,3 +210,15 @@ clubAdminApp.controller('delModalController', function ($scope, $modalInstance, 
     $modal.dismiss('cancel');
 	};
 });
+
+
+
+clubAdminApp.controller('resetpwModalController', function ($scope, $modalInstance, user) {
+	$scope.ok = function () {
+    $modal.close(user);
+  };
+  $scope.cancel = function () {
+    $modal.dismiss('cancel');
+	};
+});
+

@@ -67,6 +67,7 @@ api.post('/user', jwtauth, requireAuth, requireSu, usermanage.adduser);
 api.get('/user/:uid', jwtauth, requireAuth, requireSu, usermanage.getuser);
 api.put('/user/:uid', jwtauth, requireAuth, requireSu, usermanage.edituser);
 api.delete('/user/:uid', jwtauth, requireAuth, requireSu, usermanage.deleteuser);
+api.get('/user/:uid/resetPw', jwtauth, requireAuth, requireSu, usermanage.resetPassword);
 
 
 

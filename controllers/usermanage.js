@@ -204,6 +204,47 @@ exports.deleteuser = function(req, res, next){
 
 
 
+
+//reset PW function for superusers
+exports.resetPassword = function(req, res, next){
+	var uid = req.params.uid;
+	var password = randomString(4);
+
+
+	//no uid given
+	if(!uid || !password){
+		var err = new Error('UID missing');
+		err.status = 400;
+		return next(err);
+	}
+
+	userservice.setPassword(uid, password, function(err, user){
+		if(err) return next(err);
+		
+		userservice.getUserByUid(uid, function(err, user){
+			if(err) return next(err);
+			
+			var replace = {
+				'username': uid,
+				'password': password,
+				'name'    : user.firstname
+			}
+			
+			//use alias name instead of firstname if set
+			if(user.alias) replace.name = user.alias;
+			
+			smtp.mail(user.email, 'sendPwReset', replace, function(err){
+				if(err) return next(err);
+				res.send();
+			});
+		});
+	});
+}
+
+
+
+
+
 function randomString(bytes){
 	return crypto.randomBytes(bytes).toString('hex');
 }

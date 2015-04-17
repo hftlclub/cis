@@ -1,0 +1,8 @@
+Hallo {name},
+dein Passwort für das Clubnetzwerk wurde zurückgesetzt.
+
+Benutzername: {username}
+Passwort: {password}
+
+Bitte logge dich in das Clubsystem ein und ändere dein Passwort:
+https://intern.hftl.club
