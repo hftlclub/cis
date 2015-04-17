@@ -25,7 +25,7 @@
       <div class="form-group" ng-class="{'has-error has-feedback': form.errors.username}">
         <label for="inputUsername" class="col-sm-3 control-label">Benutzername</label>
         <div class="col-sm-9">
-          <input type="text" ng-model="form.data.username" ng-disabled="(form.mode != 'add')" class="form-control" id="inputUsername" placeholder="Benutzername"  tooltip-placement="right" tooltip-trigger="focus" tooltip="Dein Benutzername">
+          <input type="text" ng-model="form.data.username" ng-disabled="(form.mode != 'add')" class="form-control" id="inputUsername" placeholder="Benutzername"  tooltip-placement="right" tooltip-trigger="focus" tooltip="Benutzername: nur alphanumerisch in Kleinbuchstaben!">
           <span ng-if="form.errors.username" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
         </div>
       </div>

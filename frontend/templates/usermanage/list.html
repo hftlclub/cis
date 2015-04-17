@@ -25,7 +25,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="user in users.data | filter:users.filter.fn | orderBy:'lastname'">
+      <tr ng-repeat="user in users.data | filter:users.filter.fn | orderBy:'lastname'" ng-class="{'text-muted': user.former}">
         <td>{{ $index + 1 }}</td>
         <td>{{ user.username }}</td>
         <td>{{ user.lastname }}, {{ user.firstname }}</td>
