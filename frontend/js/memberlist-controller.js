@@ -42,8 +42,12 @@ clubAdminApp.controller('memberListController', function($scope, $rootScope, $ht
 	$scope.orderByCol = 'status';
 	$scope.reverseSort = 0;
 
-	$scope.attrlist = ['name', 'alias', 'tel', 'email', 'role', 'td', 'addr', 'birthday', 'accdate', 'status'];
+	$scope.attrlist = ['index','name', 'alias', 'tel', 'email', 'role', 'td', 'addr', 'birthday', 'accdate', 'status'];
 	$scope.attrs = {
+		'index': {
+			'label': 'Nr.',
+			'state': false
+		},
 		'name': {
 			'order': 'lastname',
 			'label': 'Name'

@@ -55,6 +55,7 @@
       </thead>
       <tbody>
         <tr ng-if="member.type != 'other'" ng-repeat="member in members.data | orderBy:attrs[orderByCol].order:reverseSort" ng-class="{'text-muted': member.former}">
+		  <td ng-if="attrs.index.state">{{ $index + 1 }}</td>
           <td>{{ member.lastname }}, {{ member.firstname }}</td>
           <td ng-if="attrs.alias.state">{{ member.alias }}</td>
           <td ng-if="attrs.tel.state">
