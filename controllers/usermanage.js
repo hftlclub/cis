@@ -85,7 +85,7 @@ exports.edituser = function(req, res, next){
 		return next(err);
 	}
 
-	req.checkBody('type', 'Nutzerechte ungültig').notEmpty().isIn(['club', 'other']);
+	req.checkBody('type', 'Nutzerrechte ungültig').notEmpty().isIn(['club', 'other']);
 
 	req.checkBody('email', 'E-Mail ungültig').notEmpty().isEmail();
 	req.checkBody('firstname', 'Vorname ungültig').notEmpty();
@@ -102,20 +102,21 @@ exports.edituser = function(req, res, next){
 
 	//assemble data object. we have to make sure here you just edit those attributes you are allowed to
 	var data = {
-		type:       req.body.type,
-		former:     req.body.former,
-		honorary:   req.body.honorary,
-		alias:      req.body.alias,
-		email:      req.body.email,
-		firstname:  req.body.firstname,
-		lastname:   req.body.lastname,
-		street:     req.body.street,
-		zip:        req.body.zip,
-		city:       req.body.city,
-		tel:        req.body.tel,
-		teamdrive:  req.body.teamdrive,
-		role:       req.body.role,
-		birthday:   req.body.birthday
+		type:           req.body.type,
+		former:         req.body.former,
+		honorary:       req.body.honorary,
+		alias:          req.body.alias,
+		email:          req.body.email,
+		firstname:      req.body.firstname,
+		lastname:       req.body.lastname,
+		street:         req.body.street,
+		zip:            req.body.zip,
+		city:           req.body.city,
+		tel:            req.body.tel,
+		teamdrive:      req.body.teamdrive,
+		role:           req.body.role,
+		birthday:       req.body.birthday,
+		keyPermissions: req.body.keyPermissions
 	};
 	
 	//accession date only for club members

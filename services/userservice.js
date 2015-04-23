@@ -106,6 +106,11 @@ exports.getUserByUid = function(uid, callback){
 				}else{
 					user.type = null;
 				}
+				
+				user.keyPermissions = {};
+				for(var i = 0; i < config.doorkeys.length; i++){
+					user.keyPermissions[config.doorkeys[i]] = (groups.indexOf('door' + config.doorkeys[i]) >= 0) ? true : false;
+				}
 
 				return callback(null, user);
 			});
@@ -209,7 +214,13 @@ exports.addUser = function(data, callback){
 		}else{
 			exports.addToGroup(data.username, 'clubothers', function(err, success){});
 		}
-
+		
+		
+		for(var i = 0; i < config.doorkeys.length; i++){
+			if(data.type == 'club' && data.keyPermissions[config.doorkeys[i]]){ //if is clubmember and permissions for this key are set
+				exports.addToGroup(data.username, 'door' + config.doorkeys[i], function(err, success){});
+			}			
+		}
 
 		return callback(null, true);
 	});
@@ -298,7 +309,17 @@ exports.editUser = function(uid, data, callback){
 				exports.removeFromGroup(uid, 'clubhonorary', function(err, success){});
 			}
 		}
-
+		
+		if('keyPermissions' in data){
+			for(var i = 0; i < config.doorkeys.length; i++){
+				if(data.type == 'club' && data.keyPermissions[config.doorkeys[i]]){ //if is clubmember and permissions for this key are set
+					exports.addToGroup(uid, 'door' + config.doorkeys[i], function(err, success){});
+				}else{ //if no clubmember or permissions not set
+					exports.removeFromGroup(uid, 'door' + config.doorkeys[i], function(err, success){});
+				}			
+			}
+		}
+		
 		return callback(null, true);
 	});
 
@@ -325,6 +346,10 @@ exports.deleteUser = function(uid, callback){
 		exports.removeFromGroup(uid, 'clubadmins', function(err, success){});
 		exports.removeFromGroup(uid, 'clubformer', function(err, success){});
 		exports.removeFromGroup(uid, 'clubhonorary', function(err, success){});
+		
+		for(var i = 0; i < config.doorkeys.length; i++){
+			exports.removeFromGroup(uid, 'door' + config.doorkeys[i], function(err, success){});
+		}
 		
 		return callback();
 	});
@@ -386,6 +411,7 @@ exports.getUsers = function(callback){
 	            //negative default values for groups
 	            user.superuser = false;
 	            user.type = 'other';
+	            user.keyPermissions = {};
 
 	            //go through groups and assign params to user
 	            for(var i = 0; i < groups.length; i++){
@@ -406,6 +432,12 @@ exports.getUsers = function(callback){
 				        }else if(groups[i].cn == 'clubhonorary'){
 				            user.honorary = true;
 				        }
+				        
+						for(var k = 0; k < config.doorkeys.length; k++){
+							if(groups[i].cn == ('door' + config.doorkeys[k])){
+								user.keyPermissions[config.doorkeys[k]] = true;
+							}
+						}
 		            }
 	            }
 
@@ -443,7 +475,6 @@ exports.getGroupsByUid = function(uid, callback){
 
         res.on('searchEntry', function(entry){
             groups.push(entry.object.cn);
-
         });
 
         //return group list
