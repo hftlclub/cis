@@ -37,7 +37,8 @@ clubAdminApp.controller('MainController', function ($scope, $route, $routeParams
 		}
 	});
 
-	clubAuth.refresh();
+	//probably redundant
+	//clubAuth.refresh();
 
 	$scope.openFeedbackModal = function() {
 

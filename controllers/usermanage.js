@@ -1,10 +1,7 @@
-var util = require('util');
 var moment = require('moment');
 var config = require('../config');
-var ldap = require('../modules/ldap');
 var smtp = require('../modules/smtp');
 var userservice = require('../services/userservice');
-var crypto = require('crypto');
 
 
 //add user function for superusers
@@ -247,5 +244,5 @@ exports.resetPassword = function(req, res, next){
 
 
 function randomString(bytes){
-	return crypto.randomBytes(bytes).toString('hex');
+	return require('crypto').randomBytes(bytes).toString('hex');
 }

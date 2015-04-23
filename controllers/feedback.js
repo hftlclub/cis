@@ -1,5 +1,5 @@
 var config = require('../config');
-var smtp = require('../modules/smtp');
+var smtp   = require('../modules/smtp');
 
 
 exports.sendFeedback = function(req, res, next){

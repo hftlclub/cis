@@ -1,7 +1,8 @@
-var config = require('../config');
+var moment      = require('moment');
+var jwt         = require('jwt-simple');
+var config      = require('../config');
 var userservice = require('../services/userservice');
-var moment = require('moment');
-var jwt = require('jwt-simple');
+
 
 
 exports.login = function(req, res, next){
@@ -55,7 +56,6 @@ exports.login = function(req, res, next){
 
 
 exports.externallogin = function(req, res, next){
-
     //error if uid or password not set
     if (!req.body.username || !req.body.password){
         res.send(null, 400);
