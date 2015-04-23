@@ -2,6 +2,7 @@ clubAdminApp.controller('memberListController', function($scope, $rootScope, $ht
 
 	$scope.members = {};
 	$scope.members.data = null;
+	$scope.members.keys = null;
 
 	$scope.isSuperuser = $rootScope.clubUser.superuser;
 
@@ -11,7 +12,18 @@ clubAdminApp.controller('memberListController', function($scope, $rootScope, $ht
 		$http.get(apiPath + '/members').
 			success(function(data){
 				$scope.members.data = data;
+
+				$http.get(apiPath + '/keylist').
+					success(function(data){
+						$scope.members.data.forEach(function(user) {
+							data.forEach(function(key) {
+								if (user.username == key.username)
+									user.keyPermissions = key.keyPermissions;
+							});
+						});
+				});
 		});
+
 	}
 
 
@@ -42,7 +54,7 @@ clubAdminApp.controller('memberListController', function($scope, $rootScope, $ht
 	$scope.orderByCol = 'status';
 	$scope.reverseSort = 0;
 
-	$scope.attrlist = ['index','name', 'alias', 'tel', 'email', 'role', 'td', 'addr', 'birthday', 'accdate', 'status'];
+	$scope.attrlist = ['index','name', 'alias', 'tel', 'email', 'role', 'td', 'addr', 'birthday', 'accdate', 'keyPermissions', 'status'];
 	$scope.attrs = {
 		'index': {
 			'label': 'Nr.',
@@ -89,6 +101,11 @@ clubAdminApp.controller('memberListController', function($scope, $rootScope, $ht
 			'order': 'accessiondate',
 			'state': false,
 			'label': 'Eintrittsdatum'
+		},
+		'keyPermissions': {
+			'order': 'keyPermissions',
+			'state': false,
+			'label': 'Schlüsselberechtigungen'
 		},
 		'status': {
 			'order': ['-former','lastname'],
