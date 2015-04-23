@@ -67,6 +67,12 @@ clubAdminApp.config(function($routeProvider) {
 			controller: 'memberListController',
 		}).
 
+		/* key permission list */
+		when('/keylist', {
+			templateUrl: 'templates/keylist.html?wipecache='+wipecache,
+			controller: 'keyListController',
+		}).
+
 		/* about section */
 		when('/about', {
 			templateUrl: 'templates/about.html?wipecache='+wipecache,
