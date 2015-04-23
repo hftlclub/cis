@@ -88,13 +88,13 @@
       </div>
 
 
-      <div ng-if="form.data.type == 'club' && form.mode != 'profile'" class="form-group" ng-class="{'has-error has-feedback': form.errors.accessiondate}">
+      <div ng-if="form.data.type == 'club'" class="form-group" ng-class="{'has-error has-feedback': form.errors.accessiondate}">
         <label for="inputAccessiondate" class="col-sm-3 control-label">Eintrittsdatum</label>
         <div ng-class="datepicker ? 'col-sm-4' : 'col-sm-9'">
           <input ng-focus="datepicker = true" type="text" class="form-control" ng-disabled="(form.mode == 'profile')" ng-model="form.data.accessiondate" datepicker-popup="{{format}}" tooltip-placement="bottom" tooltip-trigger="focus" tooltip="Wann ist der Nutzer dem Club beigetreten?" />
           <span ng-if="form.errors.accessiondate" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
         </div>
-        <div class="col-sm-5">
+        <div ng-if="form.mode != 'profile'" class="col-sm-5">
           <div class="pull-right" style="display:inline-block; min-height:200px;">
             <datepicker ng-model="form.data.accessiondate" min-date="minDate" datepicker-options="dateOptions" max-date="maxDate" class="well well-sm"></datepicker>
           </div>
