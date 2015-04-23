@@ -13,9 +13,10 @@ var config = require('./config');
 
 var auth       = require('./controllers/auth');
 var usermanage = require('./controllers/usermanage');
-var members = require('./controllers/members');
+var members    = require('./controllers/members');
 var settings   = require('./controllers/settings');
 var feedback   = require('./controllers/feedback');
+var keylist    = require('./controllers/keylist');
 
 
 var jwtauth      = require('./middleware/jwtauth')
@@ -68,6 +69,9 @@ api.get('/user/:uid', jwtauth, requireAuth, requireSu, usermanage.getuser);
 api.put('/user/:uid', jwtauth, requireAuth, requireSu, usermanage.edituser);
 api.delete('/user/:uid', jwtauth, requireAuth, requireSu, usermanage.deleteuser);
 api.get('/user/:uid/resetPw', jwtauth, requireAuth, requireSu, usermanage.resetPassword);
+
+api.get('/keylist', jwtauth, requireAuth, requireSu, keylist.getDoorPermissionsList);
+
 
 
 
