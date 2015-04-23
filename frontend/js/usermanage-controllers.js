@@ -16,6 +16,8 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 		]
 	};
 
+	$scope.keys = doorKeyList;
+
 	form.id = $routeParams.id;
 	form.mode = $route.current.locals.clubMode;
 	form.errors = {};
@@ -105,7 +107,7 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 
 			$http.get(apiPath + '/user/' + form.id).
 				success(function(data){
-					form.data = data;					
+					form.data = data;
 				});
 
 		//probably superuser adds new user. Nothing to do here
@@ -175,10 +177,10 @@ clubAdminApp.controller('userListController', function($scope, $rootScope, $http
 
 
 	}
-	
-	
-	
-	
+
+
+
+
 	function resetpw(user) {
 		var modal = $modal.open({
 			templateUrl: 'templates/usermanage/passwordresetmodal.html',
@@ -195,7 +197,7 @@ clubAdminApp.controller('userListController', function($scope, $rootScope, $http
 		});
 
 	}
-	
+
 
 });
 
@@ -221,4 +223,3 @@ clubAdminApp.controller('resetpwModalController', function ($scope, $modalInstan
     $modal.dismiss('cancel');
 	};
 });
-
