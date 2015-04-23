@@ -1,14 +1,5 @@
-var ldapjs = require('ldapjs');
-var ssha = require('ssha');
-var smbhash = require('smbhash');
-var moment = require('moment');
-var ldap = require('../modules/ldap');
 var config = require('../config');
 var userservice = require('../services/userservice');
-
-
-
-
 
 
 //get all members

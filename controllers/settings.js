@@ -1,6 +1,4 @@
-var util = require('util');
 var config = require('../config');
-var ldap = require('../modules/ldap');
 var userservice = require('../services/userservice');
 
 
