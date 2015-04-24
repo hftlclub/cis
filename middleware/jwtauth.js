@@ -1,13 +1,19 @@
-var jwt = require('jwt-simple');
-var config = require('../config');
-var userservice = require('../services/userservice');
+var jwt          = require('jwt-simple');
+var config       = require('../config');
+var userservice  = require('../services/userservice');
+var jwtblacklist = require('../modules/jwtblacklist');
 
 module.exports = function(req, res, next){
-
     var token = req.headers['x-access-token'];
 
+	//error if no token set
     if(!token){
         return next();
+    }
+    
+    //error if token is blacklisted
+    if(jwtblacklist.find(token)){
+	    res.send('Access token has been invalidated', 400);
     }
 
     try{

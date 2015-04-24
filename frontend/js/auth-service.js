@@ -27,12 +27,10 @@ clubAdminApp.factory('clubAuth', function($http, $location, $rootScope) {
 	}
 
 	clubAuth.logout = function() {
-		/*
-		$http.get('').
+		$http.get(apiPath + '/logout').
 			success(function(){
 				clubAuth.refresh();
 			});
-		*/
 		localStorage.removeItem('accessToken');
 		$http.defaults.headers.common['X-Access-Token'] = null;
 		clubAuth.refresh();

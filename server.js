@@ -45,6 +45,7 @@ app.use(expressValidator({
 
 //generic routes
 api.post('/login', authController.login);
+api.get('/logout', authController.logout);
 api.post('/feedback', feedbackController.sendFeedback);
 api.get('/userdata', jwtauth, requireAuth, function(req, res){
     res.json(req.user);

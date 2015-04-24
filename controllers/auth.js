@@ -1,7 +1,8 @@
-var moment      = require('moment');
-var jwt         = require('jwt-simple');
-var config      = require('../config');
-var userservice = require('../services/userservice');
+var moment       = require('moment');
+var jwt          = require('jwt-simple');
+var config       = require('../config');
+var userservice  = require('../services/userservice');
+var jwtblacklist = require('../modules/jwtblacklist');
 
 
 
@@ -12,8 +13,6 @@ exports.login = function(req, res, next){
         res.send(null, 400);
         return;
     }
-
-	
 
     //login user
     userservice.checkpassword(req.body.username, req.body.password, function(err, success){
@@ -50,6 +49,20 @@ exports.login = function(req, res, next){
 }
 
 
+
+
+exports.logout = function(req, res, next){
+	var token = req.headers['x-access-token'];
+
+	//error if no token set
+    if(!token){
+        return next();
+    }
+    
+    jwtblacklist.add(token);
+    
+    res.send();
+}
 
 
 
