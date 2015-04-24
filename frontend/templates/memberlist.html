@@ -74,6 +74,9 @@
             <span ng-if="isBirthday(member.birthday)" class="glyphicon glyphicon-gift pull-right"></span>
           </td>
           <td ng-if="attrs.accdate.state">{{ member.accessiondate | date:fulldate }}</td>
+          <td ng-if="attrs.keyPermissions.state">
+            <span ng-repeat="(key, value) in member.keyPermissions" class="badge">{{ key }}</span>
+          </td>
           <td>
             <span ng-if="!member.former" class="label label-success">Aktiv</span>
             <span ng-if="member.former" class="label label-default">Ehemalig</span>
