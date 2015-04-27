@@ -32,9 +32,6 @@ clubAdminApp.controller('memberListController', function($scope, $rootScope, $ht
 	//order stuff
 	$scope.orderBy = function(col){
 		//do not order if not desired for this column
-
-		console.log($scope.attrs[col]);
-
 		if(!$scope.attrs[col].hasOwnProperty('order')){
 			return false;
 		}

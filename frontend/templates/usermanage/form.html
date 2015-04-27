@@ -56,10 +56,10 @@
 
       <div ng-if="form.data.type == 'club'" class="form-group" ng-class="{'has-error has-feedback': form.errors.role}">
         <label for="inputKeyPermissions" class="col-sm-3 control-label">Schlüsselberechtigungen</label>
-        <div ng-repeat="(key, value) in keys" ng-if="form.data.type == 'club'" class="col-sm-offset-3 col-sm-9">
+        <div ng-repeat="key in keys" ng-if="form.data.type == 'club'" class="col-sm-offset-3 col-sm-9">
 					<div class="checkbox">
 						<label>
-							<input ng-model="form.data.keyPermissions[key]" ng-disabled="(form.mode == 'profile')" type="checkbox"> {{key}} ({{value}})
+							<input ng-model="form.data.keyPermissions[key.key]" ng-disabled="(form.mode == 'profile')" type="checkbox"> {{key.key}} ({{key.name}})
 						</label>
 					</div>
         </div>

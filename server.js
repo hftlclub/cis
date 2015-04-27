@@ -17,11 +17,12 @@ var feedbackController   = require('./controllers/feedback');
 var keylistController    = require('./controllers/keylist');
 
 
-var jwtauth      = require('./middleware/jwtauth')
-var requireAuth  = require('./middleware/requireauth');
-var requireSu    = require('./middleware/requiresu');
-var requireClub  = require('./middleware/requireclub');
-var errorhandler = require('./middleware/errorhandler');
+var jwtauth          = require('./middleware/jwtauth')
+var requireAuth      = require('./middleware/requireauth');
+var requireSu        = require('./middleware/requiresu');
+var requireClub      = require('./middleware/requireclub');
+var requirePubAccess = require('./middleware/requirepubaccess');
+var errorhandler     = require('./middleware/errorhandler');
 
 
 api.use(cors({ origin: '*' }));
@@ -70,6 +71,7 @@ api.delete('/user/:uid', jwtauth, requireAuth, requireSu, usermanageController.d
 api.get('/user/:uid/resetPw', jwtauth, requireAuth, requireSu, usermanageController.resetPassword);
 
 api.get('/keylist', jwtauth, requireAuth, requireSu, keylistController.getDoorKeyList);
+api.get('/keylist/:accesskey', requirePubAccess, keylistController.getDoorKeyList);
 
 
 

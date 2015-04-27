@@ -40,3 +40,4 @@ clubAdminApp.controller('LoginController', function($scope, $http, $location, cl
 	}
 
 });
+
