@@ -18,10 +18,9 @@ exports.login = function(req, res, next){
     userservice.checkpassword(req.body.username, req.body.password, function(err, success){
         //error if login failed or error occured
         if(err || !success){
-            res.send(null, 401);
-            return;
+            return res.send(null, 401);
         }
-
+        
         //get user
         userservice.getUserByUid(req.body.username, function(err, user){
             if(err || !user){

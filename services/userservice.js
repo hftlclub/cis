@@ -62,7 +62,9 @@ exports.checkpassword = function(uid, password, callback){
     };
 
     ldap.client.search(uidtodn(uid), opts, function(err, res){
-        if(err) callback(err, false);
+        if(err){
+	        return callback(err, false);
+	    }
 
         res.on('searchEntry', function(entry){
 
@@ -73,6 +75,12 @@ exports.checkpassword = function(uid, password, callback){
 				return callback(null, false);
 			}
         });
+		
+		res.on('error', function(err){
+			callback(err);
+		});
+				        
+        //return callback(null, false);
     });
 }
 
@@ -84,7 +92,9 @@ exports.getUserByUid = function(uid, callback){
     };
 
     ldap.client.search(uidtodn(uid), opts, function(err, res){
-        if(err) return callback(err);
+        if(err){
+	        return callback(err);
+	    }
 
         res.on('searchEntry', function(entry){
             var user = {};
@@ -115,6 +125,11 @@ exports.getUserByUid = function(uid, callback){
 				return callback(null, user);
 			});
         });
+        
+        res.on('error', function(err){
+			callback(err);
+		});
+        
     });
 }
 
@@ -445,12 +460,16 @@ exports.getUsers = function(callback){
 	            users.push(user);
 
 	        });
-
-
+	        
 	        //return user list
 	        res.on('end', function(result){
 		        return callback(null, users);
 	        });
+	        
+	        res.on('error', function(err){
+				callback(err);
+			});
+			
 	    });
 
     });
@@ -481,6 +500,11 @@ exports.getGroupsByUid = function(uid, callback){
         res.on('end', function(result){
 	        return callback(null, groups);
         });
+        
+        res.on('error', function(err){
+			callback(err);
+		});
+        
     });
 }
 
@@ -513,6 +537,11 @@ exports.getGroups = function(callback){
         res.on('end', function(result){
 	        return callback(null, groups);
         });
+        
+        res.on('error', function(err){
+			callback(err);
+		});
+        
     });
 }
 
@@ -548,6 +577,11 @@ exports.getGroupMembers = function(gid, callback){
         res.on('end', function(result){
 			return callback(null, members, groupdn);
 		});
+		
+		res.on('error', function(err){
+			callback(err);
+		});
+		
 	});
 }
 
@@ -652,6 +686,11 @@ exports.nextFreeUnixID = function(increment, callback){
 	            return callback(null, uidNumber);
             });
         });
+        
+        res.on('error', function(err){
+			callback(err);
+		});
+        
     });
 }
 
