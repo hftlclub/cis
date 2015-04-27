@@ -45,7 +45,7 @@ clubAdminApp.factory('clubAuth', function($http, $location, $rootScope) {
 	return clubAuth;
 
 	function isPublicPage(path) {
-		if(path == '/login' || (/keylist\/(.*)/.test(path))){
+		if(path == '/login' || (/keylist\/(.*)/.test(path)) || path == '/about'){
 			return true;
 		}
 		return false;
