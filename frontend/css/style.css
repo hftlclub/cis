@@ -33,3 +33,9 @@ span.largeicon {
     /* If max-width does not work, try using width instead */
     /*width: 100px;*/
 }
+
+/* floorplan container */
+#map {
+  height: 500px;
+  width: 100%;
+}
