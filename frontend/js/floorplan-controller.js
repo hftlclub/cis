@@ -1,13 +1,89 @@
 clubAdminApp.controller('floorplanController', function($scope, $rootScope, $http, $routeParams, clubAuth) {
 
-	var map = L.map('map').setView([35, 10], 2);
-	var mapWidth = document.getElementById("map").offsetWidth - 100;
+	$scope.addLocation = function(){
+		console.log('Will add location on ' + $scope.latlng.toString());
+	}
 
-	L.tileLayer('../img/floorplan/floormap.svg', {
-			tileSize: 820,
-			maxZoom: 40,
-			minZoom: 2,
-			noWrap: true
-	}).addTo(map);
+
+	var map = L.map('map', {
+    	maxZoom: 4,
+        minZoom: 1,
+        crs: L.CRS.Simple,
+        layers: []
+    }).setView([460,285.5], 1);
+
+	map.setMaxBounds(new L.LatLngBounds([0,571], [920,0]));
+	
+	
+	function onMapClick(e) {
+    	console.log(e.latlng.toString());
+	}
+
+	//map.on('click', onMapClick);
+	
+	
+	
+	
+	
+	
+	
+
+    var imageBounds = [[0,571], [920,0]];
+
+	L.imageOverlay('../img/floorplan/floormap_base.svg', imageBounds).addTo(map);
+	var labels = L.imageOverlay('../img/floorplan/floormap_labels.svg', imageBounds);
+
+	
+	
+	
+	
+	
+	var technikmarker = L.marker([573.5, 186.25]).bindPopup('Techniklager').openPopup();
+	
+
+	var polygon = L.polygon([
+    	[500,120],
+		[480,120],
+		[480,70],
+		[500,70]
+	],
+	{
+    	color: '#000000',
+		fillColor: '#ff0000',
+		fillOpacity: 1
+	});
+
+	polygon.bindPopup('<b>Schrank im roten Raum</b><br><br>Limettenstampfer<br>Elektrikzeug<br>Klopapier<br>Icecrusher<br>Schnaps')
+
+
+
+	var popup = L.popup();
+
+	map.on('click', function(e) {
+    	$scope.latlng = e.latlng;
+    	popup
+        	.setLatLng(e.latlng)
+			.setContent("<a ng-click='addLocation()'><b>Ort hinzufügen</b></a>")
+			.openOn(map);
+			$scope.$apply();
+	});
+
+
+
+	var objects = L.layerGroup([polygon, technikmarker]);
+	
+
+	var baseMaps = {
+	};
+
+	var overlayMaps = {
+	    "Labels": labels,
+	    "Objekte": objects
+	};
+
+
+	L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+	
 
 });

@@ -36,6 +36,11 @@ span.largeicon {
 
 /* floorplan container */
 #map {
-  height: 500px;
+  height: 700px;
   width: 100%;
+}
+
+.leaflet-container {
+    background: #fff !important;
+    border: 1px solid #999 !important;
 }
