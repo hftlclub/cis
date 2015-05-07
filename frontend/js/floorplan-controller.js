@@ -1,33 +1,36 @@
 clubAdminApp.controller('floorplanController', ['$scope', '$rootScope', '$http', '$routeParams', 'clubAuth', 'leafletData', 'leafletBoundsHelpers', function($scope, $rootScope, $http, $routeParams, clubAuth, leafletData, leafletBoundsHelpers) {
 
-	var bounds = leafletBoundsHelpers.createBoundsFromArray([[0,571], [920,0]]);
+  var maxBounds = leafletBoundsHelpers.createBoundsFromArray([
+    [0, 571],
+    [920, 0]
+  ]);
 
-	angular.extend($scope, {
-		bounds: bounds,
-		defaults: {
-			crs: 'Simple',
-			maxZoom: 4,
-			minzoom: 1
+  angular.extend($scope, {
+		maxBounds: maxBounds,
+    defaults: {
+      crs: 'Simple',
+      maxZoom: 4,
+      minzoom: 1
 		},
-		layers: {
-            baselayers: {
-                floormap: {
-					name: 'Club',
-					type: 'imageOverlay',
-					url: '../img/floorplan/floormap_base.svg',
-					bounds: bounds,
-					layerParams: {
-						noWrap: true,
-                    }
-				}
-            },
+    layers: {
+      baselayers: {
+        floormap: {
+          name: 'Club',
+          type: 'imageOverlay',
+          url: '../img/floorplan/floormap_base.svg',
+          bounds: maxBounds,
+          layerParams: {
+            noWrap: true
+          }
         }
-    });
-	
-	
-	
-	
-	/*$scope.addLocation = function(){
+      }
+    }
+  });
+
+
+
+
+  /*$scope.addLocation = function(){
 		console.log('Will add location on ' + $scope.latlng.toString());
 	}
 
@@ -40,33 +43,33 @@ clubAdminApp.controller('floorplanController', ['$scope', '$rootScope', '$http',
     }).setView([460,285.5], 1);
 
 	map.setMaxBounds(new L.LatLngBounds([0,571], [920,0]));
-	
-	
+
+
 	function onMapClick(e) {
     	console.log(e.latlng.toString());
 	}
 
 	//map.on('click', onMapClick);
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
 
     var imageBounds = [[0,571], [920,0]];
 
 	L.imageOverlay('../img/floorplan/floormap_base.svg', imageBounds).addTo(map);
 	var labels = L.imageOverlay('../img/floorplan/floormap_labels.svg', imageBounds);
 
-	
-	
-	
-	
-	
+
+
+
+
+
 	var technikmarker = L.marker([573.5, 186.25]).bindPopup('Techniklager').openPopup();
-	
+
 
 	var polygon = L.polygon([
     	[500,120],
@@ -98,7 +101,7 @@ clubAdminApp.controller('floorplanController', ['$scope', '$rootScope', '$http',
 
 
 	var objects = L.layerGroup([polygon, technikmarker]);
-	
+
 
 	var baseMaps = {
 	};
@@ -111,6 +114,6 @@ clubAdminApp.controller('floorplanController', ['$scope', '$rootScope', '$http',
 
 	L.control.layers(baseMaps, overlayMaps).addTo(map);
 */
-	
+
 
 }]);
