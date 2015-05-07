@@ -1,6 +1,33 @@
-clubAdminApp.controller('floorplanController', function($scope, $rootScope, $http, $routeParams, clubAuth) {
+clubAdminApp.controller('floorplanController', ['$scope', '$rootScope', '$http', '$routeParams', 'clubAuth', 'leafletData', 'leafletBoundsHelpers', function($scope, $rootScope, $http, $routeParams, clubAuth, leafletData, leafletBoundsHelpers) {
 
-	$scope.addLocation = function(){
+	var bounds = leafletBoundsHelpers.createBoundsFromArray([[0,571], [920,0]]);
+
+	angular.extend($scope, {
+		bounds: bounds,
+		defaults: {
+			crs: 'Simple',
+			maxZoom: 4,
+			minzoom: 1
+		},
+		layers: {
+            baselayers: {
+                floormap: {
+					name: 'Club',
+					type: 'imageOverlay',
+					url: '../img/floorplan/floormap_base.svg',
+					bounds: bounds,
+					layerParams: {
+						noWrap: true,
+                    }
+				}
+            },
+        }
+    });
+	
+	
+	
+	
+	/*$scope.addLocation = function(){
 		console.log('Will add location on ' + $scope.latlng.toString());
 	}
 
@@ -83,7 +110,7 @@ clubAdminApp.controller('floorplanController', function($scope, $rootScope, $htt
 
 
 	L.control.layers(baseMaps, overlayMaps).addTo(map);
-
+*/
 	
 
-});
+}]);
