@@ -80,7 +80,7 @@ clubAdminApp.config(function($routeProvider) {
 
 		/* floorplan */
 		when('/floorplan', {
-			templateUrl: 'templates/floorplan.html?wipecache='+wipecache,
+			templateUrl: 'templates/floorplan/floorplan.html?wipecache='+wipecache,
 			controller: 'floorplanController',
 		}).
 
