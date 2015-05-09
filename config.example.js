@@ -37,3 +37,5 @@ exports.feedbackmail = "ferdinand.malcher@hft-leipzig.de, mail@d-koppenhagen.de"
 exports.doorkeys = ["26", "180", "181", "182", "183"];
 
 exports.pubaccesskey = "abcdefg";
+
+exports.deploykey = "hijklmnop";

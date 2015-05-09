@@ -2,6 +2,7 @@ var express          = require('express');
 var expressValidator = require('express-validator');
 var bodyParser       = require('body-parser');
 var cors             = require('cors');
+var exec             = require('child_process').exec
 
 var app = express();
 var api = express.Router();
@@ -75,6 +76,27 @@ api.get('/keylist/:accesskey', requirePubAccess, keylistController.getDoorKeyLis
 
 
 
+api.post('/deploy/:key', function(req, res, next){
+	console.log('Deploy Webhook fired');
+
+	//check for deploy key
+	if(req.params.key != config.deploykey){
+		console.log('Invalid deploy key:', req.params.key);
+		return next(new Error('Invalid deploy key'));
+	}
+
+	//only pull when master changed
+        if(req.body.ref != 'refs/heads/master'){
+                console.log(req.body.ref);
+		return res.send('Nothing to do here');
+        }
+
+	//PULL!
+	exec('cd ' + __dirname + ' && git pull origin master', function(error, stdout, stderr){
+		console.log(error, stdout, stderr);
+		res.send(stdout + stderr);
+	});
+});
 
 
 
