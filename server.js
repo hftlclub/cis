@@ -17,12 +17,9 @@ var feedbackController   = require('./controllers/feedback');
 var keylistController    = require('./controllers/keylist');
 
 
-var jwtauth          = require('./middleware/jwtauth')
-var requireAuth      = require('./middleware/requireauth');
-var requireSu        = require('./middleware/requiresu');
-var requireClub      = require('./middleware/requireclub');
-var requirePubAccess = require('./middleware/requirepubaccess');
-var errorhandler     = require('./middleware/errorhandler');
+var jwtauth      = require('./middleware/jwtauth')
+var reqm         = require('./middleware/requiremode');
+var errorhandler = require('./middleware/errorhandler');
 
 
 api.use(cors({ origin: '*' }));
@@ -48,30 +45,30 @@ app.use(expressValidator({
 api.post('/login', authController.login);
 api.get('/logout', authController.logout);
 api.post('/feedback', feedbackController.sendFeedback);
-api.get('/userdata', jwtauth, requireAuth, function(req, res){
+api.get('/userdata', jwtauth, reqm('auth'), function(req, res){
     res.json(req.user);
 });
 
 api.post('/login/external/:type', authController.externallogin);
 
 //user settings
-api.post('/settings/changepassword', jwtauth, requireAuth, settingsController.changepassword);
-api.put('/settings/profile', jwtauth, requireAuth, settingsController.changeprofile);
+api.post('/settings/changepassword', jwtauth, reqm('auth'), settingsController.changepassword);
+api.put('/settings/profile', jwtauth, reqm('auth'), settingsController.changeprofile);
 
-api.get('/members', jwtauth, requireAuth, requireClub, membersController.listmembers);
-api.get('/members/xlsx', jwtauth, requireAuth, requireClub, membersController.makexlsx);
+api.get('/members', jwtauth, reqm('auth'), reqm('club'), membersController.listmembers);
+api.get('/members/xlsx', jwtauth, reqm('auth'), reqm('club'), membersController.makexlsx);
 
 
 //superuser actions
-api.get('/user', jwtauth, requireAuth, requireSu, usermanageController.listusers);
-api.post('/user', jwtauth, requireAuth, requireSu, usermanageController.adduser);
-api.get('/user/:uid', jwtauth, requireAuth, requireSu, usermanageController.getuser);
-api.put('/user/:uid', jwtauth, requireAuth, requireSu, usermanageController.edituser);
-api.delete('/user/:uid', jwtauth, requireAuth, requireSu, usermanageController.deleteuser);
-api.get('/user/:uid/resetPw', jwtauth, requireAuth, requireSu, usermanageController.resetPassword);
+api.get('/user', jwtauth, reqm('auth'), reqm('su'), usermanageController.listusers);
+api.post('/user', jwtauth, reqm('auth'), reqm('su'), usermanageController.adduser);
+api.get('/user/:uid', jwtauth, reqm('auth'), reqm('su'), usermanageController.getuser);
+api.put('/user/:uid', jwtauth, reqm('auth'), reqm('su'), usermanageController.edituser);
+api.delete('/user/:uid', jwtauth, reqm('auth'), reqm('su'), usermanageController.deleteuser);
+api.get('/user/:uid/resetPw', jwtauth, reqm('auth'), reqm('su'), usermanageController.resetPassword);
 
-api.get('/keylist', jwtauth, requireAuth, requireSu, keylistController.getDoorKeyList);
-api.get('/keylist/:accesskey', requirePubAccess, keylistController.getDoorKeyList);
+api.get('/keylist', jwtauth, reqm('auth'), reqm('su'), keylistController.getDoorKeyList);
+api.get('/keylist/:accesskey', reqm('pubaccess'), keylistController.getDoorKeyList);
 
 
 
