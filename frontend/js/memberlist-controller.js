@@ -71,7 +71,7 @@ clubAdminApp.controller('memberListController', function($scope, $rootScope, $ht
 			'label': 'Telefon'
 		},
 		'email': {
-			'order': 'alias',
+			'order': 'email',
 			'state': true,
 			'label': 'E-Mail'
 		},
