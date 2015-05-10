@@ -86,13 +86,13 @@ api.post('/deploy/:key', function(req, res, next){
 	}
 
 	//only pull when master changed
-        if(req.body.ref != 'refs/heads/master'){
+        if(req.body.ref != 'refs/heads/' + config.branch){
                 console.log(req.body.ref);
 		return res.send('Nothing to do here');
         }
 
 	//PULL!
-	exec('cd ' + __dirname + ' && git pull origin master', function(error, stdout, stderr){
+	exec('cd ' + __dirname + ' && git pull origin ' + config.branch, function(error, stdout, stderr){
 		console.log(error, stdout, stderr);
 		res.send(stdout + stderr);
 	});
