@@ -93,7 +93,7 @@ clubAdminApp.controller('floorplanController', ['$scope', '$rootScope', '$http',
 					});
 
 					modal.result.then(function(){
-						success();
+						//success();
 					});
 				});
 
