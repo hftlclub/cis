@@ -36,7 +36,7 @@ clubAdminApp.directive('helpbox', function($location) {
 		restrict: 'E',
 		transclude: true,
 		link: function(scope, element) {
-			if(scope.active == 'true') scope.isCollapsed = true;
+			if(scope.active != 'true') scope.isCollapsed = true;
 			else scope.isCollapsed = false;
 		},
 		scope: {
