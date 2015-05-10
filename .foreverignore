@@ -1,0 +1,5 @@
+**/.git/**
+*.log
+config.example.js
+frontend/**
+README.md

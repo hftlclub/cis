@@ -25,9 +25,23 @@ clubAdminApp.directive('clubActiveState', function($location) {
 					attr.$removeClass('active');
 
 			}
-
 		},
 
 	}
 
+});
+
+clubAdminApp.directive('helpbox', function($location) {
+	return {
+		restrict: 'E',
+		transclude: true,
+		link: function(scope, element) {
+			if(scope.active != 'true') scope.isCollapsed = true;
+			else scope.isCollapsed = false;
+		},
+		scope: {
+			active: '@'
+		},
+		templateUrl: 'templates/helpbox.html'
+	}
 });
