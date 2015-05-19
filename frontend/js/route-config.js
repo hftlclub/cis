@@ -72,13 +72,25 @@ clubAdminApp.config(function($routeProvider) {
 			templateUrl: 'templates/keylist.html?wipecache='+wipecache,
 			controller: 'keyListController',
 		}).
-		
+
 		when('/keylist/:accesskey', {
 			templateUrl: 'templates/keylist.html?wipecache='+wipecache,
 			controller: 'publicKeyListController',
 		}).
-		
-		
+
+		/* club protocol routes */
+		when('/protocols', {
+			templateUrl: 'templates/protocols/form.html?wipecache='+wipecache,
+			controller: 'protocolsController',
+		}).
+		when('/protocols/add', {
+			templateUrl: 'templates/protocols/form.html?wipecache='+wipecache,
+			controller: 'protocolsController',
+		}).
+		when('/protocols/edit/:id', {
+			templateUrl: 'templates/protocols/form.html?wipecache='+wipecache,
+			controller: 'protocolsController',
+		}).
 
 		/* about section */
 		when('/about', {

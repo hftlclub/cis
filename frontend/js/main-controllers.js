@@ -1,6 +1,6 @@
 
 var clubAdminApp = angular.module('clubAdminApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.dropdown',
-		'ui.bootstrap.modal', 'ui.bootstrap.datepicker']);
+		'ui.bootstrap.modal', 'ui.bootstrap.datepicker', 'ui.ace']);
 
 
 angular.module('clubAdminApp').run(function($http) {
@@ -67,12 +67,12 @@ clubAdminApp.controller('IndexController', function($location, clubAuth) {
 clubAdminApp.controller('FeedbackModalController', function ($scope, $modalInstance, $rootScope) {
 	$scope.data = {};
 	$scope.nameSet = false;
-	
+
 	//fill in name if user is logged in
 	if($rootScope.clubUser.firstname && $rootScope.clubUser.lastname){
 		$scope.data.name = $rootScope.clubUser.firstname + " " + $rootScope.clubUser.lastname;
 		$scope.nameSet = true;
-	}	
+	}
 
 	$scope.ok = function () {
     $modal.close();

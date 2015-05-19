@@ -33,3 +33,5 @@ span.largeicon {
     /* If max-width does not work, try using width instead */
     /*width: 100px;*/
 }
+
+.ace_editor { height: 400px; }
