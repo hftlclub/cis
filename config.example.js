@@ -32,11 +32,15 @@ exports.mailsettings = {
 };
 
 
+//recipient for feedback emails
 exports.feedbackmail = "ferdinand.malcher@hft-leipzig.de, mail@d-koppenhagen.de";
 
+//list of all door keys
 exports.doorkeys = ["26", "180", "181", "182", "183"];
 
+//secret key for public (but protected) resources
 exports.pubaccesskey = "abcdefg";
 
+//settings for git webhook deployment
 exports.deploykey = "hijklmnop";
 exports.branch = "release";

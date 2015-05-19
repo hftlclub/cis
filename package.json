@@ -1,10 +1,10 @@
 {
-	"name": "club-admin",
-	"version": "0.0.1",
-	"description": "HfTL Club Admin",
+	"name": "cis",
+	"version": "1.0.0",
+	"description": "CIS Club Information System",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/hftlclub/club-admin"
+		"url": "https://github.com/hftlclub/cis"
 	},
 	"main": "server.js",
 	"engines": {
