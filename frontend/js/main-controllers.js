@@ -1,6 +1,6 @@
 
 var clubAdminApp = angular.module('clubAdminApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.dropdown',
-		'ui.bootstrap.modal', 'ui.bootstrap.datepicker']);
+		'ui.bootstrap.modal', 'ui.bootstrap.datepicker', 'ngAudio']);
 
 
 angular.module('clubAdminApp').run(function($http) {
