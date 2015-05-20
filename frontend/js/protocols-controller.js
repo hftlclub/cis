@@ -2,7 +2,7 @@ clubAdminApp.controller('protocolsController', function($scope, $rootScope, $htt
   var form = {};
   $scope.form = form;
   $scope.form.protocolData = {};
-  $scope.form.protocolData.presentMembers = [];
+  $scope.form.protocolData.presentMembers = {};
   $scope.users = form;
   $scope.users.data = {};
 
@@ -28,6 +28,22 @@ clubAdminApp.controller('protocolsController', function($scope, $rootScope, $htt
 
   $scope.datepicker = true;
 
+  $scope.concatUserString = function() {
+	var userArray = [];
+
+	for(var i = 0; i < $scope.users.data.length; i++) {
+		var user = $scope.users.data[i];
+		if($scope.form.protocolData.presentMembers.hasOwnProperty(user.username)) {
+			if($scope.form.protocolData.presentMembers[user.username]) {
+				userArray.push(user.firstname + ' ' + user.lastname);
+			}
+		}
+	}
+
+	$scope.form.protocolData.presentMembersString = userArray.join(', ');
+	console.log($scope.form.protocolData.presentMembersString);
+  }
+
   $scope.save = function() {
     console.log('data could be send to backend now!', form.protocolData);
     /*
@@ -41,7 +57,7 @@ clubAdminApp.controller('protocolsController', function($scope, $rootScope, $htt
   /*** functions ***/
 
   function refresh() {
-    $http.get(apiPath + '/user').
+    $http.get(apiPath + '/members').
     success(function(data) {
       $scope.users.data = data;
     });

@@ -50,10 +50,18 @@
     <label class="col-sm-2 control-label">Anwesende Mitglieder</label>
     <div class="col-sm-10">
         <div class="checkbox">
-          <label ng-if="user.type == 'club' && !user.former" ng-repeat="user in users.data">
-            <input checklist-model="form.protocolData.presentMembers" checklist-value="user.firstname+''+user.lastname"  checklist-change="imChanged()" type="checkbox"><span style="padding-right:15px;">{{user.firstname}} {{user.lastname}}</span>
+          <label ng-if="!user.former" ng-repeat="user in users.data">
+            <input ng-model="form.protocolData.presentMembers[user.username]" ng-change="concatUserString()" type="checkbox"><span style="padding-right:15px;">{{user.firstname}} {{user.lastname}}</span>
           </label>
         </div>
+    </div>
+  </div>
+
+  <div class="form-group" ng-class="{'has-error has-feedback': form.errors.presentMembersString}">
+    <label for="inputLater" class="col-sm-2 control-label">Anwesende Mitglieder</label>
+    <div class="col-sm-10">
+      <textarea ng-model="form.protocolData.presentMembersString" class="form-control" id="inputLater" placeholder="Vorname Nachname, Vorname Nachname, ..." tooltip-placement="right" tooltip-trigger="focus" tooltip="Namen!" rows="3"></textarea>
+      <span ng-if="form.errors.presentMembersString" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
     </div>
   </div>
 
@@ -75,5 +83,5 @@
 
 </form>
 
-<h4>Protokolltext:</h4>
+<h4>Protokolltext (Markdown):</h4>
 <div  class="well well-lg" ui-ace="aceoptions" ng-model="form.protocolData.text"> kommt der Protokolltext rein.</div>
