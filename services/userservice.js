@@ -230,6 +230,10 @@ exports.addUser = function(data, callback){
 			exports.addToGroup(data.username, 'clubothers', function(err, success){});
 		}
 		
+		//if no key permissions are set, at least use an empty object
+		if(!data.hasOwnProperty("keyPermissions")){
+			data.keyPermissions = {};
+		}
 		
 		for(var i = 0; i < config.doorkeys.length; i++){
 			if(data.type == 'club' && data.keyPermissions[config.doorkeys[i]]){ //if is clubmember and permissions for this key are set
