@@ -6,9 +6,14 @@ clubAdminApp.controller('memberListController', function($scope, $rootScope, $ht
 
 	$scope.isSuperuser = $rootScope.clubUser.superuser;
 
+	$scope.memberlistLoading = false;
+
 	refresh();
 
 	function refresh() {
+		// show loading bar
+		$scope.memberlistLoading = true;
+		
 		$http.get(apiPath + '/members').
 			success(function(data){
 				$scope.members.data = data;
@@ -21,6 +26,8 @@ clubAdminApp.controller('memberListController', function($scope, $rootScope, $ht
 									user.keyPermissions = key.keyPermissions;
 							});
 						});
+				// hide loading bar
+				$scope.memberlistLoading = false;
 				});
 		});
 
