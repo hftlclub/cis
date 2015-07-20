@@ -8,12 +8,14 @@ clubAdminApp.controller('memberListController', function($scope, $rootScope, $ht
 
 	$scope.memberlistLoading = false;
 
+	$scope.formerHidden = true;
+
 	refresh();
 
 	function refresh() {
 		// show loading bar
 		$scope.memberlistLoading = true;
-		
+
 		$http.get(apiPath + '/members').
 			success(function(data){
 				$scope.members.data = data;
@@ -116,6 +118,11 @@ clubAdminApp.controller('memberListController', function($scope, $rootScope, $ht
 			'label': 'Status'
 		}
 	}
+
+	$scope.formerFilter = function(){
+		 if($scope.formerHidden) $scope.formerHidden = false
+		 else $scope.formerHidden = true;
+	};
 
 	$scope.isBirthday = function(birthday) {
 		if (!birthday) return false;

@@ -8,19 +8,14 @@ clubAdminApp.controller('LoginController', function($scope, $http, $location, cl
 	$scope.login.status = null;
 
 	$scope.login.submit = submit;
-<<<<<<< HEAD
 
 	//only accept lowercase usernames
 	$scope.$watch('login.data.username', function() {
 		$scope.login.data.username = $scope.login.data.username.toLowerCase().replace(/\s+/g,'');
 	});
 
-=======
-	
 	$scope.chord = ngAudio.load('media/cismajor.mp3');
-	
-	
->>>>>>> 631f2842dc535d25698be517c82954f4bb7a2861
+		
 	function submit() {
 		//fixAutofillBug();
 		$http.post(apiPath+'/login', {
@@ -31,8 +26,8 @@ clubAdminApp.controller('LoginController', function($scope, $http, $location, cl
 					setMessage('success');
 					localStorage.setItem('accessToken', data.token);
 					$http.defaults.headers.common['X-Access-Token'] = data.token;
-					
-					
+
+
 					$scope.chord.play();
 
 					clubAuth.refresh();
