@@ -3,10 +3,16 @@ clubAdminApp.controller('LoginController', function($scope, $http, $location, cl
 
 	$scope.login = {};
 	$scope.login.data = {};
+	$scope.login.data.username = '';
 	$scope.login.message = null;
 	$scope.login.status = null;
 
 	$scope.login.submit = submit;
+
+	//only accept lowercase usernames
+	$scope.$watch('login.data.username', function() {
+		$scope.login.data.username = $scope.login.data.username.toLowerCase().replace(/\s+/g,'');
+	});
 
 	function submit() {
 		//fixAutofillBug();
@@ -40,4 +46,3 @@ clubAdminApp.controller('LoginController', function($scope, $http, $location, cl
 	}
 
 });
-
