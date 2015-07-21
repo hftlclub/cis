@@ -16,7 +16,9 @@
     <div class="pull-right hidden-print">
       <a class="btn btn-success" href="javascript:window.print()">
         <span class="glyphicon glyphicon-print"></span>
+        <span ng-if="memberFilter">Gefilterte</span>
         Mitgliederliste drucken
+        <span ng-if="formerHidden">(keine Ehemaligen)</span>
       </a>
     </div>
     <h2>Mitgliederliste</h2>

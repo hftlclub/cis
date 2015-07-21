@@ -17,6 +17,22 @@
   </div>
 </div>
 <div ng-hide="userlistLoading" class="table-responsive">
+
+  <form class="form horizontal hidden-print">
+    <div class="form-group">
+      <div class="input-group">
+        <span class="input-group-btn">
+          <button class="btn" ng-class="{'btn-warning': userFilter, 'btn-default disabled': !userFilter}" ng-click="userFilter = ''" type="button">
+            Filter
+            <span class="glyphicon glyphicon glyphicon-filter" ng-if="!userFilter"></span>
+            <span class="glyphicon glyphicon-remove" ng-if="userFilter"></span>
+          </button>
+        </span>
+        <input class="form-control" ng-model="userFilter" placeholder="Benutzerliste durchsuchen" type="text">
+      </div>
+    </div>
+  </form>
+
   <table class="table table-striped table-bordered table-condensed table-hover" ng-if="users.data">
     <thead>
       <tr>
@@ -35,7 +51,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="user in users.data | filter:users.filter.fn | orderBy:'lastname'" ng-class="{'text-muted': user.former}">
+      <tr ng-repeat="user in users.data | filter:users.filter.fn | orderBy:'lastname' | filter:userFilter" ng-class="{'text-muted': user.former}">
         <td>{{ $index + 1 }}</td>
         <td>{{ user.username }}</td>
         <td>{{ user.lastname }}, {{ user.firstname }}</td>
@@ -69,7 +85,7 @@
               <li>
                 <a ng-click="users.resetpw(user)">
                   <span class="glyphicon glyphicon-lock"></span>
-                  Passwort zurücksetzen 
+                  Passwort zurücksetzen
                 </a>
               </li>
               <li>
