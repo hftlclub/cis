@@ -12,6 +12,7 @@ clubAdminApp.controller('keyListController', function($scope, $rootScope, $http,
 	function refresh() {
 		$http.get(apiPath + '/keylist').
 			success(function(data){
+				console.log(data);
 				$scope.members.data = data;
 		});
 	}
@@ -36,7 +37,7 @@ clubAdminApp.controller('publicKeyListController', function($scope, $http, $rout
 
 	refresh();
 
-	function refresh() {	
+	function refresh() {
 		$http.get(apiPath + '/keylist/' + $routeParams.accesskey).
 			success(function(data){
 				$scope.members.data = data;
