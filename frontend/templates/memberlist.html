@@ -14,11 +14,14 @@
 <div ng-if="user.type=='club'">
   <div class="page-header">
     <div class="pull-right hidden-print">
+      <a class="btn" ng-class="{'btn-warning': formerHidden, 'btn-success': !formerHidden}" ng-click="formerFilter()" type="button">
+        <span class="glyphicon" ng-class="{'glyphicon glyphicon-check': !formerHidden, 'glyphicon glyphicon-unchecked': formerHidden}"></span>
+        Ehemalige Mitglieder
+      </a>
       <a class="btn btn-success" href="javascript:window.print()">
         <span class="glyphicon glyphicon-print"></span>
         <span ng-if="memberFilter">Gefilterte</span>
         Mitgliederliste drucken
-        <span ng-if="formerHidden">(keine Ehemaligen)</span>
       </a>
     </div>
     <h2>Mitgliederliste</h2>
@@ -53,12 +56,6 @@
             </button>
           </span>
           <input class="form-control" ng-model="memberFilter" placeholder="Mitgliederliste durchsuchen" type="text">
-          <span class="input-group-btn">
-            <button class="btn" ng-class="{'btn-warning': formerHidden, 'btn-default': !formerHidden}" ng-click="formerFilter()" type="button">
-              Ehemalige Mitglieder
-              <span class="glyphicon" ng-class="{'glyphicon-eye-open': !formerHidden, 'glyphicon-eye-close': formerHidden}"></span>
-            </button>
-          </span>
         </div>
       </div>
     </form>
