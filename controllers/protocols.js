@@ -97,9 +97,43 @@ exports.get = function(req, res, next){
 exports.list = function(req, res, next){
 	protocolsservice.list(true, function(err, rows){
 		if(err) return next(err);
-		res.json(rows).end();
+		
+		//if /?grouped return results grouped by year
+		if(req.query.hasOwnProperty('grouped')){
+			var out = {};
+			rows.forEach(function(row){
+				var year = moment(row).year();
+			
+				//check whether group for this year already exists. if not, initialize it
+				if(!out.hasOwnProperty(year)){
+					out[year] = [];
+				}
+			
+				out[year].push(row);
+			
+			});
+			
+			return res.json(out).end();
+		}
+		
+		
+		return res.json(rows).end();
 	});
 }
+
+
+
+exports.listGrouped = function(req, res, next){
+	protocolsservice.list(true, function(err, rows){
+		if(err) return next(err);
+		
+		
+		
+		
+		res.json(out).end();
+	});
+}
+
 
 
 
