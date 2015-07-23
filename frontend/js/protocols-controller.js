@@ -78,13 +78,9 @@ clubAdminApp.controller('protocolsController', function($scope, $rootScope, $htt
     form.protocolData.end.hh = $scope.endTime.getHours();
     form.protocolData.end.mm = $scope.endTime.getMinutes();
 
-    console.log(form.protocolData);
-
-    $http.post(apiPath + '/protocols', form.protocolData).
-			success(function(data){
-			  console.log(data);
-		});
-    
+    $http.post(apiPath + '/protocols', form.protocolData).success(function(data){
+		    console.log(data);
+	  });
   }
 
   /*** functions ***/
