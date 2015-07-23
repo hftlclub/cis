@@ -1,6 +1,7 @@
 var moment = require('moment');
 var config = require('../config');
 var smtp = require('../modules/smtp');
+var utils = require('../modules/utils');
 var userservice = require('../services/userservice');
 
 
@@ -26,7 +27,7 @@ exports.adduser = function(req, res, next){
 	}
 
 	//random password
-	req.body.password = randomString(4);
+	req.body.password = utils.uid(8);
 
 	//get next free unix ID
 	userservice.nextFreeUnixID(1, function(err, uidnumber){
@@ -206,7 +207,7 @@ exports.deleteuser = function(req, res, next){
 //reset PW function for superusers
 exports.resetPassword = function(req, res, next){
 	var uid = req.params.uid;
-	var password = randomString(4);
+	var password = utils.uid(8);
 
 
 	//no uid given
@@ -237,12 +238,4 @@ exports.resetPassword = function(req, res, next){
 			});
 		});
 	});
-}
-
-
-
-
-
-function randomString(bytes){
-	return require('crypto').randomBytes(bytes).toString('hex');
 }
