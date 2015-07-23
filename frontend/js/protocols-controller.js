@@ -2,14 +2,14 @@ clubAdminApp.controller('protocolsController', function($scope, $rootScope, $htt
   var form = {};
   $scope.form = form;
   $scope.form.protocolData = {};
-  $scope.form.protocolData.presentMembers = {};
+  $scope.form.protocolData.attendants = [];
   $scope.users = form;
   $scope.users.data = {};
+  $scope.commonTitles = ['Clubsitzung', 'Mitgliederversammlung', 'Planungstreffen'];
 
   $scope.aceOptions = {
     mode: 'markdown'
   }
-
 
   refresh();
   /*** functions ***/
@@ -21,37 +21,57 @@ clubAdminApp.controller('protocolsController', function($scope, $rootScope, $htt
   $scope.maxDate = $scope.maxDate ? null : new Date();
 
   $scope.dateOptions = {
-    'startingDay': 1,
+    formatYear: 'yy',
+    startingDay: 1
   };
+
 
   $scope.format = 'dd.MM.yyyy';
 
   $scope.datepicker = true;
 
+  $scope.openDatepicker = function($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    $scope.openedDatepicker = true;
+  };
+
+  $scope.addAttendants = function(item, model, label){
+    var attendee = {
+      'name': label,
+      'type': 'member'
+    }
+    $scope.form.protocolData.attendants.push(attendee);
+    $scope.inputAttendee = null;
+  }
+
+  $scope.removeAttendee = function(index){
+    $scope.form.protocolData.attendants.splice(index, 1)
+  };
+
   $scope.concatUserString = function() {
-	var userArray = [];
+  	var userArray = [];
 
-	for(var i = 0; i < $scope.users.data.length; i++) {
-		var user = $scope.users.data[i];
-		if($scope.form.protocolData.presentMembers.hasOwnProperty(user.username)) {
-			if($scope.form.protocolData.presentMembers[user.username]) {
-				userArray.push(user.firstname + ' ' + user.lastname);
-			}
-		}
-	}
+  	for(var i = 0; i < $scope.users.data.length; i++) {
+  		var user = $scope.users.data[i];
+  		if($scope.form.protocolData.presentMembers.hasOwnProperty(user.username)) {
+  			if($scope.form.protocolData.presentMembers[user.username]) {
+  				userArray.push(user.firstname + ' ' + user.lastname);
+  			}
+  		}
+  	}
 
-	$scope.form.protocolData.presentMembersString = userArray.join(', ');
-	console.log($scope.form.protocolData.presentMembersString);
+  	$scope.form.protocolData.presentMembersString = userArray.join(', ');
+  	console.log($scope.form.protocolData.presentMembersString);
   }
 
   $scope.save = function() {
-    console.log('data could be send to backend now!', form.protocolData);
-    /*
-			$http.get(apiPath + '/protocols').
-				success(function(data){
-					$scope.protocols.data = data;
-			});
-			*/
+    form.protocolData.date = form.protocolData.date.toISOString();
+    console.log(form.protocolData);
+		$http.post(apiPath + '/protocols', form.protocolData).
+			success(function(data){
+			  console.log(data);
+		});
   }
 
   /*** functions ***/
