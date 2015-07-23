@@ -102,7 +102,7 @@ exports.list = function(req, res, next){
 		if(req.query.hasOwnProperty('grouped')){
 			var out = {};
 			rows.forEach(function(row){
-				var year = moment(row).year();
+				var year = moment(row.date).year();
 			
 				//check whether group for this year already exists. if not, initialize it
 				if(!out.hasOwnProperty(year)){

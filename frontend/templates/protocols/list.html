@@ -8,12 +8,12 @@
   <h2>Protokolle</h2>
 </div>
 
-<div class="panel panel-default" ng-repeat="(key, protocols) in protocols">
+<div class="panel panel-default" ng-repeat="(year, yprotocols) in protocols">
   <!-- Default panel contents -->
-  <div class="panel-heading"><h4>{{key}}</h4></div>
+  <div class="panel-heading"><h4>{{year}}</h4></div>
   <!-- List group -->
   <ul class="list-group">
-    <li class="list-group-item" ng-repeat="protocol in protocols">
+    <li class="list-group-item" ng-repeat="protocol in yprotocols">
       <h5>{{protocol.title}} - {{protocol.date | date:longDate}}
         <div class="btn-toolbar pull-right" role="toolbar" aria-label="...">
           <div class="btn-group" role="group" aria-label="...">
