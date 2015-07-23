@@ -1,4 +1,3 @@
-var moment = require('moment');
 var mysql = require('../modules/mysql');
 var config = require('../config');
 var utils = require('../modules/utils');
@@ -82,3 +81,32 @@ exports.add = function(data, callback){
 		return callback(null, add.id);
     });
 }
+
+
+
+
+
+
+exports.list = function(reduced, callback){
+	//supply a reduced set of fields if just an overview is needed
+	if(reduced){
+		var fields = 'id, start AS date, title, comment';
+	}else{
+		fields = '*';
+	}
+
+	var query = 'SELECT ' + fields + ' FROM protocols ORDER BY start DESC;';
+
+	mysql.conn.query(query, function(err, rows, fields){
+        if(err){
+            return callback(err);
+        }
+
+        if(!rows.length){
+            return callback(null, false);
+        }
+
+        return callback(null, rows);
+    });
+}
+

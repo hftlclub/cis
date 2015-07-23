@@ -62,7 +62,7 @@ api.get('/members/xlsx', jwtauth, reqm('auth'), reqm('club'), membersController.
 
 
 //protocols
-//api.get('/protocols', jwtauth, reqm('auth'), protocolsController.list);
+api.get('/protocols', protocolsController.list);
 api.post('/protocols', jwtauth, reqm('auth'), protocolsController.add);
 api.get('/protocols/:id', jwtauth, reqm('auth'), protocolsController.get);
 //api.put('/protocols/:id', jwtauth, reqm('auth'), protocolsController.edit);

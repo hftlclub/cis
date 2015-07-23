@@ -77,3 +77,14 @@ exports.get = function(req, res, next){
 }
 
 
+
+exports.list = function(req, res, next){
+	protocolsservice.list(true, function(err, rows){
+		if(err) return next(err);
+		res.json(rows).end();
+	});
+}
+
+
+
+
