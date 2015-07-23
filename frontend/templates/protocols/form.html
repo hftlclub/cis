@@ -39,18 +39,12 @@
     </div>
 
     <label for="inputStartTimeHours" class="col-sm-2 control-label">Beginn</label>
-    <div class="col-sm-1">
-      <input type="text" ng-model="form.protocolData.start.hh" class="form-control" id="inputStartTimeHours" placeholder="HH">
-    </div>
-    <div class="col-sm-1">
-        <input type="text" ng-model="form.protocolData.start.mm" class="form-control" id="inputStartTimeminutes" placeholder="MM">
+    <div class="col-sm-2">
+      <timepicker ng-model="startTime" show-meridian="false"></timepicker>
     </div>
     <label for="inputEndTimeHours" class="col-sm-2 control-label">Ende</label>
-    <div class="col-sm-1">
-      <input type="text" ng-model="form.protocolData.end.hh" class="form-control" id="inputEndTimeHours" placeholder="HH">
-    </div>
-    <div class="col-sm-1">
-        <input type="text" ng-model="form.protocolData.end.mm" class="form-control" id="inputEndTimeminutes" placeholder="MM">
+    <div class="col-sm-2">
+      <timepicker ng-model="endTime" show-meridian="false"></timepicker>
     </div>
   </div>
 
@@ -75,11 +69,12 @@
             <span class="sr-only">Toggle Dropdown</span>
           </button>
           <ul class="dropdown-menu" role="menu">
-            <li ><a ng-click="attendee.type = 'member'"><span class="glyphicon glyphicon-user"></span> Clubmitglied</a></li>
-            <li ><a ng-click="attendee.type = 'applicant'"><span class="glyphicon glyphicon-user"></span> Anwärter</a></li>
-            <li ><a ng-click="attendee.type = 'guest'"><span class="glyphicon glyphicon-user"></span> Gast</a></li>
+            <li><a ng-click="attendee.type = 'member'"><span class="glyphicon glyphicon-user"></span> Clubmitglied</a></li>
+            <li><a ng-click="attendee.type = 'applicant'"><span class="glyphicon glyphicon-user"></span> Anwärter</a></li>
+            <li><a ng-click="attendee.type = 'guest'"><span class="glyphicon glyphicon-user"></span> Gast</a></li>
             <li role="separator" class="divider"></li>
             <li><a ng-click="removeAttendee($index)"><span class="glyphicon glyphicon-remove"></span> Entfernen</a></li>
+            <li role="separator" class="divider"></li>
           </ul>
         </div>
       </div>
