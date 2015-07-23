@@ -13,7 +13,7 @@
   <div class="form-group" ng-class="{'has-error has-feedback': form.errors.title}">
     <label for="inputTitle" class="col-sm-2 control-label">Titel</label>
     <div class="col-sm-10">
-      <input type="text" ng-model="form.protocolData.title" class="form-control" id="inputTitle" typeahead="title for title in commonTitles | filter:$viewValue" placeholder="Titel" tooltip-placement="right" tooltip-trigger="focus" tooltip="Sitzung? MV? Vorstand?">
+      <input type="text" ng-enter="checkTitle()" ng-model="form.protocolData.title" class="form-control" id="inputTitle" typeahead="title for title in commonTitles | filter:$viewValue" placeholder="Titel" tooltip-placement="right" tooltip-trigger="focus" tooltip="Sitzung? MV? Vorstand?">
       <span ng-if="form.errors.title" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
     </div>
   </div>

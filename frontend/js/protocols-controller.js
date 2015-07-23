@@ -40,8 +40,6 @@ clubAdminApp.controller('protocolsController', function($scope, $rootScope, $htt
     $scope.openedDatepicker = true;
   };
 
-
-
   $scope.addAttendants = function(){
     if($scope.inputAttendee) {
       var match = false;
@@ -61,15 +59,21 @@ clubAdminApp.controller('protocolsController', function($scope, $rootScope, $htt
     $scope.inputAttendee = null;
   }
 
-
-
-
   $scope.removeAttendee = function(index){
     $scope.form.protocolData.attendants.splice(index, 1)
   };
 
-
-
+  // check if title is a common title
+  $scope.checkTitle = function() {
+    for(i=0; i<$scope.commonTitles.length; i++) {
+      if ($scope.commonTitles[i] == $scope.form.protocolData.title && !$scope.form.protocolData.text){
+        $scope.form.protocolData.text = "test";
+        $http.get('/templates/protocols/presets/clubsitzung.md').success(function(data) {
+           $scope.form.protocolData.text = data;
+        });
+      }
+    }
+  }
 
   $scope.save = function() {
     form.protocolData.date = form.protocolData.date.toISOString();
