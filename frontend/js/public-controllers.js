@@ -7,10 +7,9 @@ clubAdminApp.controller('LoginController', function($scope, $http, $location, cl
 	$scope.login.status = null;
 
 	$scope.login.submit = submit;
-	
+
 	$scope.chord = ngAudio.load('media/cismajor.mp3');
-	
-	
+
 	function submit() {
 		//fixAutofillBug();
 		$http.post(apiPath+'/login', {
@@ -21,8 +20,8 @@ clubAdminApp.controller('LoginController', function($scope, $http, $location, cl
 					setMessage('success');
 					localStorage.setItem('accessToken', data.token);
 					$http.defaults.headers.common['X-Access-Token'] = data.token;
-					
-					
+
+
 					$scope.chord.play();
 
 					clubAuth.refresh();
@@ -47,4 +46,3 @@ clubAdminApp.controller('LoginController', function($scope, $http, $location, cl
 	}
 
 });
-

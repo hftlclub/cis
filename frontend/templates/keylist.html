@@ -15,7 +15,7 @@
     <div class="pull-right hidden-print">
       <a href="javascript:window.print()" class="btn btn-success">
         <span class="glyphicon glyphicon-print"></span>
-        Schlüsselliste drucken
+        <span ng-if="keylistFilter">Gefilterte</span> Schlüsselliste drucken
       </a>
     </div>
 
@@ -34,6 +34,21 @@
   </helpbox>
   <span class="help-block hidden-print"></span>
 
+  <form class="form horizontal hidden-print">
+    <div class="form-group">
+      <div class="input-group">
+        <span class="input-group-btn">
+          <button class="btn" ng-class="{'btn-warning': keylistFilter, 'btn-default disabled': !keylistFilter}" ng-click="keylistFilter = ''" type="button">
+            Filter
+            <span class="glyphicon glyphicon glyphicon-filter" ng-if="!keylistFilter"></span>
+            <span class="glyphicon glyphicon-remove" ng-if="keylistFilter"></span>
+          </button>
+        </span>
+        <input class="form-control" ng-model="keylistFilter" placeholder="Nach einer Person suchen" type="text">
+      </div>
+    </div>
+  </form>
+
   <div class="table-responsive">
     <table class="table table-striped table-bordered table-condensed table-hover" ng-if="members.data">
       <thead>
@@ -47,7 +62,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-if="member.type != 'other'" ng-repeat="member in members.data | orderBy: 'lastname'">
+        <tr ng-if="member.type != 'other'" ng-repeat="member in members.data | orderBy: 'lastname' | filter:keylistFilter">
           <td style="width: 30px" class="text-center">{{ $index + 1 }}</td>
           <td>{{ member.lastname }}, {{ member.firstname }}</td>
           <td ng-repeat="key in keys" class="text-center">
