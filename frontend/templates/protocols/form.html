@@ -58,7 +58,7 @@
   <div class="form-group" ng-class="{'has-error has-feedback': form.errors.attendants}">
     <label for="inputAttendants" class="col-sm-2 control-label">Anwesend</label>
     <div class="col-sm-10">
-      <input type="text" ng-model="inputAttendee" class="form-control" id="inputAttendants" typeahead="attendee.firstname+' '+attendee.lastname for attendee in users.data | filter:$viewValue | limitTo:8" typeahead-on-select="addAttendants($item, $model, $label)" placeholder="Anwesende Personen" tooltip-placement="right" tooltip-trigger="focus" tooltip="Welche Mitglieder sind anwesend?">
+      <input type="text" ng-model="inputAttendee" ng-enter="addAttendants()" class="form-control" id="inputAttendants" typeahead="attendee.firstname+' '+attendee.lastname for attendee in users.data | filter:$viewValue | limitTo:8" placeholder="Anwesende Personen" tooltip-placement="right" tooltip-trigger="focus" tooltip="Welche Mitglieder sind anwesend?">
       <span ng-if="form.errors.attendants" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
     </div>
   </div>

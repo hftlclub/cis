@@ -36,12 +36,22 @@ clubAdminApp.controller('protocolsController', function($scope, $rootScope, $htt
     $scope.openedDatepicker = true;
   };
 
-  $scope.addAttendants = function(item, model, label){
-    var attendee = {
-      'name': label,
-      'type': 'member'
+  $scope.addAttendants = function(){
+    if($scope.inputAttendee) {
+      var match = false;
+      var attendee = {
+        'name': $scope.inputAttendee,
+        'type': 'member'
+      }
+
+      // check if person is already attendee
+      for (var i=0; i<form.protocolData.attendants.length; i++){
+        if (form.protocolData.attendants[i].name == attendee.name) match = true;
+      }
+
+      if (!match) $scope.form.protocolData.attendants.push(attendee);
     }
-    $scope.form.protocolData.attendants.push(attendee);
+    // reset input
     $scope.inputAttendee = null;
   }
 
