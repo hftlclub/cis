@@ -92,6 +92,7 @@ clubAdminApp.controller('protocolsController', function($scope, $rootScope, $htt
     $http.get(apiPath + '/members').success(function(data) {
 	  
 	  //build array with just names and only current members
+	  $scope.users = [];
 	  data.forEach(function(row) {
 		  if(!row.former) {
 			  $scope.users.push(row.firstname + ' ' + row.lastname);
