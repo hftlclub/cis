@@ -4,6 +4,10 @@ clubAdminApp.controller('protocolsController', function($scope, $rootScope, $htt
   $scope.form.protocolData = {};
   $scope.form.protocolData.attendants = [];
   $scope.users = [];
+  $scope.form.protocolData.start = {};
+  $scope.form.protocolData.end = {};
+  $scope.startTime = new Date();
+  $scope.endTime = new Date();
   $scope.commonTitles = ['Clubsitzung', 'Mitgliederversammlung', 'Planungstreffen'];
 
   $scope.aceOptions = {
@@ -68,11 +72,18 @@ clubAdminApp.controller('protocolsController', function($scope, $rootScope, $htt
 
   $scope.save = function() {
     form.protocolData.date = form.protocolData.date.toISOString();
+    form.protocolData.start.hh = $scope.startTime.getHours();
+    form.protocolData.start.mm = $scope.startTime.getMinutes();
+    form.protocolData.end.hh = $scope.endTime.getHours();
+    form.protocolData.end.mm = $scope.endTime.getMinutes();
+
     console.log(form.protocolData);
-		$http.post(apiPath + '/protocols', form.protocolData).
+		/*
+    $http.post(apiPath + '/protocols', form.protocolData).
 			success(function(data){
 			  console.log(data);
 		});
+    */
   }
 
   /*** functions ***/
