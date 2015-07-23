@@ -80,7 +80,7 @@ clubAdminApp.config(function($routeProvider) {
 
 		/* club protocol routes */
 		when('/protocols', {
-			templateUrl: 'templates/protocols/form.html?wipecache='+wipecache,
+			templateUrl: 'templates/protocols/list.html?wipecache='+wipecache,
 			controller: 'protocolsController',
 		}).
 		when('/protocols/add', {

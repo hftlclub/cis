@@ -1,9 +1,27 @@
 <div class="page-header">
   <div class="pull-right">
-    <a href="#/protocols/add" class="btn btn-success">
+    <a ng-href="#/protocols/add" class="btn btn-success">
       <span class="glyphicon glyphicon-plus"></span>
       Neues Protokoll
     </a>
   </div>
   <h2>Protokolle</h2>
+</div>
+
+<div class="panel panel-default" ng-repeat="(key, protocols) in protocols">
+  <!-- Default panel contents -->
+  <div class="panel-heading"><h4>{{key}}</h4></div>
+  <!-- List group -->
+  <ul class="list-group">
+    <li class="list-group-item" ng-repeat="protocol in protocols">
+      <h5>{{protocol.title}} - {{protocol.date | date:longDate}}
+        <div class="btn-toolbar pull-right" role="toolbar" aria-label="...">
+          <div class="btn-group" role="group" aria-label="...">
+            <a ng-href="#/protocols/edit/{{protocol.id}}"  type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Bearbeiten</a>
+            <a ng-href="#/protocols/{{protocol.id}}" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"></span> Protokoll ansehen</a>
+          </div>
+        </div>
+      </h5>
+    </li>
+  </ul>
 </div>

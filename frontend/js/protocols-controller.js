@@ -6,6 +6,7 @@ clubAdminApp.controller('protocolsController', function($scope, $rootScope, $htt
   $scope.users = [];
   $scope.form.protocolData.start = {};
   $scope.form.protocolData.end = {};
+  $scope.protocols = [];
   $scope.startTime = new Date();
   $scope.endTime = new Date();
   $scope.commonTitles = ['Clubsitzung', 'Mitgliederversammlung', 'Planungstreffen'];
@@ -78,26 +79,29 @@ clubAdminApp.controller('protocolsController', function($scope, $rootScope, $htt
     form.protocolData.end.mm = $scope.endTime.getMinutes();
 
     console.log(form.protocolData);
-		/*
+
     $http.post(apiPath + '/protocols', form.protocolData).
 			success(function(data){
 			  console.log(data);
 		});
-    */
+    
   }
 
   /*** functions ***/
 
   function refresh() {
     $http.get(apiPath + '/members').success(function(data) {
-	  
-	  //build array with just names and only current members
-	  $scope.users = [];
-	  data.forEach(function(row) {
-		  if(!row.former) {
-			  $scope.users.push(row.firstname + ' ' + row.lastname);
-		  }
-	  });
+  	  //build array with just names and only current members
+  	  $scope.users = [];
+  	  data.forEach(function(row) {
+  		  if(!row.former) {
+  			  $scope.users.push(row.firstname + ' ' + row.lastname);
+  		  }
+  	  });
+    });
+
+    $http.get(apiPath + '/protocols?grouped').success(function(data) {
+      $scope.protocols = data;
     });
   }
 
