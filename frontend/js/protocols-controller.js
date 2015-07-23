@@ -3,8 +3,7 @@ clubAdminApp.controller('protocolsController', function($scope, $rootScope, $htt
   $scope.form = form;
   $scope.form.protocolData = {};
   $scope.form.protocolData.attendants = [];
-  $scope.users = form;
-  $scope.users.data = {};
+  $scope.users = [];
   $scope.commonTitles = ['Clubsitzung', 'Mitgliederversammlung', 'Planungstreffen'];
 
   $scope.aceOptions = {
@@ -36,6 +35,8 @@ clubAdminApp.controller('protocolsController', function($scope, $rootScope, $htt
     $scope.openedDatepicker = true;
   };
 
+
+
   $scope.addAttendants = function(){
     if($scope.inputAttendee) {
       var match = false;
@@ -55,25 +56,15 @@ clubAdminApp.controller('protocolsController', function($scope, $rootScope, $htt
     $scope.inputAttendee = null;
   }
 
+
+
+
   $scope.removeAttendee = function(index){
     $scope.form.protocolData.attendants.splice(index, 1)
   };
 
-  $scope.concatUserString = function() {
-  	var userArray = [];
 
-  	for(var i = 0; i < $scope.users.data.length; i++) {
-  		var user = $scope.users.data[i];
-  		if($scope.form.protocolData.presentMembers.hasOwnProperty(user.username)) {
-  			if($scope.form.protocolData.presentMembers[user.username]) {
-  				userArray.push(user.firstname + ' ' + user.lastname);
-  			}
-  		}
-  	}
 
-  	$scope.form.protocolData.presentMembersString = userArray.join(', ');
-  	console.log($scope.form.protocolData.presentMembersString);
-  }
 
   $scope.save = function() {
     form.protocolData.date = form.protocolData.date.toISOString();
@@ -87,9 +78,14 @@ clubAdminApp.controller('protocolsController', function($scope, $rootScope, $htt
   /*** functions ***/
 
   function refresh() {
-    $http.get(apiPath + '/members').
-    success(function(data) {
-      $scope.users.data = data;
+    $http.get(apiPath + '/members').success(function(data) {
+	  
+	  //build array with just names and only current members
+	  data.forEach(function(row) {
+		  if(!row.former) {
+			  $scope.users.push(row.firstname + ' ' + row.lastname);
+		  }
+	  });
     });
   }
 
