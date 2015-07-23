@@ -12,7 +12,7 @@ exports.get = function(id, callback){
 
 	var query = 'SELECT * FROM protocols WHERE id = ? LIMIT 1;';
 
-	db.conn.query(query, id, function(err, rows, fields){
+	mysql.conn.query(query, id, function(err, rows, fields){
         if(err){
             return callback(err);
         }
@@ -20,6 +20,10 @@ exports.get = function(id, callback){
         if(!rows[0]){
             return callback(null, false);
         }
+        
+		//make JS object from JSON
+		rows[0].attendants = JSON.parse(rows[0].attendants);
+
 
         return callback(null, rows[0]);
     });
@@ -58,6 +62,10 @@ exports.add = function(data, callback){
 	if(!Object.keys(add).length){
 		return callback(new Error('No attributes to add'));
 	}
+
+	//make JSON from JS object
+	add.attendants = JSON.stringify(add.attendants);
+
 
 	//add new ID
 	add.id = utils.uid(32);

@@ -32,11 +32,9 @@ exports.add = function(req, res, next){
 		"title": req.body.title,
 		"recorder": req.body.recorder,
 		"text": req.body.text,
-		"comment": req.body.comment
+		"comment": req.body.comment,
+		"attendants": req.body.attendants
 	}
-	
-	//attendants as JSON string
-	prot.attendants = JSON.stringify(req.body.attendants);
 	
 	//merge date and start/end time
 	var start = moment(req.body.date).hour(req.body.start.hh).minute(req.body.start.mm);
@@ -58,3 +56,24 @@ exports.add = function(req, res, next){
 		}).end();
 	});
 }
+
+
+
+
+exports.get = function(req, res, next){
+	var id = req.params.id;
+
+	//no id given
+	if(!id){
+		var err = new Error('ID missing');
+		err.status = 400;
+		return next(err);
+	}
+
+	protocolsservice.get(id, function(err, prot){
+		if(err) return next(err);
+		res.json(prot).end();
+	});
+}
+
+
