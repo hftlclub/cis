@@ -72,8 +72,35 @@ exports.get = function(req, res, next){
 
 	protocolsservice.get(id, function(err, prot){
 		if(err) return next(err);
+		
+		//make up data
+		prot.date = prot.start; //date is a timestamp for the datepicker
+		
+		var start = moment(prot.start); //start and end are HH:MM
+		prot.start = {
+			"hh": start.hour(),
+			"mm": start.minute()
+		}
+		
+		var end = moment(prot.end);
+		prot.end = {
+			"hh": end.hour(),
+			"mm": end.minute()
+		}
+		
 		res.json(prot).end();
 	});
 }
+
+
+
+exports.list = function(req, res, next){
+	protocolsservice.list(true, function(err, rows){
+		if(err) return next(err);
+		res.json(rows).end();
+	});
+}
+
+
 
 
