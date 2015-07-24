@@ -1,5 +1,5 @@
 // controller for protocol form
-clubAdminApp.controller('protocolFormController', function($scope, $http, $routeParams, $interval, $route, $window, clubAuth) {
+clubAdminApp.controller('protocolFormController', function($scope, $http, $routeParams, $interval, $route, $window, clubAuth, hotkeys) {
 
 
   $scope.users = [];
@@ -24,6 +24,24 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
   $scope.aceOptions = {
     mode: 'markdown'
   }
+
+
+  // You can pass it an object.  This hotkey will not be unbound unless manually removed
+   // using the hotkeys.del() method
+   hotkeys.add({
+     combo:  ['ctrl+s', 'meta+s'],
+     description: 'This will save any changes',
+     allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+     callback: function(event, hotkey) {
+       if (event.preventDefault) {
+            event.preventDefault();
+        } else {
+            // internet explorer
+            event.returnValue = false;
+        }
+       $scope.save();
+     }
+   });
 
 
   $scope.autoSave = {
