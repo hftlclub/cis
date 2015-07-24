@@ -1,4 +1,5 @@
 var moment = require('moment');
+var md = require( "markdown" ).markdown;
 var config = require('../config');
 var utils = require('../modules/utils');
 var protocolsservice = require('../services/protocolsservice');
@@ -125,6 +126,80 @@ exports.get = function(req, res, next){
 		return res.json(prot).end();
 	});
 }
+
+
+
+
+
+
+
+exports.getDetail = function(req, res, next){
+	var id = req.params.id;
+
+	//no id given
+	if(!id){
+		var err = new Error('ID missing');
+		err.status = 400;
+		return next(err);
+	}
+
+	protocolsservice.get(id, function(err, row){
+		if(err) return next(err);
+		
+		var out = {
+			"title": row.title,
+			"recorder": row.recorder,
+			"start": row.start,
+			"end": row.end,
+			"comment": row.comment
+		};
+		
+		//convert MD to HTML
+		out.html = md.toHTML(row.text);
+		
+		//group attendants
+		out.attendants = {
+			'members': [],
+			'later': [],
+			'applicants': [],
+			'guests': []
+		};		
+		
+		for(var i = 0; i < row.attendants.length; i++){ //go through attendants and put them into groups
+			var att = row.attendants[i];
+			
+			if(att.later){
+				out.attendants.later.push(att.name + ' (' + att.later + ' Uhr)');
+				continue;
+			}
+						
+			if(att.type == 'member'){
+				out.attendants.members.push(att.name);
+				continue;
+			}
+			
+			if(att.type == 'applicant'){
+				out.attendants.applicants.push(att.name);
+				continue;
+			}
+			
+			if(att.type == 'guest'){
+				out.attendants.guests.push(att.name);
+				continue;
+			}
+		}
+		
+		
+		return res.json(out).end();
+	});
+}
+
+
+
+
+
+
+
 
 
 
