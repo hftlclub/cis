@@ -19,6 +19,13 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
 
   $scope.commonTitles = ['Clubsitzung', 'Mitgliederversammlung', 'Planungstreffen'];
   
+  
+  
+  $scope.testfunc = function(){
+	  console.log("dsd " + $scope.protocolForm.$dirty);
+  }
+  
+  
 
   // options for textbox
   $scope.aceOptions = {

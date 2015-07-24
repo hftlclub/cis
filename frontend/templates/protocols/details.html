@@ -13,7 +13,7 @@
   <h2>{{protocol.title}}</h2>
 </div>
 
-<div class="alert alert-info" role="alert">{{protocol.comment}}</div>
+<div ng-if="protocol.comment" class="alert alert-info" role="alert">{{protocol.comment}}</div>
 
 <div class="well well-lg">
   <div class="row">
@@ -49,15 +49,20 @@
   </div>
 
   <div class="row">
+    &nbsp;
+  </div>
+
+  <div class="row">
     <div class="col-md-2">
       <b>Teilnehmer:</b>
     </div>
     <div class="col-md-10">
+	   <span ng-if="!protocol.attendants.members.length"><i>keine</i></span>
       <span ng-repeat="person in protocol.attendants.members">{{person}}<span ng-show=" ! $last ">, </span></span>
     </div>
   </div>
 
-  <div class="row">
+  <div class="row" ng-if="protocol.attendants.later.length">
     <div class="col-md-2">
       <b>Später:</b>
     </div>
@@ -66,7 +71,7 @@
     </div>
   </div>
 
-  <div class="row">
+  <div class="row" ng-if="protocol.attendants.applicants.length">
     <div class="col-md-2">
       <b>Anwärter:</b>
     </div>
@@ -75,7 +80,7 @@
     </div>
   </div>
 
-    <div class="row">
+    <div class="row" ng-if="protocol.attendants.guests.length">
       <div class="col-md-2">
         <b>Gäste:</b>
       </div>
