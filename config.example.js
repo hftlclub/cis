@@ -52,4 +52,3 @@ exports.pubaccesskey = "abcdefg";
 
 //settings for git webhook deployment
 exports.deploykey = "hijklmnop";
-exports.branch = "release";
