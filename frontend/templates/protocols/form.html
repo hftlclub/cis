@@ -1,5 +1,9 @@
 <div class="page-header">
   <div class="pull-right">
+    <a class="btn" ng-class="{'btn-default': !autoSave.isActive, 'btn-success': autoSave.isActive}" ng-click="autoSave.toggle()" type="button">
+      <span class="glyphicon" ng-class="{'glyphicon glyphicon-check': autoSave.isActive, 'glyphicon glyphicon-unchecked': !autoSave.isActive}"></span>
+      Automatisch speichern
+    </a>
     <a ng-click="save()" class="btn btn-success">
       <span class="glyphicon glyphicon-save"></span>
       <span ng-if="form.mode=='add'">Protokoll speichern</span>
@@ -79,11 +83,11 @@
         <!-- Split button -->
         <div class="btn-group" dropdown ng-repeat="attendee in form.protocolData.attendants">
           <button type="button" class="btn btn-xs" ng-class="{'btn-success': (attendee.type == 'member'), 'btn-info': (attendee.type == 'applicant'), 'btn-default': (attendee.type == 'guest')}">{{attendee.name}}</button>
-          
-          
+
+
 		  <button popover-template="laterPopover.template" popover-mode="single" type="button" class="btn btn-xs" ng-class="{'btn-success': (attendee.type == 'member'), 'btn-info': (attendee.type == 'applicant'), 'btn-default': (attendee.type == 'guest'), 'btn-danger': (attendee.later)}"><span class="glyphicon glyphicon-time"></span></button>
-          
-          
+
+
           <button type="button" class="btn btn-xs dropdown-toggle" ng-class="{'btn-success': (attendee.type == 'member'), 'btn-info': (attendee.type == 'applicant'), 'btn-default': (attendee.type == 'guest')}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" dropdown-toggle>
             <span class="caret"></span>
             <span class="sr-only">Toggle Dropdown</span>
