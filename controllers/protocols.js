@@ -169,7 +169,7 @@ exports.getDetail = function(req, res, next){
 			var att = row.attendants[i];
 			
 			if(att.later){
-				out.attendants.later.push(att.name + ' (' + att.later + ' Uhr)');
+				out.attendants.later.push(att.name + ' (' + moment(att.later).format('HH:mm') + ' Uhr)');
 				continue;
 			}
 						
