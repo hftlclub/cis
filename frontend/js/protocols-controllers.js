@@ -36,7 +36,6 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
       if (this.isActive) {
         this.interval = $interval(function() {
           if ($scope.form.data.text) $scope.save();
-          console.log('save');
         }, 120000); // 120000 = autosave every 2 minutes
       } else {
         this.stopTimer();
@@ -139,7 +138,6 @@ $scope.autoSave.setTimer(); //initially start timer
 	
 
     if(form.mode == 'edit' && form.id){
-      console.log("edit");
       $http.put(apiPath + '/protocols/' + form.id, form.data)
         .success(function(data) {
           form.message = 'successEdit';
@@ -160,6 +158,13 @@ $scope.autoSave.setTimer(); //initially start timer
       $http.post(apiPath + '/protocols', form.data)
         .success(function(data) {
           form.message = 'successAdd';
+
+		  //if ID is returned, switch to edit mode
+          if(data.id){
+	          form.mode = 'edit';
+			  form.id = data.id;
+		  }
+          
         })
         .error(function (data, status) {
     			if (status == 400 && data.validationerror) {
@@ -191,11 +196,10 @@ $scope.autoSave.setTimer(); //initially start timer
 	if(form.mode == 'edit' && form.id){
 		// get data from specific protocol if mode is 'edit'
 		$http.get(apiPath + '/protocols/raw/' + form.id).success(function(data) {
-		  //build array with just names and only current members
-		form.data = data;
-		$scope.times.date = new Date(data.date);
-		$scope.times.start = new Date(data.start);
-		$scope.times.end = new Date(data.end);
+			form.data = data;
+			$scope.times.date = new Date(data.date);
+			$scope.times.start = new Date(data.start);
+			$scope.times.end = new Date(data.end);
 	    });
 	      
 	}
