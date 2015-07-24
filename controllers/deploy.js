@@ -17,7 +17,7 @@ exports.deploy = function(req, res, next){
 		//only pull when current branch has changed
         if(req.body.ref != 'refs/heads/' + curbranch){
             console.log(req.body.ref);
-			return res.send('Nothing to do here');
+			return res.send('Nothing to do here (current branch: refs/heads/' + curbranch + '; your branch: ' + req.body.ref + ')');
         }
 
 		//PULL!
