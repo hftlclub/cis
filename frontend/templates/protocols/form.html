@@ -1,15 +1,24 @@
 <div class="page-header">
   <div class="pull-right">
-    <a class="btn" ng-class="{'btn-default': !autoSave.isActive, 'btn-primary': autoSave.isActive}" ng-click="autoSave.toggle()" type="button">
+    <a class="btn btn-default"  ng-click="autoSave.toggle()" type="button"> <!-- ng-class="{'btn-default': !autoSave.isActive, 'btn-default': autoSave.isActive}" -->
       <span class="glyphicon" ng-class="{'glyphicon glyphicon-check': autoSave.isActive, 'glyphicon glyphicon-unchecked': !autoSave.isActive}"></span>
       Automatisch speichern
     </a>
 
-    <button ng-click="save()" class="btn btn-success"  ng-class="{'disabled': protocolForm.$pristine}">
-      <span class="glyphicon glyphicon-save"></span>
-      <span ng-if="form.mode=='add'">Protokoll speichern</span>
-      <span ng-if="form.mode=='edit'">Änderungen speichern</span>
-    </button>
+
+    <div class="btn-group" role="group">
+      <a ng-if="form.mode == 'edit'" class="btn btn-primary" type="button" ng-href="#/protocols/show/{{form.id}}">
+        <span class="glyphicon glyphicon-eye-open"></span>
+        Anzeigen
+      </a>
+        
+      <a ng-click="save()" class="btn btn-success"  ng-class="{'disabled': protocolForm.$pristine}">
+      	<span class="glyphicon glyphicon-save"></span>
+	  	<span ng-if="form.mode=='add'">Speichern</span>
+	  	<span ng-if="form.mode=='edit'">Speichern</span>
+    </a>
+    </div>
+    
   </div>
   <h2>
 	  <span ng-if="form.mode=='add'">Protokoll erstellen</span>

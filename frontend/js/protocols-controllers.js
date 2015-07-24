@@ -81,7 +81,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
   function saveOnLeave(event) {
     // autosave if form is dirty
     if ($scope.protocolForm.$dirty) {
-      $scope.save(1);
+      $scope.save(1, 1);
     }
 
     // if  beforeunload event was fired (close tab, reload page)
@@ -186,7 +186,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
 
 
 
-  $scope.save = function(autosaved) {
+  $scope.save = function(autosaved, nosetpristine) {
     var succMsg = (autosaved) ? "Automatisch gespeichert!" : "Gespeichert!"
     
     
@@ -200,7 +200,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
       $http.put(apiPath + '/protocols/' + form.id, form.data)
         .success(function(data) {
           growl.success(succMsg);
-          $scope.protocolForm.$setPristine();
+          if(!nosetpristine) $scope.protocolForm.$setPristine();
 
         })
         .error(function(data, status) {
@@ -220,7 +220,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
       $http.post(apiPath + '/protocols', form.data)
         .success(function(data) {
           growl.info('Das Protokoll wurde angelegt!');
-		  $scope.protocolForm.$setPristine();
+		  if(!nosetpristine) $scope.protocolForm.$setPristine();
 
           //if ID is returned, switch to edit mode
           if (data.id) {
