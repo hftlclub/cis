@@ -176,21 +176,23 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
 	    $scope.protocolForm.$setDirty();
     },
     countAtt: function(){
+	    var count = {
+			members: 0,
+			applicants: 0,
+			guests: 0
+		}
+	    
 	    if(form.data.attendants.length){
-		    var count = {
-				members: 0,
-				applicants: 0,
-				guests: 0
-			}
+		    
 		    
 		    form.data.attendants.forEach(function(row){
 			    if(row.type == 'member')         count.members++;
 			    else if(row.type == 'applicant') count.applicants++;
 			    else if(row.type == 'guest')     count.guests++;
 		    });
-		    
-		    $scope.attendants.count = count;
 	    }
+	    
+	    $scope.attendants.count = count;
     }
 
   }
