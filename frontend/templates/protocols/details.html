@@ -10,7 +10,10 @@
         Als PDF speichern</a>
     </div>
   </div>
-  <h2>{{protocol.title}}</h2>
+  <h2>
+	  {{protocol.title}}
+	  <small>{{protocol.start | date : longDate}}</small>
+  </h2>
 </div>
 
 <div ng-if="protocol.comment" class="alert alert-info" role="alert">{{protocol.comment}}</div>
