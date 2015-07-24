@@ -11,17 +11,17 @@ exports.deploy = function(req, res, next){
 	}
 
 	//get current branch
-	exec('cd ' + __dirname + ' && git symbolic-ref HEAD ', function(error, stdout, stderr){
-		var curref = stdout;
+	exec('git symbolic-ref --short HEAD', {cwd: __dirname}, function(error, stdout, stderr){
+		var curbranch = stdout;
 		
-		//only pull when current branch changed
-        if(req.body.ref != curref){
+		//only pull when current branch has changed
+        if(req.body.ref != 'refs/heads/' + curbranch){
             console.log(req.body.ref);
 			return res.send('Nothing to do here');
         }
 
 		//PULL!
-		exec('cd ' + __dirname + ' && git pull origin ' + config.branch, function(error, stdout, stderr){
+		exec('git pull origin ' + curbranch, {cwd: __dirname}, function(error, stdout, stderr){
 			console.log(error, stdout, stderr);
 			return res.send(stdout + stderr);
 		});
