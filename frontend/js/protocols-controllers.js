@@ -171,8 +171,6 @@ clubAdminApp.controller('delProtocolController', function ($scope, $modalInstanc
 
   // check if input is the same like the give phrase
   $scope.checkInput = function () {
-    console.log($scope.random);
-    console.log($scope.inputString);
     if($scope.random == $scope.inputString) {
   	   $modalInstance.close('success');
     }
