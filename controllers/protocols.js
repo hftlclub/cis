@@ -26,20 +26,12 @@ exports.addedit = function(req, res, next){
 	/**********************************/
 	
 	
-	//sanitize to integer
-	req.body.start.mm = parseInt(req.body.start.mm);
-	req.body.start.hh = parseInt(req.body.start.hh);
-	req.body.end.mm = parseInt(req.body.end.mm);
-	req.body.end.hh = parseInt(req.body.end.hh);
-	
 	req.checkBody('title', 'Titel ungültig').notEmpty();
 	req.checkBody('recorder', 'Protokollführer ungültig').notEmpty();
 	req.checkBody('text', 'Protokolltext ungültig').notEmpty();
 	req.checkBody('date', 'Datum ungültig').notEmpty();
-	req.checkBody('start.hh', 'Startzeit ungültig').notEmpty().isInt();
-	req.checkBody('start.mm', 'Startzeit ungültig').notEmpty().isInt();
-	req.checkBody('end.hh', 'Endzeit ungültig').notEmpty().isInt();
-	req.checkBody('end.mm', 'Endzeit ungültig').notEmpty().isInt();
+	req.checkBody('start', 'Startzeit ungültig').notEmpty();
+	req.checkBody('end', 'Endzeit ungültig').notEmpty();
 
 	if(req.validationErrors()){
 		return next();
@@ -57,10 +49,10 @@ exports.addedit = function(req, res, next){
 	}
 	
 	//merge date and start/end time
-	var start = moment(req.body.date).hour(req.body.start.hh).minute(req.body.start.mm);
+	var start = moment(req.body.date).hour(moment(req.body.start).hour()).minute(moment(req.body.start).minute());
 	prot.start = utils.moment2mysql(start);
 	
-	var end = moment(req.body.date).hour(req.body.end.hh).minute(req.body.end.mm);
+	var end = moment(req.body.date).hour(moment(req.body.end).hour()).minute(moment(req.body.end).minute());
 	prot.end = utils.moment2mysql(end);
 
 
@@ -110,19 +102,7 @@ exports.get = function(req, res, next){
 		
 		//make up data
 		prot.date = prot.start; //date is a timestamp for the datepicker
-		
-		var start = moment(prot.start); //start and end are HH:MM
-		prot.start = {
-			"hh": start.hour(),
-			"mm": start.minute()
-		}
-		
-		var end = moment(prot.end);
-		prot.end = {
-			"hh": end.hour(),
-			"mm": end.minute()
-		}
-		
+				
 		return res.json(prot).end();
 	});
 }

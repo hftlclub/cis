@@ -1,21 +1,24 @@
 // controller for protocol form
 clubAdminApp.controller('protocolFormController', function($scope, $http, $routeParams, $route, clubAuth) {
-  var form = {};
+  
+  
   $scope.users = [];
-  $scope.form = form;
-  $scope.form.protocolData = {};
-  $scope.form.protocolData.attendants = [];
-  $scope.form.protocolData.start = {};
-  $scope.form.protocolData.end = {};
-  $scope.form.date = new Date();
-  $scope.startTime = new Date();
-  $scope.endTime = new Date();
-  $scope.commonTitles = ['Clubsitzung', 'Mitgliederversammlung', 'Planungstreffen'];
-  form.id = $routeParams.id;
-	form.mode = $route.current.locals.clubMode;
 
-  form.errors = {};
-  form.message = null;
+ 
+  var form = $scope.form = {
+  	id: $routeParams.id,
+  	mode: $route.current.locals.clubMode,
+  	errors: {},
+  	message: null,
+  	data: {
+	  attendants: [],
+	  start: null,
+	  end: null
+  	}
+  }
+
+  $scope.commonTitles = ['Clubsitzung', 'Mitgliederversammlung', 'Planungstreffen'];
+  
 
   // options for textbox
   $scope.aceOptions = {
@@ -23,6 +26,14 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
   }
 
 
+  //models for timepickers // create new when form mode is "add"
+  $scope.times = {
+	  date: null,
+	  start: null,
+	  end: null
+  };
+
+  //stuff for the "attendee is later" popover
   $scope.laterPopover = {
 	  template: '/templates/protocols/laterPopover.html' ,
 	  setInitial: function(att){
@@ -30,107 +41,113 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
 	  }
   }
 
-
-  refresh();
-
+  
   /* Date picker */
   //only create new datepicker if there's no data expected
-  $scope.form.protocolData.date = new Date();
   $scope.minDate = $scope.minDate ? null : new Date(2012, (10 - 1), 25);
   $scope.maxDate = $scope.maxDate ? null : new Date();
 
-  $scope.dateOptions = {
-    formatYear: 'yy',
-    startingDay: 1
-  };
+  $scope.datePicker = {
+	  format: 'dd.MM.yyyy',
+	  open: function($event) {
+	  	$event.preventDefault();
+	  	$event.stopPropagation();
+	  	this.opened = true;
+  	  },
+  	  opened: false,
+  	  options : {
+  	  	formatYear: 'yy',
+  	  	startingDay: 1
+  	  }
+  }
+  
 
-  $scope.format = 'dd.MM.yyyy';
+  //stuff for attendants
+  $scope.attendants = {
+	  input: null,
+	  add: function(name) {
+	  	if (name) {
+	  	var match = false;
+	  	var attendee = {
+        	'name': name,
+			'type': 'member'
+      	}
 
-  $scope.datepicker = true;
+	  	// check if person is already attendee
+	  	for (var i = 0; i < form.data.attendants.length; i++) {
+        	if (form.data.attendants[i].name == attendee.name) match = true;
+      	}
 
-  $scope.openDatepicker = function($event) {
-    $event.preventDefault();
-    $event.stopPropagation();
-    $scope.openedDatepicker = true;
-  };
-
-  $scope.addAttendants = function() {
-    if ($scope.inputAttendee) {
-      var match = false;
-      var attendee = {
-        'name': $scope.inputAttendee,
-        'type': 'member'
+	  	if (!match) form.data.attendants.push(attendee);
       }
-
-      // check if person is already attendee
-      for (var i = 0; i < form.protocolData.attendants.length; i++) {
-        if (form.protocolData.attendants[i].name == attendee.name) match = true;
-      }
-
-      if (!match) $scope.form.protocolData.attendants.push(attendee);
-    }
-    // reset input
-    $scope.inputAttendee = null;
+  	},
+  	remove: function(index) {
+    	form.data.attendants.splice(index, 1)
+  	}
+  	
   }
 
-  $scope.removeAttendee = function(index) {
-    $scope.form.protocolData.attendants.splice(index, 1)
-  };
+
 
   // check whether title is a common title, then load template if available
   $scope.checkTitle = function() {
     for (i = 0; i < $scope.commonTitles.length; i++) { //go through common titles
-      if($scope.commonTitles[i] == $scope.form.protocolData.title && !$scope.form.protocolData.text) { //if current title matches a common title and there's no text in the field
-        //get protocol
+      if($scope.commonTitles[i] == form.data.title && !form.data.text) { //if current title matches a common title and there's no text in the field
+        //get protocol and fill textfield with it
         $http.get('/templates/protocols/presets/clubsitzung.md').success(function(data) {
-          $scope.form.protocolData.text = data;
+          form.data.text = data;
         });
       }
     }
   }
 
+
+
+
+
   $scope.save = function() {
-    form.protocolData.date = form.date.toISOString();
-    form.protocolData.start.hh = $scope.startTime.getHours();
-    form.protocolData.start.mm = $scope.startTime.getMinutes();
-    form.protocolData.end.hh = $scope.endTime.getHours();
-    form.protocolData.end.mm = $scope.endTime.getMinutes();
+    //make ISOStrings from dates
+    form.data.date = $scope.times.date.toISOString();
+	form.data.start = $scope.times.start.toISOString();
+	form.data.end = $scope.times.end.toISOString();
+	
 
     if(form.mode == 'edit' && form.id){
       console.log("edit");
-      $http.put(apiPath + '/protocols/' + form.id, form.protocolData)
+      $http.put(apiPath + '/protocols/' + form.id, form.data)
         .success(function(data) {
-          $scope.form.message = 'successEdit';
+          form.message = 'successEdit';
         })
         .error(function (data, status) {
     			if (status == 400 && data.validationerror) {
-    				$scope.form.message = 'invalid';
-    				$scope.form.errors = data.validationerror;
+    				form.message = 'invalid';
+    				form.errors = data.validationerror;
     			} else {
-    				$scope.form.data.errormessage = data;
-    				$scope.form.message = 'error';
-    				$scope.form.errors = null;
+    				form.data.errormessage = data;
+    				form.message = 'error';
+    				form.errors = null;
     			}
         });
-    } else {
-      $http.post(apiPath + '/protocols', form.protocolData)
+    
+    
+    } else if(form.mode == 'add') {
+      $http.post(apiPath + '/protocols', form.data)
         .success(function(data) {
-          $scope.form.message = 'successAdd';
+          form.message = 'successAdd';
         })
         .error(function (data, status) {
     			if (status == 400 && data.validationerror) {
-    				$scope.form.message = 'invalid';
-    				$scope.form.errors = data.validationerror;
+    				form.message = 'invalid';
+    				form.errors = data.validationerror;
     			} else {
-    				$scope.form.data.errormessage = data;
-    				$scope.form.message = 'error';
-    				$scope.form.errors = null;
+    				form.data.errormessage = data;
+    				form.message = 'error';
+    				form.errors = null;
     			}
         });
     }
   }
 
-  /*** functions ***/
 
   function refresh() {
     $http.get(apiPath + '/members').success(function(data) {
@@ -143,18 +160,51 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
       });
     });
 
-
+	//in edit mode: go and get the protocol we want to edit
     if(form.mode == 'edit' && form.id){
       // get data from specific protocol if mode is 'edit'
       $http.get(apiPath + '/protocols/raw/' + form.id).success(function(data) {
         //build array with just names and only current members
-        form.protocolData = data;
-        form.date = new Date(data.date);
+        form.data = data;
+        $scope.times.date = new Date(data.date);
+        $scope.times.start = new Date(data.start);
+        $scope.times.end = new Date(data.end);
       });
     }
 
   }
+  
+  
+  
+  /******************************/
+
+
+
+
+  refresh();
+  
+  //default values when creating a new protocol
+  if(form.mode == 'add'){
+	  $scope.times.date = new Date();
+	  $scope.times.start = new Date();
+	  $scope.times.end = new Date();
+	  var me = clubAuth.user.firstname + ' ' + clubAuth.user.lastname;
+	  form.data.recorder = me;
+	  $scope.attendants.add(me);
+  }
+  
+  
+  
+
+
+  
 });
+
+
+
+
+
+
 
 // controller for protocol list
 clubAdminApp.controller('protocolListController', function($scope, $http, $routeParams, clubAuth, $modal) {
