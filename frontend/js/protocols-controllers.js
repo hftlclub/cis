@@ -52,7 +52,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
     setTimer: function() {
       if (this.isActive) {
         this.interval = $interval(function() {
-          if ($scope.form.data.text) $scope.save();
+          if ($scope.form.data.text) $scope.save(1);
         }, 120000); // 120000 = autosave every 2 minutes
       } else {
         this.stopTimer();
@@ -81,15 +81,11 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
   function saveOnLeave(event) {
     // autosave if form is dirty
     if ($scope.protocolForm.$dirty) {
-      $scope.save();
+      $scope.save(1);
     }
 
-    // open confirm dialog if location was changed
-    if (event.name == '$locationChangeStart') {
-      // TODO : Snackbar Feedback
-    }
     // if  beforeunload event was fired (close tab, reload page)
-    else {
+    if (event.name != '$locationChangeStart') {
       var confirmationMessage = '';
       (event || window.event).returnValue = confirmationMessage; //Gecko + IE
       return confirmationMessage; //Webkit, Safari, Chrome
@@ -190,7 +186,10 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
 
 
 
-  $scope.save = function() {
+  $scope.save = function(autosaved) {
+    var succMsg = (autosaved) ? "Automatisch gespeichert!" : "Gespeichert!"
+    
+    
     //make ISOStrings from dates
     form.data.date = $scope.times.date.toISOString();
     form.data.start = $scope.times.start.toISOString();
@@ -200,7 +199,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
     if (form.mode == 'edit' && form.id) {
       $http.put(apiPath + '/protocols/' + form.id, form.data)
         .success(function(data) {
-          growl.success('Gespeichert');
+          growl.success(succMsg);
           $scope.protocolForm.$setPristine();
 
         })
