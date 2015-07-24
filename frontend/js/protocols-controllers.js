@@ -1,6 +1,5 @@
 // controller for protocol form
-clubAdminApp.controller('protocolFormController', function($scope, $http, $routeParams, $interval, $route, $window, clubAuth) {
-
+clubAdminApp.controller('protocolFormController', function($scope, $http, $routeParams, $interval, $route, $window, clubAuth, growl) {
 
   $scope.users = [];
 
@@ -168,7 +167,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
     if (form.mode == 'edit' && form.id) {
       $http.put(apiPath + '/protocols/' + form.id, form.data)
         .success(function(data) {
-          form.message = 'successEdit';
+          growl.success('Gespeichert');
         })
         .error(function(data, status) {
           if (status == 400 && data.validationerror) {
@@ -185,7 +184,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
     } else if (form.mode == 'add') {
       $http.post(apiPath + '/protocols', form.data)
         .success(function(data) {
-          form.message = 'successAdd';
+          growl.info('Das Protokoll wurde angelegt!');
 
           //if ID is returned, switch to edit mode
           if (data.id) {
@@ -200,7 +199,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
             form.errors = data.validationerror;
           } else {
             form.data.errormessage = data;
-            form.message = 'error';
+            growl.danger('Systemfehler');
             form.errors = null;
           }
         });

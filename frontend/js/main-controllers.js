@@ -1,11 +1,17 @@
 
 var clubAdminApp = angular.module('clubAdminApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.dropdown',
-		'ui.bootstrap.modal', 'ui.bootstrap.datepicker', 'ui.ace', 'ngAudio', 'ngSanitize']);
+		'ui.bootstrap.modal', 'ui.bootstrap.datepicker', 'ui.ace', 'ngAudio', 'ngSanitize', 'angular-growl', 'ngAnimate']);
 
 clubAdminApp.run(function($http) {
 	var token = (localStorage.getItem('accessToken')) ? localStorage.getItem('accessToken') : null;
 	$http.defaults.headers.common['X-Access-Token'] = token;
 });
+
+
+clubAdminApp.config(['growlProvider', function(growlProvider) {
+    growlProvider.globalTimeToLive(3000);
+}]);
+
 
 
 /* hack to fix autofill bug (firefox triggers no event on autofilling forms) */

@@ -15,17 +15,8 @@
 </div>
 
 <form class="form-horizontal" role="form" name="protocolForm">
-  <alert ng-if="form.message == 'error'" type="alert alert-danger">
-    Systemfehler ({{form.data.errormessage}})
-  </alert>
   <alert ng-if="form.message == 'invalid'" type="alert alert-warning">
     Einige Felder sind fehlerhaft.
-  </alert>
-  <alert ng-if="form.message == 'successAdd'" type="alert alert-success">
-    Das Protokoll wurde gespeichert!
-  </alert>
-  <alert ng-if="form.message == 'successEdit'" type="alert alert-success">
-    Gespeichert!
   </alert>
 
   <div class="form-group" ng-class="{'has-error has-feedback': form.errors.title}">
