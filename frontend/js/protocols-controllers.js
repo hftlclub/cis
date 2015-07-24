@@ -122,7 +122,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
 });
 
 // controller for protocol list
-clubAdminApp.controller('protocolListController', function($scope, $http, $routeParams, clubAuth) {
+clubAdminApp.controller('protocolListController', function($scope, $http, $routeParams, clubAuth, $modal) {
   $scope.protocols = [];
   refresh();
 
@@ -133,6 +133,50 @@ clubAdminApp.controller('protocolListController', function($scope, $http, $route
       $scope.protocols = data;
     });
   }
+
+  // function to open delete modal
+  $scope.deleteProtocol = function (protocolID) {
+    var checkArray = [
+      'Egal bei welchem Wetter',
+      'Stecker',
+      'DJ Hasi',
+      'Clubinformationssystem',
+      'Ice Cubes',
+      'Neeebel'
+    ]
+
+    random = checkArray[Math.floor(Math.random()*checkArray.length)];
+
+    var modal = $modal.open({
+      templateUrl: 'templates/protocols/deletemodal.html',
+      controller: 'delProtocolController',
+      resolve: {
+        random: function () {
+          return random;
+        }
+      }
+    });
+
+    modal.result.then(function () {
+      $http.delete(apiPath + '/protocols/' + protocolID).
+        success(refresh);
+    });
+  }
+
+});
+
+// delete modal
+clubAdminApp.controller('delProtocolController', function ($scope, $modalInstance, random) {
+  $scope.random = random;
+
+  // check if input is the same like the give phrase
+  $scope.checkInput = function () {
+    console.log($scope.random);
+    console.log($scope.inputString);
+    if($scope.random == $scope.inputString) {
+  	   $modalInstance.close('success');
+    }
+  };
 });
 
 // controller for protocol details

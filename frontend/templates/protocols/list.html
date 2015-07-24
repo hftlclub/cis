@@ -16,23 +16,23 @@
     <li class="list-group-item" ng-repeat="protocol in yprotocols">
       <strong>{{protocol.title}}</strong> ({{protocol.date | date:longDate}})
         <div class="btn-toolbar pull-right" role="toolbar" aria-label="...">
-          
+
           <div class="btn-group" dropdown>
-            
-            
+
+
             <button ng-if="protocol.comment" type="button" class="btn btn-xs btn-primary" popover="{{protocol.comment}}" popover-trigger="mouseenter">
 				<span class="glyphicon glyphicon-comment"></span>
 			</button>
-			
+
 			<a type="button" ng-href="#/protocols/show/{{protocol.id}}" class="btn btn-xs btn-default" title="Anzeigen">
 				<span class="glyphicon glyphicon-eye-open"></span>
 			</a>
-			
+
 			<a type="button" class="disabled btn btn-xs btn-default" title="PDF herunterladen">
 				<span class="glyphicon glyphicon-file"></span>
 			</a>
-            
-            
+
+
             <button type="button" class="btn btn-xs btn-default dropdown-toggle" dropdown-toggle>
               <span class="caret"></span>
             </button>
@@ -44,7 +44,7 @@
                 </a>
               </li>
               <li>
-                <a ng-click="users.remove(user)" disabled>
+                <a ng-click="deleteProtocol(protocol.id)">
                   <span class="glyphicon glyphicon-trash"></span>
                   Löschen
                 </a>
@@ -52,7 +52,7 @@
             </ul>
           </div>
         </div>
-        
+
     </li>
   </ul>
 </div>
