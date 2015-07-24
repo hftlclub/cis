@@ -187,6 +187,8 @@ exports.list = function(req, res, next){
 	protocolsservice.list(true, function(err, rows){
 		if(err) return next(err);
 		
+		if(!rows.length) return res.json({});
+		
 		//if /?grouped return results grouped by year
 		if(req.query.hasOwnProperty('grouped')){
 			var out = {};
