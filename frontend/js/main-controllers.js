@@ -10,6 +10,7 @@ clubAdminApp.run(function($http) {
 
 clubAdminApp.config(['growlProvider', function(growlProvider) {
     growlProvider.globalTimeToLive(3000);
+    growlProvider.onlyUniqueMessages(false);
 }]);
 
 
