@@ -65,7 +65,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
   $scope.autoSave.setTimer(); //initially start timer
 
   //destroy timer on location change
-  $scope.$on("$destroy", function() {
+  $scope.$on('$destroy', function() {
     $scope.autoSave.stopTimer();
   });
 
@@ -138,6 +138,11 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
   //stuff for attendants
   $scope.attendants = {
     input: null,
+    count: {
+		members: 0,
+		applicants: 0,
+		guests: 0
+	},
     add: function(name) {
       if (name) {
         var match = false;
@@ -152,10 +157,12 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
         }
 
         form.data.attendants.push(attendee);
+        this.countAtt();
       }
     },
     remove: function(index) {
       form.data.attendants.splice(index, 1);
+      this.countAtt();
       $scope.protocolForm.$setDirty();
     },
     addFromForm: function(){
@@ -165,7 +172,25 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
     },
     setType: function(att, type){
 	    att.type = type;
+	    this.countAtt();
 	    $scope.protocolForm.$setDirty();
+    },
+    countAtt: function(){
+	    if(form.data.attendants.length){
+		    var count = {
+				members: 0,
+				applicants: 0,
+				guests: 0
+			}
+		    
+		    form.data.attendants.forEach(function(row){
+			    if(row.type == 'member')         count.members++;
+			    else if(row.type == 'applicant') count.applicants++;
+			    else if(row.type == 'guest')     count.guests++;
+		    });
+		    
+		    $scope.attendants.count = count;
+	    }
     }
 
   }
