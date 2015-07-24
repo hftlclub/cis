@@ -39,7 +39,6 @@ exports.add = function(data, callback){
 	var attrs = [
 		'title',
 		'recorder',
-		'title',
 		'start',
 		'end',
 		'attendants',
@@ -81,6 +80,60 @@ exports.add = function(data, callback){
 		return callback(null, add.id);
     });
 }
+
+
+
+
+
+exports.edit = function(id, data, callback){
+	
+	//allowed attributes
+	var attrs = [
+		'title',
+		'recorder',
+		'start',
+		'end',
+		'attendants',
+		'text',
+		'comment'
+	];
+	
+	var change = {};
+	for(var key in data){
+		//check whether attribute is allowed to change
+		if(!attrs.indexOf(key) < 0) continue;
+		
+		//insert add key
+		change[key] = data[key];
+	}
+
+	
+	//error if there are no attributes left
+	if(!Object.keys(change).length){
+		return callback(new Error('No attributes to change'));
+	}
+
+	//make JSON from JS object
+	change.attendants = JSON.stringify(change.attendants);
+
+
+
+	
+	//build query
+	var query = 'UPDATE protocols SET ? WHERE id = ?;';
+
+	mysql.conn.query(query, [change, id], function(err, result){
+        if(err){
+            return callback(err);
+        }
+
+		return callback();
+    });
+}
+
+
+
+
 
 
 
