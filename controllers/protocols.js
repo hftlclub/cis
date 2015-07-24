@@ -5,8 +5,27 @@ var protocolsservice = require('../services/protocolsservice');
 
 
 //add user function for superusers
-exports.add = function(req, res, next){
+exports.addedit = function(req, res, next){
 	
+	//decide form mode
+	var mode;
+	if(req.method == 'PUT') mode = 'edit';
+	else if(req.method == 'POST') mode = 'add';
+	else return next();
+	
+	
+	
+	//error if edit and no ID given
+	if(mode == 'edit' && !req.params.id){
+		var err = new Error('ID missing');
+		err.status = 400;
+		return next(err);
+	}
+	
+	/**********************************/
+	
+	
+	//sanitize to integer
 	req.body.start.mm = parseInt(req.body.start.mm);
 	req.body.start.hh = parseInt(req.body.start.hh);
 	req.body.end.mm = parseInt(req.body.end.mm);
@@ -42,19 +61,34 @@ exports.add = function(req, res, next){
 	
 	var end = moment(req.body.date).hour(req.body.end.hh).minute(req.body.end.mm);
 	prot.end = utils.moment2mysql(end);
+
+
+	/**********************************/
+
+
+	if(mode == 'edit'){
+		protocolsservice.edit(req.params.id, prot, function(err, id){
+			if(err){
+				return next(err);
+			}
 	
-
-	//add new protocol
-	protocolsservice.add(prot, function(err, id){
-		if(err){
-			return next(err);
-		}
-
-		//return new id
-		res.json({
-			'id': id
-		}).end();
-	});
+			return res.send();
+		});
+	
+	
+	}else if(mode == 'add'){		
+		//add new protocol
+		protocolsservice.add(prot, function(err, id){
+			if(err){
+				return next(err);
+			}
+	
+			//return new id
+			return res.json({
+				'id': id
+			}).end();
+		});
+	}
 }
 
 
@@ -88,7 +122,7 @@ exports.get = function(req, res, next){
 			"mm": end.minute()
 		}
 		
-		res.json(prot).end();
+		return res.json(prot).end();
 	});
 }
 
@@ -115,24 +149,33 @@ exports.list = function(req, res, next){
 			
 			return res.json(out).end();
 		}
-		
-		
+
+
+		//if not /?grouped, return results in one list
 		return res.json(rows).end();
 	});
 }
 
 
 
-exports.listGrouped = function(req, res, next){
-	protocolsservice.list(true, function(err, rows){
+
+exports.del = function(req, res, next){
+
+	//no id given
+	if(!req.params.id){
+		var err = new Error('ID missing');
+		err.status = 400;
+		return next(err);
+	}
+	
+	protocolsservice.del(req.params.id, function(err){
 		if(err) return next(err);
-		
-		
-		
-		
-		res.json(out).end();
+
+		return res.send();
 	});
 }
+
+
 
 
 
