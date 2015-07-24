@@ -22,6 +22,15 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
     mode: 'markdown'
   }
 
+
+  $scope.laterPopover = {
+	  template: '/templates/protocols/laterPopover.html' ,
+	  setInitial: function(att){
+		  att.later = new Date();
+	  }
+  }
+
+
   refresh();
 
   /* Date picker */
@@ -162,25 +171,11 @@ clubAdminApp.controller('protocolListController', function($scope, $http, $route
 
   // function to open delete modal
   $scope.deleteProtocol = function (protocolID) {
-    var checkArray = [
-      'Egal bei welchem Wetter',
-      'Stecker',
-      'DJ Hasi',
-      'Clubinformationssystem',
-      'Ice Cubes',
-      'Neeebel'
-    ]
-
-    random = checkArray[Math.floor(Math.random()*checkArray.length)];
+    
 
     var modal = $modal.open({
       templateUrl: 'templates/protocols/deletemodal.html',
-      controller: 'delProtocolController',
-      resolve: {
-        random: function () {
-          return random;
-        }
-      }
+      controller: 'delProtocolController'
     });
 
     modal.result.then(function () {
@@ -192,16 +187,19 @@ clubAdminApp.controller('protocolListController', function($scope, $http, $route
 });
 
 // delete modal
-clubAdminApp.controller('delProtocolController', function ($scope, $modalInstance, random) {
-  $scope.random = random;
+clubAdminApp.controller('delProtocolController', function ($scope, $rootScope, $modalInstance) {
+  $scope.checkWord = $rootScope.getCheckWord();
 
   // check if input is the same like the give phrase
   $scope.checkInput = function () {
-    if($scope.random == $scope.inputString) {
+    if($scope.checkWord == $scope.inputCheckWord) {
   	   $modalInstance.close('success');
     }
   };
 });
+
+
+
 
 // controller for protocol details
 clubAdminApp.controller('protocolDetailController', function($scope, $http, $routeParams, clubAuth) {
