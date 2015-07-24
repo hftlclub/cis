@@ -33,6 +33,9 @@ exports.adduser = function(req, res, next){
 	userservice.nextFreeUnixID(1, function(err, uidnumber){
 
 		req.body.uidnumber = uidnumber;
+		
+		//force username to lowercase
+		req.body.username = (req.body.username).toLowerCase();
 
 		//add new user
 		userservice.addUser(req.body, function(err, success){
