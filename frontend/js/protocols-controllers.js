@@ -1,22 +1,25 @@
-clubAdminApp.controller('protocolsController', function($scope, $rootScope, $http, $routeParams, clubAuth) {
+// controller for protocol form
+clubAdminApp.controller('protocolFormController', function($scope, $http, $routeParams, $route, clubAuth) {
+  console.log("crash");
   var form = {};
+  $scope.users = [];
   $scope.form = form;
   $scope.form.protocolData = {};
   $scope.form.protocolData.attendants = [];
-  $scope.users = [];
   $scope.form.protocolData.start = {};
   $scope.form.protocolData.end = {};
-  $scope.protocols = [];
   $scope.startTime = new Date();
   $scope.endTime = new Date();
   $scope.commonTitles = ['Clubsitzung', 'Mitgliederversammlung', 'Planungstreffen'];
+  form.id = $routeParams.id;
+	form.mode = $route.current.locals.clubMode;
 
+  // options for textbox
   $scope.aceOptions = {
     mode: 'markdown'
   }
 
   refresh();
-  /*** functions ***/
 
   /* Date picker */
   //only create new datepicker if there's no data expected
@@ -29,7 +32,6 @@ clubAdminApp.controller('protocolsController', function($scope, $rootScope, $htt
     startingDay: 1
   };
 
-
   $scope.format = 'dd.MM.yyyy';
 
   $scope.datepicker = true;
@@ -40,8 +42,8 @@ clubAdminApp.controller('protocolsController', function($scope, $rootScope, $htt
     $scope.openedDatepicker = true;
   };
 
-  $scope.addAttendants = function(){
-    if($scope.inputAttendee) {
+  $scope.addAttendants = function() {
+    if ($scope.inputAttendee) {
       var match = false;
       var attendee = {
         'name': $scope.inputAttendee,
@@ -49,7 +51,7 @@ clubAdminApp.controller('protocolsController', function($scope, $rootScope, $htt
       }
 
       // check if person is already attendee
-      for (var i=0; i<form.protocolData.attendants.length; i++){
+      for (var i = 0; i < form.protocolData.attendants.length; i++) {
         if (form.protocolData.attendants[i].name == attendee.name) match = true;
       }
 
@@ -59,17 +61,17 @@ clubAdminApp.controller('protocolsController', function($scope, $rootScope, $htt
     $scope.inputAttendee = null;
   }
 
-  $scope.removeAttendee = function(index){
+  $scope.removeAttendee = function(index) {
     $scope.form.protocolData.attendants.splice(index, 1)
   };
 
   // check if title is a common title
   $scope.checkTitle = function() {
-    for(i=0; i<$scope.commonTitles.length; i++) {
-      if ($scope.commonTitles[i] == $scope.form.protocolData.title && !$scope.form.protocolData.text){
+    for (i = 0; i < $scope.commonTitles.length; i++) {
+      if ($scope.commonTitles[i] == $scope.form.protocolData.title && !$scope.form.protocolData.text) {
         $scope.form.protocolData.text = "test";
         $http.get('/templates/protocols/presets/clubsitzung.md').success(function(data) {
-           $scope.form.protocolData.text = data;
+          $scope.form.protocolData.text = data;
         });
       }
     }
@@ -82,28 +84,62 @@ clubAdminApp.controller('protocolsController', function($scope, $rootScope, $htt
     form.protocolData.end.hh = $scope.endTime.getHours();
     form.protocolData.end.mm = $scope.endTime.getMinutes();
 
-    $http.post(apiPath + '/protocols', form.protocolData).success(function(data){
-		    console.log(data);
-	  });
+    $http.post(apiPath + '/protocols', form.protocolData).success(function(data) {
+      //console.log(data);
+    });
   }
 
   /*** functions ***/
 
   function refresh() {
     $http.get(apiPath + '/members').success(function(data) {
-  	  //build array with just names and only current members
-  	  $scope.users = [];
-  	  data.forEach(function(row) {
-  		  if(!row.former) {
-  			  $scope.users.push(row.firstname + ' ' + row.lastname);
-  		  }
-  	  });
+      //build array with just names and only current members
+      $scope.users = [];
+      data.forEach(function(row) {
+        if (!row.former) {
+          $scope.users.push(row.firstname + ' ' + row.lastname);
+        }
+      });
     });
 
+
+    if(form.mode == 'edit' && form.id){
+      // get data from specific protocol if mode is 'edit'
+      $http.get(apiPath + '/protocols/' + form.id).success(function(data) {
+        //build array with just names and only current members
+        form.protocolData = data;
+        form.protocolData.date = new Date(data.date);
+      });
+    }
+
+  }
+});
+
+// controller for protocol list
+clubAdminApp.controller('protocolListController', function($scope, $http, $routeParams, clubAuth) {
+  $scope.protocols = [];
+  refresh();
+
+  /*** functions ***/
+
+  function refresh() {
     $http.get(apiPath + '/protocols?grouped').success(function(data) {
       $scope.protocols = data;
     });
   }
+});
+
+// controller for protocol details
+clubAdminApp.controller('protocolDetailController', function($scope, $http, $routeParams, clubAuth) {
 
 
+  /*** functions ***/
+
+  function refresh() {
+    /*
+    $http.get(apiPath + '/protocols/').success(function(data) {
+      $scope.protocols = data;
+    });
+    */
+  }
 });

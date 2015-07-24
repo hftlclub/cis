@@ -62,12 +62,14 @@ clubAdminApp.config(function($routeProvider) {
 		}).
 
 		/* member list */
+
 		when('/memberlist', {
 			templateUrl: 'templates/memberlist.html?wipecache='+wipecache,
 			controller: 'memberListController',
 		}).
 
 		/* key permission list */
+
 		when('/keylist', {
 			templateUrl: 'templates/keylist.html?wipecache='+wipecache,
 			controller: 'keyListController',
@@ -79,20 +81,35 @@ clubAdminApp.config(function($routeProvider) {
 		}).
 
 		/* club protocol routes */
+
 		when('/protocols', {
 			templateUrl: 'templates/protocols/list.html?wipecache='+wipecache,
-			controller: 'protocolsController',
+			controller: 'protocolListController',
 		}).
+
 		when('/protocols/add', {
 			templateUrl: 'templates/protocols/form.html?wipecache='+wipecache,
-			controller: 'protocolsController',
+			controller: 'protocolFormController',
+			resolve : {
+				clubMode: function(){ return 'add'; }
+			}
 		}).
+
 		when('/protocols/edit/:id', {
 			templateUrl: 'templates/protocols/form.html?wipecache='+wipecache,
-			controller: 'protocolsController',
+			controller: 'protocolFormController',
+			resolve : {
+				clubMode: function(){ return 'edit'; }
+			}
+		}).
+
+		when('/protocols/show/:id', {
+			templateUrl: 'templates/protocols/details.html?wipecache='+wipecache,
+			controller: 'protocolDetailController',
 		}).
 
 		/* about section */
+
 		when('/about', {
 			templateUrl: 'templates/about.html?wipecache='+wipecache,
 		});
