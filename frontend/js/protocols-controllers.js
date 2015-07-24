@@ -64,11 +64,11 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
     $scope.form.protocolData.attendants.splice(index, 1)
   };
 
-  // check if title is a common title
+  // check whether title is a common title, then load template if available
   $scope.checkTitle = function() {
-    for (i = 0; i < $scope.commonTitles.length; i++) {
-      if ($scope.commonTitles[i] == $scope.form.protocolData.title && !$scope.form.protocolData.text) {
-        $scope.form.protocolData.text = "test";
+    for (i = 0; i < $scope.commonTitles.length; i++) { //go through common titles
+      if($scope.commonTitles[i] == $scope.form.protocolData.title && !$scope.form.protocolData.text) { //if current title matches a common title and there's no text in the field
+        //get protocol
         $http.get('/templates/protocols/presets/clubsitzung.md').success(function(data) {
           $scope.form.protocolData.text = data;
         });
@@ -111,7 +111,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
 
     if(form.mode == 'edit' && form.id){
       // get data from specific protocol if mode is 'edit'
-      $http.get(apiPath + '/protocols/' + form.id).success(function(data) {
+      $http.get(apiPath + '/protocols/raw/' + form.id).success(function(data) {
         //build array with just names and only current members
         form.protocolData = data;
         form.protocolData.date = new Date(data.date);
