@@ -2,7 +2,7 @@
 exports.port = 3000;
 
 //session secret (random string)
-exports.tokensecret = require('crypto').randomBytes(20).toString('hex');
+exports.tokensecret = require('crypto').randomBytes(21).toString('hex');
 
 //LDAP settings
 exports.ldap = {
