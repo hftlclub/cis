@@ -1,5 +1,7 @@
 var config = require('../config');
 var exec = require('child_process').exec
+var trim = require('trim');
+
 
 exports.deploy = function(req, res, next){
 	console.log('Deploy Webhook fired');
@@ -12,7 +14,7 @@ exports.deploy = function(req, res, next){
 
 	//get current branch
 	exec('git symbolic-ref --short HEAD', {cwd: __dirname}, function(error, stdout, stderr){
-		var curbranch = stdout;
+		var curbranch = trim(stdout);
 		
 		//only pull when current branch has changed
         if(req.body.ref != 'refs/heads/' + curbranch){
