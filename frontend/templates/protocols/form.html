@@ -19,10 +19,6 @@
 </div>
 
 <form class="form-horizontal" role="form" name="protocolForm">
-  <alert ng-if="form.message == 'invalid'" type="alert alert-warning">
-    Einige Felder sind fehlerhaft.
-  </alert>
-
   <div class="form-group" ng-class="{'has-error has-feedback': form.errors.title}">
     <label for="inputTitle" class="col-sm-2 control-label">Titel</label>
     <div class="col-sm-10">

@@ -188,11 +188,12 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
         })
         .error(function(data, status) {
           if (status == 400 && data.validationerror) {
-            form.message = 'invalid';
+            growl.warning('Einige Felder sind fehlerhaft!', {ttl: 10000});
             form.errors = data.validationerror;
+          
           } else {
             form.data.errormessage = data;
-            form.message = 'error';
+            growl.error('Systemfehler');
             form.errors = null;
           }
         });
@@ -202,7 +203,6 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
       $http.post(apiPath + '/protocols', form.data)
         .success(function(data) {
           growl.info('Das Protokoll wurde angelegt!');
-		  
 		  $scope.protocolForm.$setPristine();
 		  
           //if ID is returned, switch to edit mode
@@ -214,11 +214,11 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
         })
         .error(function(data, status) {
           if (status == 400 && data.validationerror) {
-            form.message = 'invalid';
+            growl.warning('Einige Felder sind fehlerhaft!', {ttl: 10000});
             form.errors = data.validationerror;
           } else {
             form.data.errormessage = data;
-            growl.danger('Systemfehler');
+            growl.error('Systemfehler');
             form.errors = null;
           }
         });
