@@ -1,5 +1,5 @@
 // controller for protocol form
-clubAdminApp.controller('protocolFormController', function($scope, $http, $routeParams, $route, clubAuth) {
+clubAdminApp.controller('protocolFormController', function($scope, $http, $routeParams, $interval, $route, clubAuth) {
   
   
   $scope.users = [];
@@ -24,6 +24,25 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
   $scope.aceOptions = {
     mode: 'markdown'
   }
+
+
+  $scope.autoSave = {
+    isActive: true,
+    toggle: function() { // autosave function
+      this.isActive = !this.isActive;
+      this.setTimer();
+    },
+    setTimer: function() {
+      if (this.isActive) {
+        this.interval = $interval(function() {
+          if ($scope.form.protocolData.text) $scope.save();
+        }, 120000); // 120000 = autosave every 2 minutes
+      } else {
+        $interval.cancel(this.interval);
+      }
+    }
+};
+$scope.autoSave.setTimer();
 
 
   //models for timepickers // create new when form mode is "add"
@@ -98,10 +117,8 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
           form.data.text = data;
         });
       }
-    }
+   }
   }
-
-
 
 
 
@@ -156,23 +173,26 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
       data.forEach(function(row) {
         if (!row.former) {
           $scope.users.push(row.firstname + ' ' + row.lastname);
-        }
-      });
-    });
+		}
+	  });
+	});
+	  
 
 	//in edit mode: go and get the protocol we want to edit
-    if(form.mode == 'edit' && form.id){
-      // get data from specific protocol if mode is 'edit'
-      $http.get(apiPath + '/protocols/raw/' + form.id).success(function(data) {
-        //build array with just names and only current members
-        form.data = data;
-        $scope.times.date = new Date(data.date);
-        $scope.times.start = new Date(data.start);
-        $scope.times.end = new Date(data.end);
-      });
-    }
+	if(form.mode == 'edit' && form.id){
+		// get data from specific protocol if mode is 'edit'
+		$http.get(apiPath + '/protocols/raw/' + form.id).success(function(data) {
+		  //build array with just names and only current members
+		form.data = data;
+		$scope.times.date = new Date(data.date);
+		$scope.times.start = new Date(data.start);
+		$scope.times.end = new Date(data.end);
+	    });
+	      
+	}
 
   }
+
   
   
   
@@ -196,9 +216,8 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
   
   
 
-
-  
 });
+
 
 
 
@@ -220,35 +239,33 @@ clubAdminApp.controller('protocolListController', function($scope, $http, $route
   }
 
   // function to open delete modal
-  $scope.deleteProtocol = function (protocolID) {
-    
+  $scope.deleteProtocol = function(protocolID) {
+
 
     var modal = $modal.open({
       templateUrl: 'templates/protocols/deletemodal.html',
       controller: 'delProtocolController'
     });
 
-    modal.result.then(function () {
+    modal.result.then(function() {
       $http.delete(apiPath + '/protocols/' + protocolID).
-        success(refresh);
+      success(refresh);
     });
   }
 
 });
 
 // delete modal
-clubAdminApp.controller('delProtocolController', function ($scope, $rootScope, $modalInstance) {
+clubAdminApp.controller('delProtocolController', function($scope, $rootScope, $modalInstance) {
   $scope.checkWord = $rootScope.getCheckWord();
 
   // check if input is the same like the give phrase
-  $scope.checkInput = function () {
-    if($scope.checkWord == $scope.inputCheckWord) {
-  	   $modalInstance.close('success');
+  $scope.checkInput = function() {
+    if ($scope.checkWord == $scope.inputCheckWord) {
+      $modalInstance.close('success');
     }
   };
 });
-
-
 
 
 // controller for protocol details
