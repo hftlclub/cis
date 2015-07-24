@@ -15,11 +15,8 @@ var membersController    = require('./controllers/members');
 var settingsController   = require('./controllers/settings');
 var feedbackController   = require('./controllers/feedback');
 var keylistController    = require('./controllers/keylist');
-<<<<<<< HEAD
 var protocolsController  = require('./controllers/protocols');
-=======
 var deployController     = require('./controllers/deploy');
->>>>>>> master
 
 
 var jwtauth      = require('./middleware/jwtauth')
