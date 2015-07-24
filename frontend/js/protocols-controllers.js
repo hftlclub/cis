@@ -52,7 +52,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
     setTimer: function() {
       if (this.isActive) {
         this.interval = $interval(function() {
-          if ($scope.form.data.text) $scope.save();
+          if ($scope.form.data.text) $scope.save(1);
         }, 120000); // 120000 = autosave every 2 minutes
       } else {
         this.stopTimer();
@@ -81,15 +81,11 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
   function saveOnLeave(event) {
     // autosave if form is dirty
     if ($scope.protocolForm.$dirty) {
-      $scope.save();
+      $scope.save(1, 1);
     }
 
-    // open confirm dialog if location was changed
-    if (event.name == '$locationChangeStart') {
-      // TODO : Snackbar Feedback
-    }
     // if  beforeunload event was fired (close tab, reload page)
-    else {
+    if (event.name != '$locationChangeStart') {
       var confirmationMessage = '';
       (event || window.event).returnValue = confirmationMessage; //Gecko + IE
       return confirmationMessage; //Webkit, Safari, Chrome
@@ -190,7 +186,10 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
 
 
 
-  $scope.save = function() {
+  $scope.save = function(autosaved, nosetpristine) {
+    var succMsg = (autosaved) ? "Automatisch gespeichert!" : "Gespeichert!"
+    
+    
     //make ISOStrings from dates
     form.data.date = $scope.times.date.toISOString();
     form.data.start = $scope.times.start.toISOString();
@@ -200,17 +199,18 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
     if (form.mode == 'edit' && form.id) {
       $http.put(apiPath + '/protocols/' + form.id, form.data)
         .success(function(data) {
-          growl.success('Gespeichert');
-          $scope.protocolForm.$setPristine();
+          growl.success(succMsg);
+          if(!nosetpristine) $scope.protocolForm.$setPristine();
 
         })
         .error(function(data, status) {
           if (status == 400 && data.validationerror) {
-            form.message = 'invalid';
+            growl.warning('Einige Felder sind fehlerhaft!', {ttl: 10000});
             form.errors = data.validationerror;
+          
           } else {
             form.data.errormessage = data;
-            form.message = 'error';
+            growl.error('Systemfehler');
             form.errors = null;
           }
         });
@@ -220,8 +220,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
       $http.post(apiPath + '/protocols', form.data)
         .success(function(data) {
           growl.info('Das Protokoll wurde angelegt!');
-
-		  $scope.protocolForm.$setPristine();
+		  if(!nosetpristine) $scope.protocolForm.$setPristine();
 
           //if ID is returned, switch to edit mode
           if (data.id) {
@@ -232,11 +231,11 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
         })
         .error(function(data, status) {
           if (status == 400 && data.validationerror) {
-            form.message = 'invalid';
+            growl.warning('Einige Felder sind fehlerhaft!', {ttl: 10000});
             form.errors = data.validationerror;
           } else {
             form.data.errormessage = data;
-            growl.danger('Systemfehler');
+            growl.error('Systemfehler');
             form.errors = null;
           }
         });
