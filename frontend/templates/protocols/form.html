@@ -4,7 +4,7 @@
       <span class="glyphicon" ng-class="{'glyphicon glyphicon-check': autoSave.isActive, 'glyphicon glyphicon-unchecked': !autoSave.isActive}"></span>
       Automatisch speichern
     </a>
-    
+
     <button ng-click="save()" class="btn btn-success"  ng-class="{'disabled': protocolForm.$pristine}">
       <span class="glyphicon glyphicon-save"></span>
       <span ng-if="form.mode=='add'">Protokoll speichern</span>
@@ -103,7 +103,7 @@
 </helpbox>
 
 <h4>Protokolltext (Markdown)</h4>
-<div class="well well-lg" ui-ace="aceoptions" ng-model="form.data.text"></div>
+<div class="well well-lg" ui-ace="aceoptions" ng-model="form.data.text" id="test"></div>
 
 <h4>Kommentare</h4>
 <textarea class="form-control" ng-model="form.data.comment" rows="3" placeholder="Kommentare"></textarea>

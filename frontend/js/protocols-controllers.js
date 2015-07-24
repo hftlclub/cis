@@ -1,5 +1,5 @@
 // controller for protocol form
-clubAdminApp.controller('protocolFormController', function($scope, $http, $routeParams, $interval, $route, $window, clubAuth, growl) {
+clubAdminApp.controller('protocolFormController', function($scope, $http, $routeParams, $interval, $route, $window, clubAuth, hotkeys, growl) {
 
   $scope.users = [];
 
@@ -23,6 +23,24 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
   $scope.aceOptions = {
     mode: 'markdown'
   }
+
+
+  // You can pass it an object.  This hotkey will not be unbound unless manually removed
+   // using the hotkeys.del() method
+   hotkeys.add({
+     combo:  ['ctrl+s', 'meta+s'],
+     description: 'This will save any changes',
+     allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+     callback: function(event, hotkey) {
+       if (event.preventDefault) {
+            event.preventDefault();
+        } else {
+            // internet explorer
+            event.returnValue = false;
+        }
+       $scope.save();
+     }
+   });
 
 
   $scope.autoSave = {
@@ -184,7 +202,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
         .success(function(data) {
           growl.success('Gespeichert');
           $scope.protocolForm.$setPristine();
-          
+
         })
         .error(function(data, status) {
           if (status == 400 && data.validationerror) {
@@ -204,7 +222,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
         .success(function(data) {
           growl.info('Das Protokoll wurde angelegt!');
 		  $scope.protocolForm.$setPristine();
-		  
+
           //if ID is returned, switch to edit mode
           if (data.id) {
             form.mode = 'edit';
