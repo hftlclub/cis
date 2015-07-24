@@ -1,6 +1,5 @@
 // controller for protocol form
 clubAdminApp.controller('protocolFormController', function($scope, $http, $routeParams, $route, clubAuth) {
-  console.log("crash");
   var form = {};
   $scope.users = [];
   $scope.form = form;
@@ -84,9 +83,16 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
     form.protocolData.end.hh = $scope.endTime.getHours();
     form.protocolData.end.mm = $scope.endTime.getMinutes();
 
-    $http.post(apiPath + '/protocols', form.protocolData).success(function(data) {
-      //console.log(data);
-    });
+    if(form.mode == 'edit' && form.id){
+      console.log("edit");
+      $http.put(apiPath + '/protocols/' + form.id, form.protocolData).success(function(data) {
+        //console.log(data);
+      });
+    } else {
+      $http.post(apiPath + '/protocols', form.protocolData).success(function(data) {
+        //console.log(data);
+      });
+    }
   }
 
   /*** functions ***/
