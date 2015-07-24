@@ -4,7 +4,7 @@ exports.port = 3000;
 //session secret (random string)
 exports.tokensecret = require('crypto').randomBytes(20).toString('hex');
 
-//LDAP settings for user database
+//LDAP settings
 exports.ldap = {
     "server"   : "10.12.114.138",
     "port"     : 389,
@@ -14,6 +14,15 @@ exports.ldap = {
     "admindn"  : "cn=admin,dc=club,dc=hft-leipzig,dc=de",
     "adminpw"  : ""
 };
+
+//MySQL settings
+exports.dbcred = {
+    "host": "",
+    "port": 3306,
+    "user": "",
+    "password": "",
+    "database": ""
+}
 
 //SMTP settings
 exports.smtp = {
