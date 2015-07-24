@@ -1,6 +1,6 @@
 <div class="page-header">
   <div class="pull-right">
-    <a ng-href="#/protocols/add" class="btn btn-success">
+    <a class="btn btn-success" ng-href="#/protocols/add">
       <span class="glyphicon glyphicon-plus"></span>
       Neues Protokoll
     </a>
@@ -9,49 +9,60 @@
 </div>
 
 <div class="panel panel-default" ng-repeat="(year, yprotocols) in protocols">
-  <!-- Default panel contents -->
-  <div class="panel-heading"><h4>{{year}}</h4></div>
-  <!-- List group -->
+<!-- Default panel contents -->
+  <div class="panel-heading">
+    <h4>{{year}}</h4>
+  </div>
+<!-- List group -->
   <ul class="list-group">
     <li class="list-group-item" ng-repeat="protocol in yprotocols">
-      <strong>{{protocol.title}}</strong> ({{protocol.date | date:longDate}})
-        <div class="btn-toolbar pull-right" role="toolbar" aria-label="...">
 
-          <div class="btn-group" dropdown>
-
-
-            <button ng-if="protocol.comment" type="button" class="btn btn-xs btn-primary" popover="{{protocol.comment}}" popover-trigger="mouseenter">
-				<span class="glyphicon glyphicon-comment"></span>
-			</button>
-
-			<a type="button" ng-href="#/protocols/show/{{protocol.id}}" class="btn btn-xs btn-default" title="Anzeigen">
-				<span class="glyphicon glyphicon-eye-open"></span>
-			</a>
-
-			<a type="button" class="disabled btn btn-xs btn-default" title="PDF herunterladen">
-				<span class="glyphicon glyphicon-file"></span>
-			</a>
-
-
-            <button type="button" class="btn btn-xs btn-default dropdown-toggle" dropdown-toggle>
-              <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu pull-right" role="menu">
-              <li>
-                <a ng-href="#/protocols/edit/{{protocol.id}}">
-                  <span class="glyphicon glyphicon-pencil"></span>
-                  Bearbeiten
-                </a>
-              </li>
-              <li>
-                <a ng-click="deleteProtocol(protocol.id)">
-                  <span class="glyphicon glyphicon-trash"></span>
-                  Löschen
-                </a>
-              </li>
-            </ul>
-          </div>
+      <div class="row">
+        <div class="col-md-10 col-sm-9 col-xs-5">
+          <strong>{{protocol.title}}</strong>
+          <br class="visible-xs">
+          ({{protocol.date | date:longDate}})
         </div>
+        <div class="col-md-2 col-sm-3 col-xs-7">
+
+          <div aria-label="..." class="btn-toolbar pull-right" role="toolbar">
+
+            <div class="btn-group" dropdown>
+
+              <button class="btn btn-sm btn-primary" ng-if="protocol.comment" popover-trigger="mouseenter" popover="{{protocol.comment}}" type="button">
+                <span class="glyphicon glyphicon-comment"></span>
+              </button>
+
+              <a class="btn btn-sm btn-default" ng-href="#/protocols/show/{{protocol.id}}" title="Anzeigen" type="button">
+                <span class="glyphicon glyphicon-eye-open"></span>
+              </a>
+
+              <a class="disabled btn btn-sm btn-default" title="PDF herunterladen" type="button">
+                <span class="glyphicon glyphicon-file"></span>
+              </a>
+
+              <button class="btn btn-sm btn-default dropdown-toggle" dropdown-toggle type="button">
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu pull-right" role="menu">
+                <li>
+                  <a ng-href="#/protocols/edit/{{protocol.id}}">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                    Bearbeiten
+                  </a>
+                </li>
+                <li>
+                  <a ng-click="deleteProtocol(protocol.id)">
+                    <span class="glyphicon glyphicon-trash"></span>
+                    Löschen
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
 
     </li>
   </ul>
