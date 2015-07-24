@@ -17,7 +17,9 @@ exports.addedit = function(req, res, next){
 	
 	//error if edit and no ID given
 	if(mode == 'edit' && !req.params.id){
-		return next(new Error('No ID given'));
+		var err = new Error('ID missing');
+		err.status = 400;
+		return next(err);
 	}
 	
 	/**********************************/
@@ -153,6 +155,26 @@ exports.list = function(req, res, next){
 		return res.json(rows).end();
 	});
 }
+
+
+
+
+exports.del = function(req, res, next){
+
+	//no id given
+	if(!req.params.id){
+		var err = new Error('ID missing');
+		err.status = 400;
+		return next(err);
+	}
+	
+	protocolsservice.del(req.params.id, function(err){
+		if(err) return next(err);
+
+		return res.send();
+	});
+}
+
 
 
 

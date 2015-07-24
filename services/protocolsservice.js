@@ -163,3 +163,26 @@ exports.list = function(reduced, callback){
     });
 }
 
+
+
+
+
+
+exports.del = function(id, callback){
+	var query = 'DELETE FROM protocols WHERE id = ?;';
+
+	mysql.conn.query(query, id, function(err, result){
+        if(err){
+            return callback(err);
+        }
+
+        return callback();
+    });
+}
+
+
+
+
+
+
+

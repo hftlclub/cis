@@ -66,7 +66,7 @@ api.get('/protocols', jwtauth, reqm('auth'), protocolsController.list);
 api.get('/protocols/:id', jwtauth, reqm('auth'), protocolsController.get);
 api.post('/protocols', jwtauth, reqm('auth'), protocolsController.addedit); //add
 api.put('/protocols/:id', jwtauth, reqm('auth'), protocolsController.addedit); //edit
-//api.delete('/protocols/:id', jwtauth, reqm('auth'), protocolsController.delete);
+api.delete('/protocols/:id', jwtauth, reqm('auth'), protocolsController.del);
 
 
 
