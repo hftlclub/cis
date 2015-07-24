@@ -2,7 +2,7 @@
 
 <h5>Teilnehmer kam später?</h5>
 
-<button ng-if="attendee.later" ng-click="attendee.later = null" type="button" class="btn btn-xs btn-danger">
+<button ng-if="attendee.later" ng-click="laterPopover.removeTime(attendee)" type="button" class="btn btn-xs btn-danger">
 	<span class="glyphicon glyphicon-remove"></span>
 	Zeit entfernen
 </button>

@@ -1,6 +1,5 @@
 // controller for protocol form
-clubAdminApp.controller('protocolFormController', function($scope, $http, $routeParams, $interval, $route, $window, clubAuth, hotkeys) {
-
+clubAdminApp.controller('protocolFormController', function($scope, $http, $routeParams, $interval, $route, $window, clubAuth, hotkeys, growl) {
 
   $scope.users = [];
 
@@ -111,6 +110,11 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
     template: '/templates/protocols/laterPopover.html',
     setInitial: function(att) {
       att.later = new Date();
+      $scope.protocolForm.$setDirty();
+    },
+    removeTime: function(att){
+	    att.later = null;
+		$scope.protocolForm.$setDirty();
     }
   }
 
@@ -146,16 +150,26 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
           'type': 'member'
         }
 
-        // check if person is already attendee
+        // check if person is already attendee, return if already in list
         for (var i = 0; i < form.data.attendants.length; i++) {
-          if (form.data.attendants[i].name == attendee.name) match = true;
+          if (form.data.attendants[i].name == attendee.name) return;;
         }
 
-        if (!match) form.data.attendants.push(attendee);
+        form.data.attendants.push(attendee);
       }
     },
     remove: function(index) {
-      form.data.attendants.splice(index, 1)
+      form.data.attendants.splice(index, 1);
+      $scope.protocolForm.$setDirty();
+    },
+    addFromForm: function(){
+	    this.add(this.input);
+	    this.input = null;
+	    $scope.protocolForm.$setDirty();
+    },
+    setType: function(att, type){
+	    att.type = type;
+	    $scope.protocolForm.$setDirty();
     }
 
   }
@@ -186,7 +200,9 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
     if (form.mode == 'edit' && form.id) {
       $http.put(apiPath + '/protocols/' + form.id, form.data)
         .success(function(data) {
-          form.message = 'successEdit';
+          growl.success('Gespeichert');
+          $scope.protocolForm.$setPristine();
+
         })
         .error(function(data, status) {
           if (status == 400 && data.validationerror) {
@@ -203,7 +219,9 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
     } else if (form.mode == 'add') {
       $http.post(apiPath + '/protocols', form.data)
         .success(function(data) {
-          form.message = 'successAdd';
+          growl.info('Das Protokoll wurde angelegt!');
+
+		  $scope.protocolForm.$setPristine();
 
           //if ID is returned, switch to edit mode
           if (data.id) {
@@ -218,7 +236,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
             form.errors = data.validationerror;
           } else {
             form.data.errormessage = data;
-            form.message = 'error';
+            growl.danger('Systemfehler');
             form.errors = null;
           }
         });
