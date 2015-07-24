@@ -11,6 +11,18 @@
 </div>
 
 <form class="form-horizontal" role="form" ng-submit="form.submit()">
+  <alert ng-if="form.message == 'error'" type="alert alert-danger">
+    Systemfehler ({{form.data.errormessage}})
+  </alert>
+  <alert ng-if="form.message == 'invalid'" type="alert alert-warning">
+    Einige Felder sind fehlerhaft.
+  </alert>
+  <alert ng-if="form.message == 'successAdd'" type="alert alert-success">
+    Das Protokoll wurde gespeichert!
+  </alert>
+  <alert ng-if="form.message == 'successEdit'" type="alert alert-success">
+    Das Protokoll wurde erfolgreich bearbeitet!
+  </alert>
 
   <div class="form-group" ng-class="{'has-error has-feedback': form.errors.title}">
     <label for="inputTitle" class="col-sm-2 control-label">Titel</label>
@@ -23,7 +35,7 @@
   <div class="form-group" ng-class="{'has-error has-feedback': form.errors.recorder}">
     <label for="inputRecorder" class="col-sm-2 control-label">Protokollführer</label>
     <div class="col-sm-10">
-      <input type="text" ng-model="form.protocolData.recorder" class="form-control" id="inputRecorder" typeahead="user for user in users | filter:$viewValue | limitTo:8" placeholder="Protokollführer" tooltip-placement="right" tooltip-trigger="focus" tooltip="Wer ist Protokollführer?">
+      <input type="text" ng-model="form.protocolData.recorder" ng-required="true" class="form-control" id="inputRecorder" typeahead="user for user in users | filter:$viewValue | limitTo:8" placeholder="Protokollführer" tooltip-placement="right" tooltip-trigger="focus" tooltip="Wer ist Protokollführer?">
       <span ng-if="form.errors.recorder" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
     </div>
   </div>
@@ -63,7 +75,7 @@
   <div class="form-group" ng-class="{'has-error has-feedback': form.errors.attendants}">
     <label class="col-sm-2 control-label"></label>
     <div class="col-sm-10">
-      <div class="btn-toolbar" role="toolbar" aria-label="...">
+      <div id="attendantsToolbar" class="btn-toolbar" role="toolbar" aria-label="...">
         <!-- Split button -->
         <div class="btn-group" dropdown ng-repeat="attendee in form.protocolData.attendants">
           <button type="button" class="btn btn-xs" ng-class="{'btn-success': (attendee.type == 'member'), 'btn-info': (attendee.type == 'applicant'), 'btn-default': (attendee.type == 'guest')}">{{attendee.name}}</button>
@@ -89,6 +101,13 @@
   </div>
 
 </form>
+
+<helpbox>
+  <h4>Hinweise zu Markdown</h4>
+  <p>
+
+  </p>
+</helpbox>
 
 <h4>Protokolltext (Markdown)</h4>
 <div class="well well-lg" ui-ace="aceoptions" ng-model="form.protocolData.text"> kommt der Protokolltext rein.</div>

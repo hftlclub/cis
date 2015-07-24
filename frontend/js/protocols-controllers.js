@@ -7,11 +7,15 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
   $scope.form.protocolData.attendants = [];
   $scope.form.protocolData.start = {};
   $scope.form.protocolData.end = {};
+  $scope.form.date = new Date();
   $scope.startTime = new Date();
   $scope.endTime = new Date();
   $scope.commonTitles = ['Clubsitzung', 'Mitgliederversammlung', 'Planungstreffen'];
   form.id = $routeParams.id;
 	form.mode = $route.current.locals.clubMode;
+
+  form.errors = {};
+  form.message = null;
 
   // options for textbox
   $scope.aceOptions = {
@@ -94,13 +98,35 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
 
     if(form.mode == 'edit' && form.id){
       console.log("edit");
-      $http.put(apiPath + '/protocols/' + form.id, form.protocolData).success(function(data) {
-        //console.log(data);
-      });
+      $http.put(apiPath + '/protocols/' + form.id, form.protocolData)
+        .success(function(data) {
+          $scope.form.message = 'successEdit';
+        })
+        .error(function (data, status) {
+    			if (status == 400 && data.validationerror) {
+    				$scope.form.message = 'invalid';
+    				$scope.form.errors = data.validationerror;
+    			} else {
+    				$scope.form.data.errormessage = data;
+    				$scope.form.message = 'error';
+    				$scope.form.errors = null;
+    			}
+        });
     } else {
-      $http.post(apiPath + '/protocols', form.protocolData).success(function(data) {
-        //console.log(data);
-      });
+      $http.post(apiPath + '/protocols', form.protocolData)
+        .success(function(data) {
+          $scope.form.message = 'successAdd';
+        })
+        .error(function (data, status) {
+    			if (status == 400 && data.validationerror) {
+    				$scope.form.message = 'invalid';
+    				$scope.form.errors = data.validationerror;
+    			} else {
+    				$scope.form.data.errormessage = data;
+    				$scope.form.message = 'error';
+    				$scope.form.errors = null;
+    			}
+        });
     }
   }
 

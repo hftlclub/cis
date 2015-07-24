@@ -13,7 +13,7 @@ span.largeicon {
   font-size: 2em;
 }
 
-.centering{
+.centering {
   text-align: center;
 }
 
@@ -23,7 +23,7 @@ span.largeicon {
   margin-right: auto;
 }
 
-.btn-xl{
+.btn-xl {
   height: 60px;
   font-size: 2em;
 }
@@ -36,18 +36,22 @@ span.largeicon {
 
 .ace_editor { height: 400px; }
 
-#protocolContent h1{
+#protocolContent h1 {
   font-size: 2em;
 }
 
-#protocolContent h2{
+#protocolContent h2 {
   font-size: 1.6em;
 }
 
-#protocolContent h3{
+#protocolContent h3 {
   font-size: 1.4em;
 }
 
-#protocolContent h4{
+#protocolContent h4 {
   font-size: 1.2em;
+}
+
+#attendantsToolbar .btn-group {
+  margin-bottom: 5px;
 }
