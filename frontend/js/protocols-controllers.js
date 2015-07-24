@@ -35,14 +35,23 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
     setTimer: function() {
       if (this.isActive) {
         this.interval = $interval(function() {
-          if ($scope.form.protocolData.text) $scope.save();
+          if ($scope.form.data.text) $scope.save();
+          console.log('save');
         }, 120000); // 120000 = autosave every 2 minutes
       } else {
-        $interval.cancel(this.interval);
+        this.stopTimer();
       }
+    },
+    stopTimer: function(){
+	    $interval.cancel(this.interval)
     }
 };
-$scope.autoSave.setTimer();
+$scope.autoSave.setTimer(); //initially start timer
+	
+	//destroy timer on location change
+	$scope.$on("$destroy", function(){
+		$scope.autoSave.stopTimer();
+	});
 
 
   //models for timepickers // create new when form mode is "add"

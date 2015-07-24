@@ -1,6 +1,6 @@
 <div class="page-header">
   <div class="pull-right">
-    <a class="btn" ng-class="{'btn-default': !autoSave.isActive, 'btn-success': autoSave.isActive}" ng-click="autoSave.toggle()" type="button">
+    <a class="btn" ng-class="{'btn-default': !autoSave.isActive, 'btn-primary': autoSave.isActive}" ng-click="autoSave.toggle()" type="button">
       <span class="glyphicon" ng-class="{'glyphicon glyphicon-check': autoSave.isActive, 'glyphicon glyphicon-unchecked': !autoSave.isActive}"></span>
       Automatisch speichern
     </a>
@@ -70,7 +70,7 @@
   <div class="form-group" ng-class="{'has-error has-feedback': form.errors.attendants}">
     <label for="inputAttendants" class="col-sm-2 control-label">Anwesend</label>
     <div class="col-sm-10">
-      <input type="text" ng-model="attendants.input" ng-enter="attendants.add(attendants.input);this.input = null" class="form-control" id="inputAttendants" typeahead="attendee for attendee in users | filter:$viewValue | limitTo:8" placeholder="Anwesende Personen" tooltip-placement="right" tooltip-trigger="focus" tooltip="Welche Mitglieder sind anwesend?">
+      <input type="text" ng-model="attendants.input" ng-enter="attendants.add(attendants.input);attendants.input = null" class="form-control" id="inputAttendants" typeahead="attendee for attendee in users | filter:$viewValue | limitTo:8" placeholder="Anwesende Personen" tooltip-placement="right" tooltip-trigger="focus" tooltip="Welche Mitglieder sind anwesend?">
       <span ng-if="form.errors.attendants" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
     </div>
   </div>
