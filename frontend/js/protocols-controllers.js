@@ -86,7 +86,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
   }
 
   $scope.save = function() {
-    form.protocolData.date = form.protocolData.date.toISOString();
+    form.protocolData.date = form.date.toISOString();
     form.protocolData.start.hh = $scope.startTime.getHours();
     form.protocolData.start.mm = $scope.startTime.getMinutes();
     form.protocolData.end.hh = $scope.endTime.getHours();
@@ -123,7 +123,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
       $http.get(apiPath + '/protocols/raw/' + form.id).success(function(data) {
         //build array with just names and only current members
         form.protocolData = data;
-        form.protocolData.date = new Date(data.date);
+        form.date = new Date(data.date);
       });
     }
 
@@ -131,7 +131,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
 });
 
 // controller for protocol list
-clubAdminApp.controller('protocolListController', function($scope, $http, $routeParams, clubAuth) {
+clubAdminApp.controller('protocolListController', function($scope, $http, $routeParams, clubAuth, $modal) {
   $scope.protocols = [];
   refresh();
 
@@ -142,19 +142,61 @@ clubAdminApp.controller('protocolListController', function($scope, $http, $route
       $scope.protocols = data;
     });
   }
+
+  // function to open delete modal
+  $scope.deleteProtocol = function (protocolID) {
+    var checkArray = [
+      'Egal bei welchem Wetter',
+      'Stecker',
+      'DJ Hasi',
+      'Clubinformationssystem',
+      'Ice Cubes',
+      'Neeebel'
+    ]
+
+    random = checkArray[Math.floor(Math.random()*checkArray.length)];
+
+    var modal = $modal.open({
+      templateUrl: 'templates/protocols/deletemodal.html',
+      controller: 'delProtocolController',
+      resolve: {
+        random: function () {
+          return random;
+        }
+      }
+    });
+
+    modal.result.then(function () {
+      $http.delete(apiPath + '/protocols/' + protocolID).
+        success(refresh);
+    });
+  }
+
+});
+
+// delete modal
+clubAdminApp.controller('delProtocolController', function ($scope, $modalInstance, random) {
+  $scope.random = random;
+
+  // check if input is the same like the give phrase
+  $scope.checkInput = function () {
+    if($scope.random == $scope.inputString) {
+  	   $modalInstance.close('success');
+    }
+  };
 });
 
 // controller for protocol details
 clubAdminApp.controller('protocolDetailController', function($scope, $http, $routeParams, clubAuth) {
+  $scope.protocolid = $routeParams.id;
+  $scope.protocol = {};
 
-
+  refresh();
   /*** functions ***/
 
   function refresh() {
-    /*
-    $http.get(apiPath + '/protocols/').success(function(data) {
-      $scope.protocols = data;
+    $http.get(apiPath + '/protocols/detail/' + $scope.protocolid).success(function(data) {
+      $scope.protocol = data;
     });
-    */
   }
 });

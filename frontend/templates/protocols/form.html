@@ -32,7 +32,7 @@
     <label for="inputDate" class="col-sm-2 control-label">Datum</label>
     <div class="col-md-2">
       <p class="input-group">
-        <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="form.protocolData.date" is-open="openedDatepicker" datepicker-options="dateOptions" ng-required="true" close-text="Close" tooltip-placement="bottom" tooltip-trigger="focus" tooltip="Wann wurde das Protokoll erstellt?"/>
+        <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="form.date" is-open="openedDatepicker" datepicker-options="dateOptions" ng-required="true" close-text="Close" tooltip-placement="bottom" tooltip-trigger="focus" tooltip="Wann wurde das Protokoll erstellt?"/>
         <span class="input-group-btn">
           <button type="button" class="btn btn-default" ng-click="openDatepicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
         </span>

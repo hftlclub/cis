@@ -35,3 +35,19 @@ span.largeicon {
 }
 
 .ace_editor { height: 400px; }
+
+#protocolContent h1{
+  font-size: 2em;
+}
+
+#protocolContent h2{
+  font-size: 1.6em;
+}
+
+#protocolContent h3{
+  font-size: 1.4em;
+}
+
+#protocolContent h4{
+  font-size: 1.2em;
+}

@@ -1,6 +1,6 @@
 
 var clubAdminApp = angular.module('clubAdminApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.dropdown',
-		'ui.bootstrap.modal', 'ui.bootstrap.datepicker', 'ui.ace', 'ngAudio']);
+		'ui.bootstrap.modal', 'ui.bootstrap.datepicker', 'ui.ace', 'ngAudio', 'ngSanitize']);
 
 angular.module('clubAdminApp').run(function($http) {
 	var token = (localStorage.getItem('accessToken')) ? localStorage.getItem('accessToken') : null;
