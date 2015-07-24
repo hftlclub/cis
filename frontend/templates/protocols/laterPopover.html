@@ -1,0 +1,20 @@
+<div style="text-align: center">
+
+<h5>Teilnehmer kam später?</h5>
+
+<timepicker ng-if="attendee.later" ng-model="attendee.later" show-meridian="false"></timepicker>
+
+
+<button ng-if="!attendee.later" ng-click="laterPopover.setInitial(attendee)" type="button" class="btn btn-xs btn-danger" style="margin-bottom: 4px">
+	<span class="glyphicon glyphicon-ok"></span>
+	Zeit setzen
+</button>
+
+<button ng-if="attendee.later" ng-click="attendee.later = null" type="button" class="btn btn-xs btn-warning">
+	<span class="glyphicon glyphicon-remove"></span>
+	Zeit entfernen
+</button>
+
+
+
+</div>

@@ -18,6 +18,15 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
     mode: 'markdown'
   }
 
+
+  $scope.laterPopover = {
+	  template: '/templates/protocols/laterPopover.html' ,
+	  setInitial: function(att){
+		  att.later = new Date();
+	  }
+  }
+
+
   refresh();
 
   /* Date picker */
