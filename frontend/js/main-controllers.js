@@ -1,9 +1,8 @@
 
 var clubAdminApp = angular.module('clubAdminApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.dropdown',
-		'ui.bootstrap.modal', 'ui.bootstrap.datepicker', 'ngAudio']);
+		'ui.bootstrap.modal', 'ui.bootstrap.datepicker', 'ui.ace', 'ngAudio', 'ngSanitize']);
 
-
-angular.module('clubAdminApp').run(function($http) {
+clubAdminApp.run(function($http) {
 	var token = (localStorage.getItem('accessToken')) ? localStorage.getItem('accessToken') : null;
 	$http.defaults.headers.common['X-Access-Token'] = token;
 });
@@ -16,7 +15,7 @@ function fixAutofillBug() {
 	});
 }
 
-clubAdminApp.controller('MainController', function ($scope, $route, $routeParams, $location, $interval, clubAuth, $timeout, $modal, $http) {
+clubAdminApp.controller('MainController', function ($scope, $rootScope, $route, $routeParams, $location, $interval, clubAuth, $timeout, $modal, $http) {
 	$scope.$route = $route;
 	$scope.$location = $location;
 	$scope.$routeParams = $routeParams;
@@ -24,7 +23,7 @@ clubAdminApp.controller('MainController', function ($scope, $route, $routeParams
 	$scope.nav = {
 		templateUrl: null,
 		logout: clubAuth.logout,
-		name: null,
+		name: null
 	};
 
 	$scope.$on('clubAuthRefreshed', function() {
@@ -37,8 +36,23 @@ clubAdminApp.controller('MainController', function ($scope, $route, $routeParams
 		}
 	});
 
-	//probably redundant
-	//clubAuth.refresh();
+
+	//returns random checkword for critical actions
+	$rootScope.getCheckWord = function(){
+		var checkArray = [
+			'Egal bei welchem Wetter',
+			'Stecker',
+			'DJ Hasi',
+			'Clubinformationssystem',
+			'Ice Cubes',
+			'Mehr Nebel!',
+			'Sturakete'
+		]
+
+		return checkArray[Math.floor(Math.random()*checkArray.length)];
+	}
+
+
 
 	$scope.openFeedbackModal = function() {
 
@@ -54,6 +68,8 @@ clubAdminApp.controller('MainController', function ($scope, $route, $routeParams
 
 });
 
+
+
 clubAdminApp.controller('IndexController', function($location, clubAuth) {
 
 	if(clubAuth.user) {
@@ -64,15 +80,18 @@ clubAdminApp.controller('IndexController', function($location, clubAuth) {
 
 });
 
-clubAdminApp.controller('FeedbackModalController', function ($scope, $modalInstance, $rootScope) {
+
+
+
+clubAdminApp.controller('FeedbackModalController', function ($scope, $rootScope, $modalInstance) {
 	$scope.data = {};
 	$scope.nameSet = false;
-	
+
 	//fill in name if user is logged in
 	if($rootScope.clubUser.firstname && $rootScope.clubUser.lastname){
 		$scope.data.name = $rootScope.clubUser.firstname + " " + $rootScope.clubUser.lastname;
 		$scope.nameSet = true;
-	}	
+	}
 
 	$scope.ok = function () {
     $modal.close();

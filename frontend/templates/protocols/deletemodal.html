@@ -1,0 +1,18 @@
+<div class="modal-header">
+	<h3 class="modal-title">Protokoll wirklich löschen</h3>
+</div>
+<div class="modal-body">
+	<p>
+		<strong>Wirklich fortfahren?</strong>
+	</p>
+	<form>
+		<div class="form-group">
+	    <label for="input">Bitte tippe folgendes ein: <code>{{checkWord}}</code></label>
+	    <input ng-model="inputCheckWord" type="text" class="form-control" id="input" placeholder="">
+	  </div>
+	</form>
+</div>
+<div class="modal-footer">
+	<button class="btn btn-danger" ng-click="checkInput()">Löschen</button>
+	<button class="btn btn-default" ng-click="$dismiss()">Abbrechen</button>
+</div>

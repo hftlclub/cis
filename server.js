@@ -16,6 +16,7 @@ var membersController    = require('./controllers/members');
 var settingsController   = require('./controllers/settings');
 var feedbackController   = require('./controllers/feedback');
 var keylistController    = require('./controllers/keylist');
+var protocolsController  = require('./controllers/protocols');
 
 
 var jwtauth      = require('./middleware/jwtauth')
@@ -58,6 +59,16 @@ api.put('/settings/profile', jwtauth, reqm('auth'), settingsController.changepro
 
 api.get('/members', jwtauth, reqm('auth'), reqm('club'), membersController.listmembers);
 api.get('/members/xlsx', jwtauth, reqm('auth'), reqm('club'), membersController.makexlsx);
+
+
+//protocols
+api.get('/protocols', jwtauth, reqm('auth'), protocolsController.list);
+api.get('/protocols/raw/:id', jwtauth, reqm('auth'), protocolsController.get); //raw view
+api.get('/protocols/detail/:id', jwtauth, reqm('auth'), protocolsController.getDetail); //detailed view with HTML
+api.post('/protocols', jwtauth, reqm('auth'), protocolsController.addedit); //add
+api.put('/protocols/:id', jwtauth, reqm('auth'), protocolsController.addedit); //edit
+api.delete('/protocols/:id', jwtauth, reqm('auth'), protocolsController.del);
+
 
 
 //superuser actions

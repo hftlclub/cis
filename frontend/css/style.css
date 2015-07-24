@@ -13,7 +13,7 @@ span.largeicon {
   font-size: 2em;
 }
 
-.centering{
+.centering {
   text-align: center;
 }
 
@@ -23,7 +23,7 @@ span.largeicon {
   margin-right: auto;
 }
 
-.btn-xl{
+.btn-xl {
   height: 60px;
   font-size: 2em;
 }
@@ -32,4 +32,26 @@ span.largeicon {
     width: 150px;
     /* If max-width does not work, try using width instead */
     /*width: 100px;*/
+}
+
+.ace_editor { height: 400px; }
+
+#protocolContent h1 {
+  font-size: 2em;
+}
+
+#protocolContent h2 {
+  font-size: 1.6em;
+}
+
+#protocolContent h3 {
+  font-size: 1.4em;
+}
+
+#protocolContent h4 {
+  font-size: 1.2em;
+}
+
+#attendantsToolbar .btn-group {
+  margin-bottom: 5px;
 }
