@@ -14,14 +14,45 @@
   <!-- List group -->
   <ul class="list-group">
     <li class="list-group-item" ng-repeat="protocol in yprotocols">
-      <h5>{{protocol.title}} - {{protocol.date | date:longDate}}
+      <strong>{{protocol.title}}</strong> ({{protocol.date | date:longDate}})
         <div class="btn-toolbar pull-right" role="toolbar" aria-label="...">
-          <div class="btn-group" role="group" aria-label="...">
-            <a ng-href="#/protocols/edit/{{protocol.id}}"  type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Bearbeiten</a>
-            <a ng-href="#/protocols/show/{{protocol.id}}" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"></span> Protokoll ansehen</a>
+          
+          <div class="btn-group" dropdown>
+            
+            
+            <button ng-if="protocol.comment" type="button" class="btn btn-xs btn-primary" popover="{{protocol.comment}}" popover-trigger="mouseenter">
+				<span class="glyphicon glyphicon-comment"></span>
+			</button>
+			
+			<a type="button" ng-href="#/protocols/show/{{protocol.id}}" class="btn btn-xs btn-default" title="Anzeigen">
+				<span class="glyphicon glyphicon-eye-open"></span>
+			</a>
+			
+			<a type="button" class="disabled btn btn-xs btn-default" title="PDF herunterladen">
+				<span class="glyphicon glyphicon-file"></span>
+			</a>
+            
+            
+            <button type="button" class="btn btn-xs btn-default dropdown-toggle" dropdown-toggle>
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu pull-right" role="menu">
+              <li>
+                <a ng-href="#/protocols/edit/{{protocol.id}}">
+                  <span class="glyphicon glyphicon-pencil"></span>
+                  Bearbeiten
+                </a>
+              </li>
+              <li>
+                <a ng-click="users.remove(user)" disabled>
+                  <span class="glyphicon glyphicon-trash"></span>
+                  Löschen
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
-      </h5>
+        
     </li>
   </ul>
 </div>

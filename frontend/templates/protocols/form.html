@@ -2,9 +2,8 @@
   <div class="pull-right">
     <a ng-click="save()" class="btn btn-success">
       <span class="glyphicon glyphicon-save"></span>
-      <span ng-if="form.mode=='add'">Protokoll </span>
-      <span ng-if="form.mode=='edit'">Änderungen </span>
-      Speichern
+      <span ng-if="form.mode=='add'">Protokoll speichern</span>
+      <span ng-if="form.mode=='edit'">Änderungen speichern</span>
     </a>
   </div>
   <h2 ng-if="form.mode=='add'">Protokoll erstellen</h2>
@@ -86,8 +85,8 @@
 
 </form>
 
-<h4>Protokolltext (Markdown):</h4>
+<h4>Protokolltext (Markdown)</h4>
 <div class="well well-lg" ui-ace="aceoptions" ng-model="form.protocolData.text"> kommt der Protokolltext rein.</div>
 
-<h4>Kommentare:</h4>
+<h4>Kommentare</h4>
 <textarea class="form-control" ng-model="form.protocolData.comment" rows="3" placeholder="Kommentare"></textarea>
