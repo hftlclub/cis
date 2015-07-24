@@ -1,5 +1,5 @@
 var config = require('../config');
-
+var exec = require('child_process').exec
 
 exports.deploy = function(req, res, next){
 	console.log('Deploy Webhook fired');

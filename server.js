@@ -2,7 +2,6 @@ var express          = require('express');
 var expressValidator = require('express-validator');
 var bodyParser       = require('body-parser');
 var cors             = require('cors');
-var exec             = require('child_process').exec
 
 var app = express();
 var api = express.Router();
