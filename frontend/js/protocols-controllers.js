@@ -34,7 +34,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
   /*************************
     * Datepicker
     *************************/
-  
+
   //only create new datepicker if there's no data expected
   $scope.minDate = $scope.minDate ? null : new Date(2012, (10 - 1), 25);
   $scope.maxDate = $scope.maxDate ? null : new Date();
@@ -82,21 +82,21 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
   };
   $scope.autoSave.setTimer(); //initially start timer
 
-  
+
   // catch location change event
   $scope.$on('$locationChangeStart', function(event, next, current) {
     if(form.mode == 'edit' && $scope.autoSave.isActive && $scope.protocolForm.$dirty){ //if edit mode, autosave active and form dirty: autosave!
 		$scope.save(1, 1);
 	}
   });
-  
+
   //destroy timer and unloadListener on location change
   $scope.$on('$destroy', function() {
     $scope.autoSave.stopTimer();
     $window.removeEventListener("beforeunload", unloadListener);
   });
 
-   
+
   // catch close/reload event and show confirmation message
   $window.addEventListener("beforeunload", unloadListener);
   function unloadListener(event) {
@@ -121,10 +121,10 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
        $scope.save();
      }
    });
-   
-   
-   
-   
+
+
+
+
 
 
   /*************************
@@ -148,7 +148,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
         for (var i = 0; i < form.data.attendants.length; i++) {
           if(form.data.attendants[i].name == attendee.name) return;;
         }
-		
+
 		//attendee seems to be new. add it
         form.data.attendants.push(attendee);
       }
@@ -166,13 +166,13 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
 	    att.type = type;
 	    $scope.protocolForm.$setDirty();
     },
-    countAtt: function(){    
+    countAtt: function(){
 	    var count = {
 			members: 0,
 			applicants: 0,
 			guests: 0
 		}
-	    
+
 	    if(form.data.attendants.length){
 		    form.data.attendants.forEach(function(row){
 			    if(row.type == 'member')         count.members++;
@@ -180,7 +180,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
 			    else if(row.type == 'guest')     count.guests++;
 		    });
 	    }
-	    
+
 	    $scope.attendants.count = count;
     }
 
@@ -230,8 +230,8 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
 
   $scope.save = function(autosaved, nosetpristine) {
     var succMsg = (autosaved) ? "Automatisch gespeichert!" : "Gespeichert!"
-    
-    
+
+
     //make ISOStrings from dates
     form.data.date = $scope.times.date.toISOString();
     form.data.start = $scope.times.start.toISOString();
@@ -249,7 +249,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
           if (status == 400 && data.validationerror) {
             growl.warning('Einige Felder sind fehlerhaft!', {ttl: 10000});
             form.errors = data.validationerror;
-          
+
           } else {
             form.data.errormessage = data;
             growl.error('Systemfehler');
@@ -283,13 +283,13 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
         });
     }
   }
-  
-  
-  
+
+
+
   /*************************
    * refresh function
    *************************/
-   
+
   function refresh() {
     $http.get(apiPath + '/members').success(function(data) {
       //build array with just names and only current members
@@ -353,7 +353,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
 
 
 // controller for protocol list
-clubAdminApp.controller('protocolListController', function($scope, $http, $routeParams, clubAuth, $modal) {
+clubAdminApp.controller('protocolListController', function($scope, $http, $routeParams, clubAuth, $modal, $location) {
   $scope.protocols = [];
   refresh();
 
@@ -384,6 +384,10 @@ clubAdminApp.controller('protocolListController', function($scope, $http, $route
     });
   }
 
+	$scope.showProtocol = function(id) {
+		$location.path('protocols/show/'+id);
+	}
+
 });
 
 
@@ -393,7 +397,7 @@ clubAdminApp.controller('protocolListController', function($scope, $http, $route
 clubAdminApp.controller('delProtocolModalController', function($scope, $rootScope, $modalInstance, protocol) {
   $scope.protocol = protocol;
   $scope.checkWord = $rootScope.getCheckWord();
-  
+
   // check if input is the same like the give phrase
   $scope.checkInput = function() {
     if ($scope.checkWord == $scope.inputCheckWord) {

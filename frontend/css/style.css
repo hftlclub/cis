@@ -112,3 +112,8 @@ span.largeicon {
   -o-transition:1s linear all;
   transition:1s linear all;
 }
+
+/* protocol-list */
+.protocol-list li {
+  cursor: pointer;
+}
