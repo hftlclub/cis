@@ -361,16 +361,20 @@ clubAdminApp.controller('protocolListController', function($scope, $http, $route
   }
 
   // function to open delete modal
-  $scope.deleteProtocol = function(protocolID) {
-
+  $scope.deleteProtocol = function(prot) {
 
     var modal = $modal.open({
       templateUrl: 'templates/protocols/deletemodal.html',
-      controller: 'delProtocolController'
+      controller: 'delProtocolModalController',
+      resolve: {
+	      protocol: function(){
+		      return prot;
+		  }
+      }
     });
 
     modal.result.then(function() {
-      $http.delete(apiPath + '/protocols/' + protocolID).
+      $http.delete(apiPath + '/protocols/' + prot.id).
       success(refresh);
     });
   }
@@ -381,9 +385,10 @@ clubAdminApp.controller('protocolListController', function($scope, $http, $route
 
 
 // delete modal
-clubAdminApp.controller('delProtocolController', function($scope, $rootScope, $modalInstance) {
+clubAdminApp.controller('delProtocolModalController', function($scope, $rootScope, $modalInstance, protocol) {
+  $scope.protocol = protocol;
   $scope.checkWord = $rootScope.getCheckWord();
-
+  
   // check if input is the same like the give phrase
   $scope.checkInput = function() {
     if ($scope.checkWord == $scope.inputCheckWord) {
