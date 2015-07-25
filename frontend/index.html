@@ -72,7 +72,7 @@
 		</div>
 	</nav>
 
-	<div class="container">
+	<div class="container" scroll id="scrollToTopTarget">
 		<div ng-view></div>
 	</div>
 
@@ -81,8 +81,17 @@
 			<ul class="nav navbar-nav hidden-xs">
         <li><a ng-href="#/about"><span class="glyphicon glyphicon-info-sign"></span> Info</a></li>
 			</ul>
+
+			<ul class="nav navbar-nav hidden-xs">
+				<li><a ng-click="openFeedbackModal()"><span class="glyphicon glyphicon-envelope"></span> Fehler entdeckt oder Probleme?</a></li>
+			</ul>
+
 			<ul class="nav navbar-nav navbar-right">
-        <li><a ng-click="openFeedbackModal()"><span class="glyphicon glyphicon-envelope"></span> Fehler entdeckt oder Probleme?</a></li>
+				<li>
+					<a ng-hide="!boolChangeClass" id="scrollToTopBtn" ng-click="scroll.toTop()" type="button">
+						<span class="glyphicon glyphicon-circle-arrow-up"></span>
+					</a>
+				</li>
 			</ul>
 	  </div>
 	</nav>

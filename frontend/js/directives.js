@@ -61,3 +61,16 @@ clubAdminApp.directive('ngEnter', function() {
             });
         };
     });
+
+clubAdminApp.directive("scroll", function ($window) {
+    return function(scope, element, attrs) {
+        angular.element($window).bind("scroll", function() {
+             if (this.pageYOffset >= 800) { // distance from top
+                 scope.boolChangeClass = true;
+             } else {
+                 scope.boolChangeClass = false;
+             }
+            scope.$apply();
+        });
+    };
+});

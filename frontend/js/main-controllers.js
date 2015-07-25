@@ -22,10 +22,16 @@ function fixAutofillBug() {
 	});
 }
 
-clubAdminApp.controller('MainController', function ($scope, $rootScope, $route, $routeParams, $location, $interval, clubAuth, $timeout, $modal, $http) {
-	$scope.$route = $route;
-	$scope.$location = $location;
-	$scope.$routeParams = $routeParams;
+clubAdminApp.controller('MainController', function ($scope, $rootScope, $route, $routeParams, $location, $interval, clubAuth, $timeout, $modal, $http, $anchorScroll, $window) {
+	$scope.scroll = {
+		// scroll to top if Button in Footer was clicked
+		toTop : function() {
+			 /* set the location.hash to the id of the element you wish to scroll to. */
+			 $location.hash('scrollToTopTarget');
+			 $anchorScroll();
+		 }
+	}
+
 
 	$scope.nav = {
 		templateUrl: null,
