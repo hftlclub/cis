@@ -19,6 +19,7 @@
 
       <div class="row">
         <div class="col-md-10 col-sm-9 col-xs-5" >
+          <span class="glyphicon glyphicon-file"></span>
           <strong>{{protocol.title}}</strong>
           <br class="visible-xs">
           {{protocol.date | date:longDate}}
@@ -33,26 +34,26 @@
                 <span class="glyphicon glyphicon-comment"></span>
               </button>
 
-              <a class="btn btn-sm btn-default" ng-href="#/protocols/show/{{protocol.id}}" title="Anzeigen" type="button">
+              <a class="btn btn-sm btn-default" ng-href="#/protocols/show/{{protocol.id}}" title="Anzeigen" type="button" ng-click="$event.stopPropagation()">
                 <span class="glyphicon glyphicon-eye-open"></span>
               </a>
 
-              <a class="disabled btn btn-sm btn-default" title="PDF herunterladen" type="button">
+              <a class="disabled btn btn-sm btn-default" title="PDF herunterladen" type="button" ng-click="$event.stopPropagation()">
                 <span class="glyphicon glyphicon-file"></span>
               </a>
 
-              <button class="btn btn-sm btn-default dropdown-toggle" dropdown-toggle type="button">
+              <button class="btn btn-sm btn-default dropdown-toggle" dropdown-toggle type="button" ng-click="$event.stopPropagation()">
                 <span class="caret"></span>
               </button>
               <ul class="dropdown-menu pull-right" role="menu">
                 <li>
-                  <a ng-href="#/protocols/edit/{{protocol.id}}">
+                  <a ng-href="#/protocols/edit/{{protocol.id}}" ng-click="$event.stopPropagation()">
                     <span class="glyphicon glyphicon-pencil"></span>
                     Bearbeiten
                   </a>
                 </li>
                 <li>
-                  <a ng-click="deleteProtocol(protocol)">
+                  <a ng-click="deleteProtocol(protocol); $event.stopPropagation()">
                     <span class="glyphicon glyphicon-trash"></span>
                     Löschen
                   </a>

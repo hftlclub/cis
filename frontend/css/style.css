@@ -114,6 +114,7 @@ span.largeicon {
 }
 
 /* protocol-list */
-.protocol-list li {
+.protocol-list li:hover {
   cursor: pointer;
+  background-color: #F5F5F5;
 }
