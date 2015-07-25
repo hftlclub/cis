@@ -145,24 +145,22 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
 	},
     add: function(name) {
       if (name) {
-        var match = false;
         var attendee = {
           'name': name,
-          'type': 'member'
+          'type': 'member' //default is member
         }
 
-        // check if person is already attendee, return if already in list
+        //check if person is already attendee, end this function if already in list
         for (var i = 0; i < form.data.attendants.length; i++) {
-          if (form.data.attendants[i].name == attendee.name) return;;
+          if(form.data.attendants[i].name == attendee.name) return;;
         }
-
+		
+		//attendee seems to be new. add it
         form.data.attendants.push(attendee);
-        this.countAtt();
       }
     },
     remove: function(index) {
       form.data.attendants.splice(index, 1);
-      this.countAtt();
       $scope.protocolForm.$setDirty();
     },
     addFromForm: function(){
@@ -172,10 +170,11 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
     },
     setType: function(att, type){
 	    att.type = type;
-	    this.countAtt();
 	    $scope.protocolForm.$setDirty();
     },
     countAtt: function(){
+	    console.log('count now');
+	    
 	    var count = {
 			members: 0,
 			applicants: 0,
@@ -183,8 +182,6 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
 		}
 	    
 	    if(form.data.attendants.length){
-		    
-		    
 		    form.data.attendants.forEach(function(row){
 			    if(row.type == 'member')         count.members++;
 			    else if(row.type == 'applicant') count.applicants++;
@@ -196,6 +193,10 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
     }
 
   }
+  //watch for attendants changes and execute counting
+  $scope.$watch(function(){
+	  return angular.toJson(form.data.attendants)
+  }, $scope.attendants.countAtt);
 
 
 
