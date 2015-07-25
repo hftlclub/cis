@@ -31,7 +31,7 @@
   <div class="form-group" ng-class="{'has-error has-feedback': form.errors.title}">
     <label for="inputTitle" class="col-sm-2 control-label">Titel</label>
     <div class="col-sm-10">
-      <input type="text" ng-enter="checkTitle()" ng-model="form.data.title" class="form-control" id="inputTitle" typeahead="title for title in commonTitles | filter:$viewValue" placeholder="Titel" tooltip-placement="right" tooltip-trigger="focus" tooltip="Sitzung? MV? Vorstand?">
+      <input type="text" ng-enter="checkTitle()" ng-model="form.data.title" class="form-control" id="inputTitle" typeahead="title for title in options.commonTitles | filter:$viewValue" placeholder="Titel" tooltip-placement="right" tooltip-trigger="focus" tooltip="Sitzung? MV? Vorstand?">
       <span ng-if="form.errors.title" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
     </div>
   </div>
@@ -120,13 +120,13 @@
   <hr>
 
 <div class="form-group">
-<helpbox label="Markdown Erklärung">
+<helpbox label="Markdown-Hilfe">
   <div ng-include="'templates/helpbox/content/markdown.html'"></div>
 </helpbox>
 </div>
 
 <h4>Protokolltext (Markdown)</h4>
-<div class="well well-lg" ui-ace="aceoptions" ng-model="form.data.text" id="test"></div>
+<div class="well well-lg" ui-ace="options.aceoptions" ng-model="form.data.text" id="test"></div>
 
 <h4>Kommentare</h4>
 <textarea class="form-control" ng-model="form.data.comment" rows="3" placeholder="Kommentare"></textarea>
