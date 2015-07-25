@@ -1,8 +1,8 @@
 Hallo {name},
-dein Passwort für das Clubnetzwerk wurde zurückgesetzt.
+dein Passwort für das Clubnetzwerk / CIS wurde zurückgesetzt.
 
 Benutzername: {username}
 Passwort: {password}
 
-Bitte logge dich in das Clubsystem ein und ändere dein Passwort:
-https://intern.hftl.club
+Bitte logge dich in das ClubInformationsSystem ein und ändere dein Passwort:
+https://cis.hftl.club

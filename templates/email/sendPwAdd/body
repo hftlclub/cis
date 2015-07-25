@@ -6,7 +6,7 @@ Passwort: {password}
 
 Den Account brauchst Du für:
 1) das Club-WLAN (hftl_club)
-2) das Clubinformationssystem: https://intern.hftl.club
+2) das ClubInformationsSystem: https://cis.hftl.club
 3) den Infoscreen (Fernseher): https://screen.hftl.club
 4) die Netzwerkdosen im Club
 
@@ -21,4 +21,4 @@ Technische Infos:
 - Konstruktives Kaputtspielen ist erlaubt, wenn es der Verbesserung dient ;-)
 - es werden keine Accounting-Daten erhoben
 - LAN und WLAN: 802.1X, PEAP, MSCHAPv2
-- https://github.com/hftlclub/club-admin
+- https://github.com/hftlclub/cis
