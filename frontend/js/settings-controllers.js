@@ -13,7 +13,7 @@ clubAdminApp.controller('SettingsIndexController', function($scope, clubAuth){
 
 });
 
-clubAdminApp.controller('SettingsChangePasswordController', function($scope, $http, $timeout, $location){
+clubAdminApp.controller('SettingsChangePasswordController', function($scope, $http, $timeout, $location, growl){
 
 	$scope.form = {};
 	$scope.form.data = {};
@@ -25,20 +25,20 @@ clubAdminApp.controller('SettingsChangePasswordController', function($scope, $ht
 	function submit() {
 		$http.post(apiPath + '/settings/changepassword', $scope.form.data).
 			success(function(data){
-				$scope.form.message = 'success';
 				$scope.form.data = {};
 				$scope.form.errors = {};
+				growl.success('Passwort wurde geändert');
 				$timeout(function() {
 					$location.path('/settings');
-				}, 3000);
+				}, 1000);
 			}).
 			error(function(data, status){
 				if(status == 400 && data.validationerror) {
-					$scope.form.message = 'invalid';
+					growl.warning('Einige Felder sind fehlerhaft!', {ttl: 10000});
 					$scope.form.errors = data.validationerror;
 				} else {
+					growl.error('Systemfehler '+ data);
 					$scope.form.data.errormessage = data;
-					$scope.form.message = 'error';
 					$scope.form.errors = null;
 				}
 			});

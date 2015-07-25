@@ -1,6 +1,6 @@
 
 
-clubAdminApp.controller('userFormController', function ($scope, $rootScope, $routeParams, $route, $http, $location, $modal, $timeout, clubAuth) {
+clubAdminApp.controller('userFormController', function ($scope, $rootScope, $routeParams, $route, $http, $location, $modal, $timeout, clubAuth, growl) {
 	var form = {};
 	$scope.form = form;
 
@@ -61,32 +61,39 @@ clubAdminApp.controller('userFormController', function ($scope, $rootScope, $rou
 
 		$http(req).
 			success(function (data) {
-			if (form.mode == 'add') {
-				$scope.form.msgdata = data;
-				$scope.form.message = 'successAdd';
-				$scope.form.data = {};
+				var succMsg;
+				var succPath;
+				if (form.mode == 'add') {
+					succMsg = 'Der Benutzer <b>'
+						+ $scope.form.data.username
+						+'</b> wurde hinzugefügt!';
+					succPath = 'users';
 
-			} else if (form.mode == 'edit') {
-				$scope.form.message = 'successEdit';
-				$timeout(function () {
-					$location.path('/users');
-				}, 3000);
+				} else if (form.mode == 'edit') {
+					succMsg = 'Der Benutzer <b>'
+						+ $scope.form.data.username
+						+ '</b> wurde erfolgreich bearbeitet!';
+					succPath = 'users';
 
-			} else if (form.mode == 'profile') {
-				$scope.form.message = 'successEdit';
-				$timeout(function () {
-					$location.path('/settings');
-				}, 3000);
-			}
-			//$scope.form.data = {};
-		}).
+				} else if (form.mode == 'profile') {
+					succMsg = 'Dein Profil wurde bearbeitet!';
+					succPath = 'settings';
+				}
+				if(succMsg && succPath) {
+					growl.success(succMsg);
+					$timeout(function () {
+						$location.path('/'+succPath);
+					}, 1000);
+				}
+			}).
 			error(function (data, status) {
 			if (status == 400 && data.validationerror) {
-				$scope.form.message = 'invalid';
+				growl.warning('Einige Felder sind fehlerhaft.', {ttl: 10000});
 				$scope.form.errors = data.validationerror;
 			} else {
-				$scope.form.data.errormessage = data;
-				$scope.form.message = 'error';
+				var errMsg = '';
+				if (data) errMsg = data
+				growl.error('Systemfehler '+ errMsg);
 				$scope.form.errors = null;
 			}
 
@@ -139,14 +146,14 @@ clubAdminApp.controller('userFormController', function ($scope, $rootScope, $rou
 
 
 
-clubAdminApp.controller('userListController', function ($scope, $rootScope, $http, $routeParams, clubAuth, $modal) {
+clubAdminApp.controller('userListController', function ($scope, $rootScope, $http, $routeParams, clubAuth, $modal, growl) {
 
 	$scope.users = {};
 	$scope.users.data = null;
 	$scope.users.remove = remove;
 	$scope.users.resetpw = resetpw;
 	$scope.userlistLoading = true;
-	
+
 	refresh();
 
 
@@ -174,8 +181,11 @@ clubAdminApp.controller('userListController', function ($scope, $rootScope, $htt
 		});
 
 		modal.result.then(function () {
-			$http.delete(apiPath + '/user/' + user.username).
-				success(refresh);
+			$http.delete(apiPath + '/user/' + user.username)
+				.success(function (data) {
+						growl.success('Der Nutzer ' + user.username + ' wurde erfolgreich entfernt.');
+						refresh();
+				});
 		});
 
 
@@ -196,7 +206,10 @@ clubAdminApp.controller('userListController', function ($scope, $rootScope, $htt
 		});
 
 		modal.result.then(function () {
-			$http.get(apiPath + '/user/' + user.username + '/resetPw').success(function () { });
+			$http.get(apiPath + '/user/' + user.username + '/resetPw')
+				.success(function () {
+					growl.success('Passwort wurde zurückgesetzt.');
+				});
 		});
 
 	}
