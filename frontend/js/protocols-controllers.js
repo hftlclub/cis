@@ -1,8 +1,15 @@
 // controller for protocol form
 clubAdminApp.controller('protocolFormController', function($scope, $http, $routeParams, $interval, $route, $window, clubAuth, hotkeys, growl) {
 
-  $scope.users = [];
+	$scope.options = {
+	  commonTitles: ['Clubsitzung', 'Mitgliederversammlung', 'Planungstreffen'],
+	  aceOptions: {
+	  	mode: 'markdown'
+	  }
+  }
 
+
+  $scope.users = [];
 
   var form = $scope.form = {
     id: $routeParams.id,
@@ -16,32 +23,43 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
     }
   }
 
-  $scope.commonTitles = ['Clubsitzung', 'Mitgliederversammlung', 'Planungstreffen'];
+  //models for timepickers // create new when form mode is "add"
+  $scope.times = {
+    date: null,
+    start: null,
+    end: null
+  };
 
 
-  // options for textbox
-  $scope.aceOptions = {
-    mode: 'markdown'
+  /*************************
+    * Datepicker
+    *************************/
+  
+  //only create new datepicker if there's no data expected
+  $scope.minDate = $scope.minDate ? null : new Date(2012, (10 - 1), 25);
+  $scope.maxDate = $scope.maxDate ? null : new Date();
+
+  $scope.datePicker = {
+    format: 'dd.MM.yyyy',
+    open: function($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+      this.opened = true;
+    },
+    opened: false,
+    options: {
+      formatYear: 'yy',
+      startingDay: 1
+    }
   }
 
 
-  // You can pass it an object.  This hotkey will not be unbound unless manually removed
-   // using the hotkeys.del() method
-   hotkeys.add({
-     combo:  ['ctrl+s', 'meta+s'],
-     description: 'This will save any changes',
-     allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-     callback: function(event, hotkey) {
-       if (event.preventDefault) {
-            event.preventDefault();
-        } else {
-            // internet explorer
-            event.returnValue = false;
-        }
-       $scope.save();
-     }
-   });
 
+
+
+   /*************************
+    * Autosave
+    *************************/
 
   $scope.autoSave = {
     isActive: true,
@@ -64,44 +82,119 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
   };
   $scope.autoSave.setTimer(); //initially start timer
 
-  //destroy timer on location change
+  
+  // catch location change event
+  $scope.$on('$locationChangeStart', function(event, next, current) {
+    if(form.mode == 'edit' && $scope.autoSave.isActive && $scope.protocolForm.$dirty){ //if edit mode, autosave active and form dirty: autosave!
+		$scope.save(1, 1);
+	}
+  });
+  
+  //destroy timer and unloadListener on location change
   $scope.$on('$destroy', function() {
     $scope.autoSave.stopTimer();
+    $window.removeEventListener("beforeunload", unloadListener);
   });
 
-  // catch location change event and save if in edit mode
-  $scope.$on('$locationChangeStart', function(event, next, current) {
-    if (form.mode == 'edit') saveOnLeave(event);
-  });
-  // catch close/reload event and save if in edit mode
-  $window.addEventListener("beforeunload", function(event) {
-    if (form.mode == 'edit') saveOnLeave(event);
-  });
-
-  function saveOnLeave(event) {
-    // autosave if form is dirty
-    if ($scope.protocolForm.$dirty) {
-      $scope.save(1, 1);
-    }
-
-    // if  beforeunload event was fired (close tab, reload page)
-    if (event.name != '$locationChangeStart') {
-      var confirmationMessage = '';
-      (event || window.event).returnValue = confirmationMessage; //Gecko + IE
-      return confirmationMessage; //Webkit, Safari, Chrome
-    }
+   
+  // catch close/reload event and show confirmation message
+  $window.addEventListener("beforeunload", unloadListener);
+  function unloadListener(event) {
+    var confirmationMessage = '';
+    (event || window.event).returnValue = confirmationMessage; //Gecko + IE
+    return confirmationMessage; //Webkit, Safari, Chrome
   }
 
 
+  //Strg + S / Cmd + S for save
+  hotkeys.add({
+     combo:  ['ctrl+s', 'meta+s'],
+     description: 'This will save any changes',
+     allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+     callback: function(event, hotkey) {
+       if (event.preventDefault) {
+            event.preventDefault();
+        } else {
+            // internet explorer
+            event.returnValue = false;
+        }
+       $scope.save();
+     }
+   });
+   
+   
+   
+   
 
-  //models for timepickers // create new when form mode is "add"
-  $scope.times = {
-    date: null,
-    start: null,
-    end: null
-  };
 
-  //stuff for the "attendee is later" popover
+  /*************************
+    * Attendants
+    *************************/
+  $scope.attendants = {
+    input: null,
+    count: {
+		members: 0,
+		applicants: 0,
+		guests: 0
+	},
+    add: function(name) {
+      if (name) {
+        var attendee = {
+          'name': name,
+          'type': 'member' //default is member
+        }
+
+        //check if person is already attendee, end this function if already in list
+        for (var i = 0; i < form.data.attendants.length; i++) {
+          if(form.data.attendants[i].name == attendee.name) return;;
+        }
+		
+		//attendee seems to be new. add it
+        form.data.attendants.push(attendee);
+      }
+    },
+    remove: function(index) {
+      form.data.attendants.splice(index, 1);
+      $scope.protocolForm.$setDirty();
+    },
+    addFromForm: function(){
+	    this.add(this.input);
+	    this.input = null;
+	    $scope.protocolForm.$setDirty();
+    },
+    setType: function(att, type){
+	    att.type = type;
+	    $scope.protocolForm.$setDirty();
+    },
+    countAtt: function(){    
+	    var count = {
+			members: 0,
+			applicants: 0,
+			guests: 0
+		}
+	    
+	    if(form.data.attendants.length){
+		    form.data.attendants.forEach(function(row){
+			    if(row.type == 'member')         count.members++;
+			    else if(row.type == 'applicant') count.applicants++;
+			    else if(row.type == 'guest')     count.guests++;
+		    });
+	    }
+	    
+	    $scope.attendants.count = count;
+    }
+
+  }
+  //watch for attendants changes and execute counting
+  $scope.$watch(function(){
+	  return angular.toJson(form.data.attendants)
+  }, $scope.attendants.countAtt);
+
+
+
+  /*************************
+   * "attendee is later" popover
+   *************************/
   $scope.laterPopover = {
     template: '/templates/protocols/laterPopover.html',
     setInitial: function(att) {
@@ -115,94 +208,13 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
   }
 
 
-  /* Date picker */
-  //only create new datepicker if there's no data expected
-  $scope.minDate = $scope.minDate ? null : new Date(2012, (10 - 1), 25);
-  $scope.maxDate = $scope.maxDate ? null : new Date();
-
-  $scope.datePicker = {
-    format: 'dd.MM.yyyy',
-    open: function($event) {
-      $event.preventDefault();
-      $event.stopPropagation();
-      this.opened = true;
-    },
-    opened: false,
-    options: {
-      formatYear: 'yy',
-      startingDay: 1
-    }
-  }
-
-
-  //stuff for attendants
-  $scope.attendants = {
-    input: null,
-    count: {
-		members: 0,
-		applicants: 0,
-		guests: 0
-	},
-    add: function(name) {
-      if (name) {
-        var match = false;
-        var attendee = {
-          'name': name,
-          'type': 'member'
-        }
-
-        // check if person is already attendee, return if already in list
-        for (var i = 0; i < form.data.attendants.length; i++) {
-          if (form.data.attendants[i].name == attendee.name) return;;
-        }
-
-        form.data.attendants.push(attendee);
-        this.countAtt();
-      }
-    },
-    remove: function(index) {
-      form.data.attendants.splice(index, 1);
-      this.countAtt();
-      $scope.protocolForm.$setDirty();
-    },
-    addFromForm: function(){
-	    this.add(this.input);
-	    this.input = null;
-	    $scope.protocolForm.$setDirty();
-    },
-    setType: function(att, type){
-	    att.type = type;
-	    this.countAtt();
-	    $scope.protocolForm.$setDirty();
-    },
-    countAtt: function(){
-	    var count = {
-			members: 0,
-			applicants: 0,
-			guests: 0
-		}
-	    
-	    if(form.data.attendants.length){
-		    
-		    
-		    form.data.attendants.forEach(function(row){
-			    if(row.type == 'member')         count.members++;
-			    else if(row.type == 'applicant') count.applicants++;
-			    else if(row.type == 'guest')     count.guests++;
-		    });
-	    }
-	    
-	    $scope.attendants.count = count;
-    }
-
-  }
 
 
 
   // check whether title is a common title, then load template if available
   $scope.checkTitle = function() {
-    for (i = 0; i < $scope.commonTitles.length; i++) { //go through common titles
-      if ($scope.commonTitles[i] == form.data.title && !form.data.text) { //if current title matches a common title and there's no text in the field
+    for (i = 0; i < $scope.options.commonTitles.length; i++) { //go through common titles
+      if ($scope.options.commonTitles[i] == form.data.title && !form.data.text) { //if current title matches a common title and there's no text in the field
         //get protocol and fill textfield with it
         $http.get('/templates/protocols/presets/clubsitzung.md').success(function(data) {
           form.data.text = data;
@@ -212,6 +224,9 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
   }
 
 
+  /*************************
+   * save function
+   *************************/
 
   $scope.save = function(autosaved, nosetpristine) {
     var succMsg = (autosaved) ? "Automatisch gespeichert!" : "Gespeichert!"
@@ -268,8 +283,13 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
         });
     }
   }
-
-
+  
+  
+  
+  /*************************
+   * refresh function
+   *************************/
+   
   function refresh() {
     $http.get(apiPath + '/members').success(function(data) {
       //build array with just names and only current members
@@ -299,7 +319,9 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
 
 
 
-  /******************************/
+  /**************************************************
+  ***************************************************
+  ****************************************************/
 
 
 
@@ -328,6 +350,8 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
 
 
 
+
+
 // controller for protocol list
 clubAdminApp.controller('protocolListController', function($scope, $http, $routeParams, clubAuth, $modal) {
   $scope.protocols = [];
@@ -342,26 +366,34 @@ clubAdminApp.controller('protocolListController', function($scope, $http, $route
   }
 
   // function to open delete modal
-  $scope.deleteProtocol = function(protocolID) {
-
+  $scope.deleteProtocol = function(prot) {
 
     var modal = $modal.open({
       templateUrl: 'templates/protocols/deletemodal.html',
-      controller: 'delProtocolController'
+      controller: 'delProtocolModalController',
+      resolve: {
+	      protocol: function(){
+		      return prot;
+		  }
+      }
     });
 
     modal.result.then(function() {
-      $http.delete(apiPath + '/protocols/' + protocolID).
+      $http.delete(apiPath + '/protocols/' + prot.id).
       success(refresh);
     });
   }
 
 });
 
-// delete modal
-clubAdminApp.controller('delProtocolController', function($scope, $rootScope, $modalInstance) {
-  $scope.checkWord = $rootScope.getCheckWord();
 
+
+
+// delete modal
+clubAdminApp.controller('delProtocolModalController', function($scope, $rootScope, $modalInstance, protocol) {
+  $scope.protocol = protocol;
+  $scope.checkWord = $rootScope.getCheckWord();
+  
   // check if input is the same like the give phrase
   $scope.checkInput = function() {
     if ($scope.checkWord == $scope.inputCheckWord) {
@@ -369,6 +401,15 @@ clubAdminApp.controller('delProtocolController', function($scope, $rootScope, $m
     }
   };
 });
+
+
+
+
+
+
+
+
+
 
 
 // controller for protocol details

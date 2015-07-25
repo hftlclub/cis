@@ -1,13 +1,13 @@
 <div class="modal-header">
-	<h3 class="modal-title">Protokoll wirklich löschen</h3>
+	<h3 class="modal-title">Protokoll löschen</h3>
 </div>
 <div class="modal-body">
 	<p>
-		<strong>Wirklich fortfahren?</strong>
+		Das Protokoll <strong>{{protocol.title}} {{protocol.date | date:longDate}}</strong> wird gelöscht.
 	</p>
 	<form>
 		<div class="form-group">
-	    <label for="input">Bitte tippe folgendes ein: <code>{{checkWord}}</code></label>
+	    <label for="input">Zur Bestätigung tippe bitte folgendes ein: <code>{{checkWord}}</code></label>
 	    <input ng-model="inputCheckWord" type="text" class="form-control" id="input" placeholder="">
 	  </div>
 	</form>
