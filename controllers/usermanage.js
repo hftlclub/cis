@@ -6,239 +6,239 @@ var userservice = require('../services/userservice');
 
 
 //add user function for superusers
-exports.adduser = function(req, res, next){
+exports.adduser = function(req, res, next) {
 
-	req.checkBody('username', 'Benutzername ungültig').notEmpty().isAlphanumeric();
-	req.checkBody('type', 'Nutzerechte ungültig').notEmpty().isIn(['club', 'other']);
+    req.checkBody('username', 'Benutzername ungültig').notEmpty().isAlphanumeric();
+    req.checkBody('type', 'Nutzerechte ungültig').notEmpty().isIn(['club', 'other']);
 
-	if(!req.body.loginShell) req.body.loginShell = '/bin/false';
+    if (!req.body.loginShell) req.body.loginShell = '/bin/false';
 
-	req.checkBody('email', 'E-Mail ungültig').notEmpty().isEmail();
-	req.checkBody('firstname', 'Vorname ungültig').notEmpty();
-	req.checkBody('lastname', 'Nachname ungültig').notEmpty();
+    req.checkBody('email', 'E-Mail ungültig').notEmpty().isEmail();
+    req.checkBody('firstname', 'Vorname ungültig').notEmpty();
+    req.checkBody('lastname', 'Nachname ungültig').notEmpty();
 
-	//req.checkBody('street', 'Strasse ungültig').notEmpty();
-	//req.checkBody('zip', 'PLZ ungültig').notEmpty().isNumeric();
-	//req.checkBody('city', 'Stadt ungültig').notEmpty();
-	//req.checkBody('tel', 'Telefon ungültig').notEmpty();
+    //req.checkBody('street', 'Strasse ungültig').notEmpty();
+    //req.checkBody('zip', 'PLZ ungültig').notEmpty().isNumeric();
+    //req.checkBody('city', 'Stadt ungültig').notEmpty();
+    //req.checkBody('tel', 'Telefon ungültig').notEmpty();
 
-	if(req.validationErrors()){
-		return next();
-	}
+    if (req.validationErrors()) {
+        return next();
+    }
 
-	//random password
-	req.body.password = utils.uid(8);
+    //random password
+    req.body.password = utils.uid(8);
 
-	//get next free unix ID
-	userservice.nextFreeUnixID(1, function(err, uidnumber){
+    //get next free unix ID
+    userservice.nextFreeUnixID(1, function(err, uidnumber) {
 
-		req.body.uidnumber = uidnumber;
-		
-		//force username to lowercase
-		req.body.username = (req.body.username).toLowerCase();
+        req.body.uidnumber = uidnumber;
 
-		//add new user
-		userservice.addUser(req.body, function(err, success){
-			if(err){
-				//throw validation error if entry already exists
-				if(err.name == 'EntryAlreadyExistsError'){
-					req.checkBody('username', 'Benutzername wird schon verwendet').error(1);
-					next();
-				}else{
-					next(err);
-				}
-			}
+        //force username to lowercase
+        req.body.username = (req.body.username).toLowerCase();
 
-			if(req.body.sendPassword){
-				var replace = {
-					'username': req.body.username,
-					'password': req.body.password,
-					'name': req.body.firstname
-				}
-				
-				//use alias name instead of firstname if set
-				if(req.body.alias) replace.name = req.body.alias;
-				
-				smtp.mail(req.body.email, 'sendPwAdd', replace, function(err, success){
-					if(err) console.log(err);
-				});
-			}
-			
+        //add new user
+        userservice.addUser(req.body, function(err, success) {
+            if (err) {
+                //throw validation error if entry already exists
+                if (err.name == 'EntryAlreadyExistsError') {
+                    req.checkBody('username', 'Benutzername wird schon verwendet').error(1);
+                    next();
+                } else {
+                    next(err);
+                }
+            }
 
-			//return new password
-			res.json({
-				'username': req.body.username,
-				'password': req.body.password
-			}).end();
-		});
-	});
+            if (req.body.sendPassword) {
+                var replace = {
+                    'username': req.body.username,
+                    'password': req.body.password,
+                    'name': req.body.firstname
+                }
+
+                //use alias name instead of firstname if set
+                if (req.body.alias) replace.name = req.body.alias;
+
+                smtp.mail(req.body.email, 'sendPwAdd', replace, function(err, success) {
+                    if (err) console.log(err);
+                });
+            }
+
+
+            //return new password
+            res.json({
+                'username': req.body.username,
+                'password': req.body.password
+            }).end();
+        });
+    });
 }
 
 
 //edit user function for superusers
-exports.edituser = function(req, res, next){
-	var uid = req.params.uid;
+exports.edituser = function(req, res, next) {
+    var uid = req.params.uid;
 
-	//no uid given
-	if(!uid){
-		var err = new Error('UID missing');
-		err.status = 400;
-		return next(err);
-	}
+    //no uid given
+    if (!uid) {
+        var err = new Error('UID missing');
+        err.status = 400;
+        return next(err);
+    }
 
-	req.checkBody('type', 'Nutzerrechte ungültig').notEmpty().isIn(['club', 'other']);
+    req.checkBody('type', 'Nutzerrechte ungültig').notEmpty().isIn(['club', 'other']);
 
-	req.checkBody('email', 'E-Mail ungültig').notEmpty().isEmail();
-	req.checkBody('firstname', 'Vorname ungültig').notEmpty();
-	req.checkBody('lastname', 'Nachname ungültig').notEmpty();
+    req.checkBody('email', 'E-Mail ungültig').notEmpty().isEmail();
+    req.checkBody('firstname', 'Vorname ungültig').notEmpty();
+    req.checkBody('lastname', 'Nachname ungültig').notEmpty();
 
-	//req.checkBody('street', 'Strasse ungültig').notEmpty();
-	//req.checkBody('zip', 'PLZ ungültig').notEmpty().isNumeric();
-	//req.checkBody('city', 'Stadt ungültig').notEmpty();
-	//req.checkBody('tel', 'Telefon ungültig').notEmpty();
+    //req.checkBody('street', 'Strasse ungültig').notEmpty();
+    //req.checkBody('zip', 'PLZ ungültig').notEmpty().isNumeric();
+    //req.checkBody('city', 'Stadt ungültig').notEmpty();
+    //req.checkBody('tel', 'Telefon ungültig').notEmpty();
 
-	if(req.validationErrors()){
-		return next();
-	}
+    if (req.validationErrors()) {
+        return next();
+    }
 
-	//assemble data object. we have to make sure here you just edit those attributes you are allowed to
-	var data = {
-		type:           req.body.type,
-		former:         req.body.former,
-		honorary:       req.body.honorary,
-		alias:          req.body.alias,
-		email:          req.body.email,
-		firstname:      req.body.firstname,
-		lastname:       req.body.lastname,
-		street:         req.body.street,
-		zip:            req.body.zip,
-		city:           req.body.city,
-		tel:            req.body.tel,
-		teamdrive:      req.body.teamdrive,
-		role:           req.body.role,
-		birthday:       req.body.birthday,
-		keyPermissions: req.body.keyPermissions
-	};
-	
-	//accession date only for club members
-	if(data.type == 'club' && req.body.accessiondate){
-		data.accessiondate = moment(req.body.accessiondate).toJSON();
-	}else{
-		data.accessiondate = null;
-	}
-	
-	//sanitize date
-	if(data.birthday) data.birthday = moment(data.birthday).toJSON();
-	
+    //assemble data object. we have to make sure here you just edit those attributes you are allowed to
+    var data = {
+        type: req.body.type,
+        former: req.body.former,
+        honorary: req.body.honorary,
+        alias: req.body.alias,
+        email: req.body.email,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        street: req.body.street,
+        zip: req.body.zip,
+        city: req.body.city,
+        tel: req.body.tel,
+        teamdrive: req.body.teamdrive,
+        role: req.body.role,
+        birthday: req.body.birthday,
+        keyPermissions: req.body.keyPermissions
+    };
+
+    //accession date only for club members
+    if (data.type == 'club' && req.body.accessiondate) {
+        data.accessiondate = moment(req.body.accessiondate).toJSON();
+    } else {
+        data.accessiondate = null;
+    }
+
+    //sanitize date
+    if (data.birthday) data.birthday = moment(data.birthday).toJSON();
 
 
-	//you can only change superuser state of others
-	if(uid != req.user.username){
-		data.superuser = req.body.superuser;
-	}else{
-		data.superuser = req.user.superuser;
-	}
 
-	//loginShell only for superusers
-	if(data.superuser){
-		data.loginShell = req.body.loginShell;
-	}else{
-		data.loginShell = '/bin/false';
-	}
+    //you can only change superuser state of others
+    if (uid != req.user.username) {
+        data.superuser = req.body.superuser;
+    } else {
+        data.superuser = req.user.superuser;
+    }
 
-	//edit user!
-	userservice.editUser(uid, data, function(err, success){
-		if(err) next(err);
-		//send response to client
-		res.end();
-	});
+    //loginShell only for superusers
+    if (data.superuser) {
+        data.loginShell = req.body.loginShell;
+    } else {
+        data.loginShell = '/bin/false';
+    }
+
+    //edit user!
+    userservice.editUser(uid, data, function(err, success) {
+        if (err) next(err);
+        //send response to client
+        res.end();
+    });
 }
 
 
 
 //list users function for superusers
-exports.listusers = function(req, res, next){
-	userservice.getUsers(function(err, users){
-		if(err) return next(err);
-		res.json(users).end();
-	});
+exports.listusers = function(req, res, next) {
+    userservice.getUsers(function(err, users) {
+        if (err) return next(err);
+        res.json(users).end();
+    });
 }
 
 
 
 
 //get user function for superusers
-exports.getuser = function(req, res, next){
-	var uid = req.params.uid;
+exports.getuser = function(req, res, next) {
+    var uid = req.params.uid;
 
-	//no uid given
-	if(!uid){
-		var err = new Error('UID missing');
-		err.status = 400;
-		return next(err);
-	}
+    //no uid given
+    if (!uid) {
+        var err = new Error('UID missing');
+        err.status = 400;
+        return next(err);
+    }
 
-	userservice.getUserByUid(uid, function(err, user){
-		if(err) return next(err);
-		res.json(user).end();
-	});
+    userservice.getUserByUid(uid, function(err, user) {
+        if (err) return next(err);
+        res.json(user).end();
+    });
 }
 
 
 
 
 
-exports.deleteuser = function(req, res, next){
-	//prevent users from deleting themselves...
-	if(req.params.uid == req.user.username) {
-		var err = new Error('You cannot delete yourself, bitch...');
-		err.status = 400;
-		return next(err);
-	}
+exports.deleteuser = function(req, res, next) {
+    //prevent users from deleting themselves...
+    if (req.params.uid == req.user.username) {
+        var err = new Error('You cannot delete yourself, bitch...');
+        err.status = 400;
+        return next(err);
+    }
 
-	//delete user
-	userservice.deleteUser(req.params.uid, function(err){
-		if(err) next(err);
+    //delete user
+    userservice.deleteUser(req.params.uid, function(err) {
+        if (err) next(err);
 
-		res.send();
-	});
+        res.send();
+    });
 }
 
 
 
 
 //reset PW function for superusers
-exports.resetPassword = function(req, res, next){
-	var uid = req.params.uid;
-	var password = utils.uid(8);
+exports.resetPassword = function(req, res, next) {
+    var uid = req.params.uid;
+    var password = utils.uid(8);
 
 
-	//no uid given
-	if(!uid || !password){
-		var err = new Error('UID missing');
-		err.status = 400;
-		return next(err);
-	}
+    //no uid given
+    if (!uid || !password) {
+        var err = new Error('UID missing');
+        err.status = 400;
+        return next(err);
+    }
 
-	userservice.setPassword(uid, password, function(err, user){
-		if(err) return next(err);
-		
-		userservice.getUserByUid(uid, function(err, user){
-			if(err) return next(err);
-			
-			var replace = {
-				'username': uid,
-				'password': password,
-				'name'    : user.firstname
-			}
-			
-			//use alias name instead of firstname if set
-			if(user.alias) replace.name = user.alias;
-			
-			smtp.mail(user.email, 'sendPwReset', replace, function(err){
-				if(err) return next(err);
-				res.send();
-			});
-		});
-	});
+    userservice.setPassword(uid, password, function(err, user) {
+        if (err) return next(err);
+
+        userservice.getUserByUid(uid, function(err, user) {
+            if (err) return next(err);
+
+            var replace = {
+                'username': uid,
+                'password': password,
+                'name': user.firstname
+            }
+
+            //use alias name instead of firstname if set
+            if (user.alias) replace.name = user.alias;
+
+            smtp.mail(user.email, 'sendPwReset', replace, function(err) {
+                if (err) return next(err);
+                res.send();
+            });
+        });
+    });
 }

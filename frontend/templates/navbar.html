@@ -1,11 +1,34 @@
-
 <ul class="nav navbar-nav">
-	<li club-active-state><a ng-href="#/settings"><span class="glyphicon glyphicon-cog"></span> Einstellungen</a></li>
-	<li ng-if="user.superuser" club-active-state><a ng-href="#/users"><span class="glyphicon glyphicon-user"></span> Benutzer</a></li>
-	<li ng-if="user.type=='club'" club-active-state><a ng-href="#/memberlist"><span class="glyphicon glyphicon-list"></span> Mitgliederliste</a></li>
-	<li ng-if="user.type=='club' && user.superuser" club-active-state><a ng-href="#/keylist"><span class="glyphicon glyphicon-list-alt"></span> Schlüsselliste</a></li>
-	<li ng-if="user.type=='club'" club-active-state><a ng-href="#/protocols"><span class="glyphicon glyphicon-file"></span> Protokolle</a></li>
-	<li club-active-state><a href="http://screen.hftl.club" target="clubmanager"><span class="glyphicon glyphicon-new-window"></span> Infoscreen</a></li>
+	<li club-active-state>
+		<a ng-href="#/settings">
+			<span class="glyphicon glyphicon-cog"></span> Einstellungen
+		</a>
+	</li>
+	<li ng-if="user.superuser" club-active-state>
+		<a ng-href="#/users">
+			<span class="glyphicon glyphicon-user"></span> Benutzer
+		</a>
+	</li>
+	<li ng-if="user.type=='club'" club-active-state>
+		<a ng-href="#/memberlist">
+			<span class="glyphicon glyphicon-list"></span> Mitgliederliste
+		</a>
+	</li>
+	<li ng-if="user.type=='club' && user.superuser" club-active-state>
+		<a ng-href="#/keylist">
+			<span class="glyphicon glyphicon-list-alt"></span> Schlüsselliste
+		</a>
+	</li>
+	<li ng-if="user.type=='club'" club-active-state>
+		<a ng-href="#/protocols">
+			<span class="glyphicon glyphicon-file"></span> Protokolle
+		</a>
+	</li>
+	<li club-active-state>
+		<a href="http://screen.hftl.club" target="clubmanager">
+			<span class="glyphicon glyphicon-new-window"></span> Infoscreen
+		</a>
+	</li>
 </ul>
 
 <div class="navbar-right">

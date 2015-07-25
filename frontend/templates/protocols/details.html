@@ -1,99 +1,108 @@
 <div class="page-header" id="protocolDetailHeader">
-  <div class="pull-right">
+    <div class="pull-right">
 
-    <div aria-label="..." class="btn-group" role="group">
-      <a class="btn btn-default" type="button" ng-href="#/protocols/edit/{{protocolid}}">
-        <span class="glyphicon glyphicon-pencil"></span>
-        Bearbeiten</a>
-      <a class="disabled btn btn-default" type="button" ng-click="donwloadPDF()">
-        <span class="glyphicon glyphicon-download-alt"></span>
-        Als PDF speichern</a>
+        <div aria-label="..." class="btn-group" role="group">
+            <a class="btn btn-default" type="button" ng-href="#/protocols/edit/{{protocolid}}">
+                <span class="glyphicon glyphicon-pencil"></span>
+                Bearbeiten</a>
+            <a class="disabled btn btn-default" type="button" ng-click="donwloadPDF()">
+                <span class="glyphicon glyphicon-download-alt"></span>
+                Als PDF speichern</a>
+        </div>
     </div>
-  </div>
-  <h2>
-	  {{protocol.title}}
-	  <small>{{protocol.start | date : longDate}}</small>
-  </h2>
+    <h2>
+        {{protocol.title}}
+        <small>{{protocol.start | date : longDate}}</small>
+    </h2>
 </div>
 
 <div ng-if="protocol.comment" class="alert alert-info" role="alert">{{protocol.comment}}</div>
 
 <div class="well well-lg">
-  <div class="row">
-    <div class="col-md-2">
-      <b>Datum:</b>
+    <div class="row">
+        <div class="col-md-2">
+            <b>Datum:</b>
+        </div>
+        <div class="col-md-2">
+            {{protocol.start | date : longDate}}
+        </div>
+        <div class="col-md-2">
+            <b class="pull-right hidden-xs hidden-sm">Start:</b>
+            <b class="hidden-md hidden-lg">Start:</b>
+        </div>
+        <div class="col-md-2">
+            {{protocol.start | date : 'HH:mm'}} Uhr
+        </div>
+        <div class="col-md-2">
+            <b class="pull-right hidden-xs hidden-sm">Ende:</b>
+            <b class="hidden-md hidden-lg">Ende:</b>
+        </div>
+        <div class="col-md-2">
+            {{protocol.end | date : 'HH:mm'}} Uhr
+        </div>
     </div>
-    <div class="col-md-2">
-      {{protocol.start | date : longDate}}
-    </div>
-    <div class="col-md-2">
-      <b class="pull-right hidden-xs hidden-sm">Start:</b>
-      <b class="hidden-md hidden-lg">Start:</b>
-    </div>
-    <div class="col-md-2">
-      {{protocol.start | date : 'HH:mm'}} Uhr
-    </div>
-    <div class="col-md-2">
-      <b class="pull-right hidden-xs hidden-sm">Ende:</b>
-      <b class="hidden-md hidden-lg">Ende:</b>
-    </div>
-    <div class="col-md-2">
-      {{protocol.end | date : 'HH:mm'}} Uhr
-    </div>
-  </div>
 
-  <div class="row">
-    <div class="col-md-2">
-      <b>Protokollführer:</b>
+    <div class="row">
+        <div class="col-md-2">
+            <b>Protokollführer:</b>
+        </div>
+        <div class="col-md-10">
+            {{protocol.recorder}}
+        </div>
     </div>
-    <div class="col-md-10">
-      {{protocol.recorder}}
-    </div>
-  </div>
 
-  <div class="row">
-    &nbsp;
-  </div>
+    <div class="row">
+        &nbsp;
+    </div>
 
-  <div class="row">
-    <div class="col-md-2">
-      <b>Teilnehmer:</b>
+    <div class="row">
+        <div class="col-md-2">
+            <b>Teilnehmer:</b>
+        </div>
+        <div class="col-md-10">
+            <span ng-if="!protocol.attendants.members.length"><i>keine</i></span>
+            <span ng-repeat="person in protocol.attendants.members">{{person}}
+                <span ng-show=" ! $last ">, </span>
+            </span>
+        </div>
     </div>
-    <div class="col-md-10">
-	   <span ng-if="!protocol.attendants.members.length"><i>keine</i></span>
-      <span ng-repeat="person in protocol.attendants.members">{{person}}<span ng-show=" ! $last ">, </span></span>
-    </div>
-  </div>
 
-  <div class="row" ng-if="protocol.attendants.later.length">
-    <div class="col-md-2">
-      <b>Später:</b>
+    <div class="row" ng-if="protocol.attendants.later.length">
+        <div class="col-md-2">
+            <b>Später:</b>
+        </div>
+        <div class="col-md-10">
+            <span ng-repeat="person in protocol.attendants.later">{{person}}
+                <span ng-show=" ! $last ">, </span>
+            </span>
+        </div>
     </div>
-    <div class="col-md-10">
-      <span ng-repeat="person in protocol.attendants.later">{{person}}<span ng-show=" ! $last ">, </span></span>
-    </div>
-  </div>
 
-  <div class="row" ng-if="protocol.attendants.applicants.length">
-    <div class="col-md-2">
-      <b>Anwärter:</b>
+    <div class="row" ng-if="protocol.attendants.applicants.length">
+        <div class="col-md-2">
+            <b>Anwärter:</b>
+        </div>
+        <div class="col-md-10">
+            <span ng-repeat="person in protocol.attendants.applicants">{{person}}
+                <span ng-show=" ! $last ">, </span>
+            </span>
+        </div>
     </div>
-    <div class="col-md-10">
-      <span ng-repeat="person in protocol.attendants.applicants">{{person}}<span ng-show=" ! $last ">, </span></span>
-    </div>
-  </div>
 
     <div class="row" ng-if="protocol.attendants.guests.length">
-      <div class="col-md-2">
-        <b>Gäste:</b>
-      </div>
-      <div class="col-md-10">
-        <span><span ng-repeat="person in protocol.attendants.guests">{{person}}<span ng-show=" ! $last ">, </span></span>
-      </div>
+        <div class="col-md-2">
+            <b>Gäste:</b>
+        </div>
+        <div class="col-md-10">
+            <span>
+                <span ng-repeat="person in protocol.attendants.guests">{{person}}
+                    <span ng-show=" ! $last ">, </span>
+                </span>
+        </div>
     </div>
 </div>
 
 <div class="well well-lg">
-  <div ng-bind-html="protocol.html" id="protocolContent">
-  </div>
+    <div ng-bind-html="protocol.html" id="protocolContent">
+    </div>
 </div>

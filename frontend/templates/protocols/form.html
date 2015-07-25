@@ -1,135 +1,156 @@
 <div class="page-header">
-  <div class="pull-right">
-    <a class="btn btn-default"  ng-click="autoSave.toggle()" type="button"> <!-- ng-class="{'btn-default': !autoSave.isActive, 'btn-default': autoSave.isActive}" -->
-      <span class="glyphicon" ng-class="{'glyphicon glyphicon-check': autoSave.isActive, 'glyphicon glyphicon-unchecked': !autoSave.isActive}"></span>
-      Automatisch speichern
-    </a>
+    <div class="pull-right">
+        <a class="btn btn-default" ng-click="autoSave.toggle()" type="button">
+            <!-- ng-class="{'btn-default': !autoSave.isActive, 'btn-default': autoSave.isActive}" -->
+            <span class="glyphicon" ng-class="{'glyphicon glyphicon-check': autoSave.isActive, 'glyphicon glyphicon-unchecked': !autoSave.isActive}"></span>
+            Automatisch speichern
+        </a>
 
 
-    <div class="btn-group" role="group">
-      <a ng-if="form.mode == 'edit'" class="btn btn-primary" type="button" ng-href="#/protocols/show/{{form.id}}">
-        <span class="glyphicon glyphicon-eye-open"></span>
-        Anzeigen
-      </a>
+        <div class="btn-group" role="group">
+            <a ng-if="form.mode == 'edit'" class="btn btn-primary" type="button" ng-href="#/protocols/show/{{form.id}}">
+                <span class="glyphicon glyphicon-eye-open"></span>
+                Anzeigen
+            </a>
 
-      <a ng-click="save()" class="btn btn-success"  ng-class="{'disabled': protocolForm.$pristine}">
-      	<span class="glyphicon glyphicon-save"></span>
-	  	<span ng-if="form.mode=='add'">Speichern</span>
-	  	<span ng-if="form.mode=='edit'">Speichern</span>
-    </a>
+            <a ng-click="save()" class="btn btn-success" ng-class="{'disabled': protocolForm.$pristine}">
+                <span class="glyphicon glyphicon-save"></span>
+                <span ng-if="form.mode=='add'">Speichern</span>
+                <span ng-if="form.mode=='edit'">Speichern</span>
+            </a>
+        </div>
+
     </div>
-
-  </div>
-  <h2>
-	  <span ng-if="form.mode=='add'">Protokoll erstellen</span>
-	  <span ng-if="form.mode=='edit'">Protokoll bearbeiten</span>
-	  <small class="text-danger" ng-if="protocolForm.$dirty" title="Ungespeicherte Änderungen"><span class="glyphicon glyphicon-star"></span></small>
-  </h2>
+    <h2>
+        <span ng-if="form.mode=='add'">Protokoll erstellen</span>
+        <span ng-if="form.mode=='edit'">Protokoll bearbeiten</span>
+        <small class="text-danger" ng-if="protocolForm.$dirty" title="Ungespeicherte Änderungen">
+            <span class="glyphicon glyphicon-star"></span>
+        </small>
+    </h2>
 </div>
 
 <form class="form-horizontal" role="form" name="protocolForm">
-  <div class="form-group" ng-class="{'has-error has-feedback': form.errors.title}">
-    <label for="inputTitle" class="col-sm-2 control-label">Titel</label>
-    <div class="col-sm-10">
-      <input type="text" ng-enter="checkTitle()" ng-model="form.data.title" class="form-control" id="inputTitle" typeahead="title for title in options.commonTitles | filter:$viewValue" placeholder="Titel" tooltip-placement="right" tooltip-trigger="focus" tooltip="Sitzung? MV? Vorstand?">
-      <span ng-if="form.errors.title" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-    </div>
-  </div>
-
-  <div class="form-group" ng-class="{'has-error has-feedback': form.errors.recorder}">
-    <label for="inputRecorder" class="col-sm-2 control-label">Protokollführer</label>
-    <div class="col-sm-10">
-      <input type="text" ng-model="form.data.recorder" ng-required="true" class="form-control" id="inputRecorder" typeahead="user for user in users | filter:$viewValue | limitTo:8" placeholder="Protokollführer" tooltip-placement="right" tooltip-trigger="focus" tooltip="Wer ist Protokollführer?">
-      <span ng-if="form.errors.recorder" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-    </div>
-  </div>
-
-  <div class="form-group" id="dateAndTimePicker" ng-class="{'has-error has-feedback': form.errors.date}">
-    <label for="inputDate" class="col-sm-2 control-label">Datum</label>
-    <div class="col-md-2">
-      <p class="input-group datepicker">
-        <input type="text" class="form-control" datepicker-popup="{{datePicker.format}}" ng-model="times.date" is-open="datePicker.opened" datepicker-options="datePicker.options" ng-required="true" close-text="Close" tooltip-placement="bottom" tooltip-trigger="focus" tooltip="Wann wurde das Protokoll erstellt?"/>
-        <span class="input-group-btn">
-          <button type="button" class="btn btn-default" ng-click="datePicker.open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-        </span>
-        <span ng-if="form.errors.date" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-      </p>
-    </div>
-
-    <label for="inputStartTimeHours" class="col-sm-2 control-label">Beginn</label>
-    <div class="col-sm-2">
-      <timepicker ng-model="times.start" show-meridian="false"></timepicker>
-    </div>
-    <label for="inputEndTimeHours" class="col-sm-2 control-label">Ende</label>
-    <div class="col-sm-2">
-      <timepicker ng-model="times.end" show-meridian="false"></timepicker>
-    </div>
-  </div>
-
-  <hr>
-  <div class="form-group">
-  <helpbox label="Hilfe">
-    <div ng-include="'templates/helpbox/content/attendants.html'"></div>
-  </helpbox>
-</div>
-
-  <div class="form-group" ng-class="{'has-error has-feedback': form.errors.attendants}">
-    <label for="inputAttendants" class="col-sm-2 control-label">Anwesende</label>
-    <div class="col-sm-10">
-      <div class="input-group">
-	    <span class="input-group-addon text-success">
-	   		<span class="label label-success" title="Clubmitglieder">{{attendants.count.members}}</span>
-	   		<span ng-if="attendants.count.applicants" class="label label-info" title="Anwärter">{{attendants.count.applicants}}</span>
-	   		<span ng-if="attendants.count.guests" class="label label-default" title="Gäste">{{attendants.count.guests}}</span>
-	    </span>
-      <input type="text" ng-model="attendants.input" ng-enter="attendants.addFromForm()" class="form-control" id="inputAttendants" typeahead="attendee for attendee in users | filter:$viewValue | limitTo:8" placeholder="Anwesende Personen" tooltip-placement="right" tooltip-trigger="focus" tooltip="Welche Mitglieder sind anwesend?">
-      <span ng-if="form.errors.attendants" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="form-group" ng-class="{'has-error has-feedback': form.errors.attendants}">
-    <label class="col-sm-2 control-label"></label>
-    <div class="col-sm-10">
-      <div id="attendantsToolbar" class="btn-toolbar" role="toolbar" aria-label="...">
-        <!-- Split button -->
-        <div class="btn-group" dropdown ng-repeat="attendee in form.data.attendants">
-          <button type="button" class="btn btn-xs" ng-class="{'btn-success': (attendee.type == 'member'), 'btn-info': (attendee.type == 'applicant'), 'btn-default': (attendee.type == 'guest')}">{{attendee.name}}</button>
-
-
-		  <button popover-template="laterPopover.template" popover-mode="single" type="button" class="btn btn-xs" ng-class="{'btn-success': (attendee.type == 'member'), 'btn-info': (attendee.type == 'applicant'), 'btn-default': (attendee.type == 'guest'), 'btn-danger': (attendee.later)}"><span class="glyphicon glyphicon-time"></span></button>
-
-
-          <button type="button" class="btn btn-xs dropdown-toggle" ng-class="{'btn-success': (attendee.type == 'member'), 'btn-info': (attendee.type == 'applicant'), 'btn-default': (attendee.type == 'guest')}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" dropdown-toggle>
-            <span class="caret"></span>
-            <span class="sr-only">Toggle Dropdown</span>
-          </button>
-          <ul class="dropdown-menu" role="menu">
-            <li><a ng-click="attendants.setType(attendee, 'member')"><span class="glyphicon glyphicon-user"></span> Clubmitglied</a></li>
-            <li><a ng-click="attendants.setType(attendee, 'applicant')"><span class="glyphicon glyphicon-user"></span> Anwärter</a></li>
-            <li><a ng-click="attendants.setType(attendee, 'guest')"><span class="glyphicon glyphicon-user"></span> Gast</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a ng-click="attendants.remove($index)"><span class="glyphicon glyphicon-remove"></span> Entfernen</a></li>
-          </ul>
+    <div class="form-group" ng-class="{'has-error has-feedback': form.errors.title}">
+        <label for="inputTitle" class="col-sm-2 control-label">Titel</label>
+        <div class="col-sm-10">
+            <input type="text" ng-enter="checkTitle()" ng-model="form.data.title" class="form-control" id="inputTitle" typeahead="title for title in options.commonTitles | filter:$viewValue" placeholder="Titel" tooltip-placement="right" tooltip-trigger="focus" tooltip="Sitzung? MV? Vorstand?">
+            <span ng-if="form.errors.title" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
         </div>
-      </div>
     </div>
-  </div>
 
-  <hr>
+    <div class="form-group" ng-class="{'has-error has-feedback': form.errors.recorder}">
+        <label for="inputRecorder" class="col-sm-2 control-label">Protokollführer</label>
+        <div class="col-sm-10">
+            <input type="text" ng-model="form.data.recorder" ng-required="true" class="form-control" id="inputRecorder" typeahead="user for user in users | filter:$viewValue | limitTo:8" placeholder="Protokollführer" tooltip-placement="right" tooltip-trigger="focus"
+            tooltip="Wer ist Protokollführer?">
+            <span ng-if="form.errors.recorder" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        </div>
+    </div>
 
-<div class="form-group">
-<helpbox label="Markdown-Hilfe">
-  <div ng-include="'templates/helpbox/content/markdown.html'"></div>
-</helpbox>
-</div>
+    <div class="form-group" id="dateAndTimePicker" ng-class="{'has-error has-feedback': form.errors.date}">
+        <label for="inputDate" class="col-sm-2 control-label">Datum</label>
+        <div class="col-md-2">
+            <p class="input-group datepicker">
+                <input type="text" class="form-control" datepicker-popup="{{datePicker.format}}" ng-model="times.date" is-open="datePicker.opened" datepicker-options="datePicker.options" ng-required="true" close-text="Close" tooltip-placement="bottom" tooltip-trigger="focus"
+                tooltip="Wann wurde das Protokoll erstellt?" />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="datePicker.open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+                <span ng-if="form.errors.date" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+            </p>
+        </div>
 
-<h4>Protokolltext (Markdown)</h4>
-<div class="well well-lg" ui-ace="options.aceoptions" ng-model="form.data.text" id="test"></div>
+        <label for="inputStartTimeHours" class="col-sm-2 control-label">Beginn</label>
+        <div class="col-sm-2">
+            <timepicker ng-model="times.start" show-meridian="false"></timepicker>
+        </div>
+        <label for="inputEndTimeHours" class="col-sm-2 control-label">Ende</label>
+        <div class="col-sm-2">
+            <timepicker ng-model="times.end" show-meridian="false"></timepicker>
+        </div>
+    </div>
 
-<h4>Kommentare</h4>
-<textarea class="form-control" ng-model="form.data.comment" rows="3" placeholder="Kommentare"></textarea>
+    <hr>
+    <div class="form-group">
+        <helpbox label="Hilfe">
+            <div ng-include="'templates/helpbox/content/attendants.html'"></div>
+        </helpbox>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error has-feedback': form.errors.attendants}">
+        <label for="inputAttendants" class="col-sm-2 control-label">Anwesende</label>
+        <div class="col-sm-10">
+            <div class="input-group">
+                <span class="input-group-addon text-success">
+                    <span class="label label-success" title="Clubmitglieder">{{attendants.count.members}}</span>
+                    <span ng-if="attendants.count.applicants" class="label label-info" title="Anwärter">{{attendants.count.applicants}}</span>
+                    <span ng-if="attendants.count.guests" class="label label-default" title="Gäste">{{attendants.count.guests}}</span>
+                </span>
+                <input type="text" ng-model="attendants.input" ng-enter="attendants.addFromForm()" class="form-control" id="inputAttendants" typeahead="attendee for attendee in users | filter:$viewValue | limitTo:8" placeholder="Anwesende Personen" tooltip-placement="right"
+                tooltip-trigger="focus" tooltip="Welche Mitglieder sind anwesend?">
+                <span ng-if="form.errors.attendants" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-group" ng-class="{'has-error has-feedback': form.errors.attendants}">
+        <label class="col-sm-2 control-label"></label>
+        <div class="col-sm-10">
+            <div id="attendantsToolbar" class="btn-toolbar" role="toolbar" aria-label="...">
+                <!-- Split button -->
+                <div class="btn-group" dropdown ng-repeat="attendee in form.data.attendants">
+                    <button type="button" class="btn btn-xs" ng-class="{'btn-success': (attendee.type == 'member'), 'btn-info': (attendee.type == 'applicant'), 'btn-default': (attendee.type == 'guest')}">{{attendee.name}}</button>
+
+
+                    <button popover-template="laterPopover.template" popover-mode="single" type="button" class="btn btn-xs" ng-class="{'btn-success': (attendee.type == 'member'), 'btn-info': (attendee.type == 'applicant'), 'btn-default': (attendee.type == 'guest'), 'btn-danger': (attendee.later)}">
+                        <span class="glyphicon glyphicon-time"></span>
+                    </button>
+
+
+                    <button type="button" class="btn btn-xs dropdown-toggle" ng-class="{'btn-success': (attendee.type == 'member'), 'btn-info': (attendee.type == 'applicant'), 'btn-default': (attendee.type == 'guest')}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                    dropdown-toggle>
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a ng-click="attendants.setType(attendee, 'member')">
+                                <span class="glyphicon glyphicon-user"></span> Clubmitglied</a>
+                        </li>
+                        <li>
+                            <a ng-click="attendants.setType(attendee, 'applicant')">
+                                <span class="glyphicon glyphicon-user"></span> Anwärter</a>
+                        </li>
+                        <li>
+                            <a ng-click="attendants.setType(attendee, 'guest')">
+                                <span class="glyphicon glyphicon-user"></span> Gast</a>
+                        </li>
+                        <li role="separator" class="divider"></li>
+                        <li>
+                            <a ng-click="attendants.remove($index)">
+                                <span class="glyphicon glyphicon-remove"></span> Entfernen</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="form-group">
+        <helpbox label="Markdown-Hilfe">
+            <div ng-include="'templates/helpbox/content/markdown.html'"></div>
+        </helpbox>
+    </div>
+
+    <h4>Protokolltext (Markdown)</h4>
+    <div class="well well-lg" ui-ace="options.aceoptions" ng-model="form.data.text" id="test"></div>
+
+    <h4>Kommentare</h4>
+    <textarea class="form-control" ng-model="form.data.comment" rows="3" placeholder="Kommentare"></textarea>
 
 
 </form>

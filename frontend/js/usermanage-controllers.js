@@ -1,241 +1,245 @@
+clubAdminApp.controller('userFormController', function($scope, $rootScope, $routeParams, $route, $http, $location, $modal, $timeout, clubAuth, growl) {
+    var form = {};
+    $scope.form = form;
+
+    $scope.options = {
+        shells: [{
+            label: '/bin/false (keine)',
+            value: '/bin/false'
+        }, {
+            label: '/bin/bash (Bash)',
+            value: '/bin/bash'
+        }, {
+            label: '/usr/bin/zsh (Z-Shell)',
+            value: '/usr/bin/zsh'
+        }],
+        usertypes: [{
+            label: 'Clubmitglied',
+            value: 'club'
+        }, {
+            label: 'Extern',
+            value: 'other'
+        }]
+    };
+
+    $scope.keys = doorKeyList;
+
+    form.id = $routeParams.id;
+    form.mode = $route.current.locals.clubMode;
+    form.errors = {};
+    form.message = null;
+
+    form.submit = submit;
+
+    //default values
+    if (form.mode == 'add') {
+        form.data = {
+            sendPassword: true
+        };
+    } else {
+        form.data = null; // 'cause form is hidden when data is null
+    }
 
 
-clubAdminApp.controller('userFormController', function ($scope, $rootScope, $routeParams, $route, $http, $location, $modal, $timeout, clubAuth, growl) {
-	var form = {};
-	$scope.form = form;
+    refresh();
 
-	$scope.options = {
-		shells: [
-			{ label: '/bin/false (keine)', value: '/bin/false' },
-			{ label: '/bin/bash (Bash)', value: '/bin/bash' },
-			{ label: '/usr/bin/zsh (Z-Shell)', value: '/usr/bin/zsh' }
-		],
-		usertypes: [
-			{ label: 'Clubmitglied', value: 'club' },
-			{ label: 'Extern', value: 'other' }
-		]
-	};
+    /*** functions ***/
 
-	$scope.keys = doorKeyList;
+    function submit() {
+        var url = null;
 
-	form.id = $routeParams.id;
-	form.mode = $route.current.locals.clubMode;
-	form.errors = {};
-	form.message = null;
+        var req = {
+            data: $scope.form.data
+        };
 
-	form.submit = submit;
+        if (form.mode == 'add') {
+            req.method = 'POST';
+            req.url = apiPath + '/user';
 
-	//default values
-	if (form.mode == 'add') {
-		form.data = {
-			sendPassword: true
-		};
-	} else {
-		form.data = null; // 'cause form is hidden when data is null
-	}
+        } else if (form.mode == 'edit') {
+            req.method = 'PUT';
+            req.url = apiPath + '/user/' + form.id;
 
+        } else if (form.mode == 'profile') {
+            req.method = 'PUT';
+            req.url = apiPath + '/settings/profile';
+        }
 
-	refresh();
+        $http(req).
+        success(function(data) {
+            var succMsg;
+            var succPath;
+            if (form.mode == 'add') {
+                succMsg = 'Der Benutzer <b>' + $scope.form.data.username + '</b> wurde hinzugefügt!';
+                succPath = 'users';
 
-	/*** functions ***/
+            } else if (form.mode == 'edit') {
+                succMsg = 'Der Benutzer <b>' + $scope.form.data.username + '</b> wurde erfolgreich bearbeitet!';
+                succPath = 'users';
 
-	function submit() {
-		var url = null;
+            } else if (form.mode == 'profile') {
+                succMsg = 'Dein Profil wurde bearbeitet!';
+                succPath = 'settings';
+            }
+            if (succMsg && succPath) {
+                growl.success(succMsg);
+                $timeout(function() {
+                    $location.path('/' + succPath);
+                }, 1000);
+            }
+        }).
+        error(function(data, status) {
+            if (status == 400 && data.validationerror) {
+                growl.warning('Einige Felder sind fehlerhaft.', {
+                    ttl: 10000
+                });
+                $scope.form.errors = data.validationerror;
+            } else {
+                var errMsg = '';
+                if (data) errMsg = data
+                growl.error('Systemfehler ' + errMsg);
+                $scope.form.errors = null;
+            }
 
-		var req = {
-			data: $scope.form.data
-		};
+        });
+    }
 
-		if (form.mode == 'add') {
-			req.method = 'POST';
-			req.url = apiPath + '/user';
+    function refresh() {
+        if (!clubAuth.user) {
+            return false;
+        }
 
-		} else if (form.mode == 'edit') {
-			req.method = 'PUT';
-			req.url = apiPath + '/user/' + form.id;
+        //user edits his own profile
+        if (form.mode == 'profile') {
+            form.data = clubAuth.user;
 
-		} else if (form.mode == 'profile') {
-			req.method = 'PUT';
-			req.url = apiPath + '/settings/profile';
-		}
+            //superuser edits other user
+        } else if (clubAuth.user.superuser && form.mode == 'edit') {
 
-		$http(req).
-			success(function (data) {
-				var succMsg;
-				var succPath;
-				if (form.mode == 'add') {
-					succMsg = 'Der Benutzer <b>'
-						+ $scope.form.data.username
-						+'</b> wurde hinzugefügt!';
-					succPath = 'users';
+            $http.get(apiPath + '/user/' + form.id).
+            success(function(data) {
+                form.data = data;
+            });
 
-				} else if (form.mode == 'edit') {
-					succMsg = 'Der Benutzer <b>'
-						+ $scope.form.data.username
-						+ '</b> wurde erfolgreich bearbeitet!';
-					succPath = 'users';
+            //probably superuser adds new user. Nothing to do here
+        } else {
+            return false;
+        }
+    }
 
-				} else if (form.mode == 'profile') {
-					succMsg = 'Dein Profil wurde bearbeitet!';
-					succPath = 'settings';
-				}
-				if(succMsg && succPath) {
-					growl.success(succMsg);
-					$timeout(function () {
-						$location.path('/'+succPath);
-					}, 1000);
-				}
-			}).
-			error(function (data, status) {
-			if (status == 400 && data.validationerror) {
-				growl.warning('Einige Felder sind fehlerhaft.', {ttl: 10000});
-				$scope.form.errors = data.validationerror;
-			} else {
-				var errMsg = '';
-				if (data) errMsg = data
-				growl.error('Systemfehler '+ errMsg);
-				$scope.form.errors = null;
-			}
+    /* Date picker */
+    //only create new datepicker if there's no data expected
+    if (form.mode == 'add') {
+        $scope.form.data.accessiondate = new Date();
+    }
+    $scope.minDate = $scope.minDate ? null : new Date(2012, (10 - 1), 25);
+    $scope.maxDate = $scope.maxDate ? null : new Date();
 
-		});
-	}
+    $scope.dateOptions = {
+        'startingDay': 1,
+    };
 
-	function refresh() {
-		if (!clubAuth.user) {
-			return false;
-		}
+    $scope.format = 'dd.MM.yyyy';
 
-		//user edits his own profile
-		if (form.mode == 'profile') {
-			form.data = clubAuth.user;
-
-			//superuser edits other user
-		} else if (clubAuth.user.superuser && form.mode == 'edit') {
-
-			$http.get(apiPath + '/user/' + form.id).
-				success(function (data) {
-				form.data = data;
-			});
-
-			//probably superuser adds new user. Nothing to do here
-		} else {
-			return false;
-		}
-	}
-
-	/* Date picker */
-	//only create new datepicker if there's no data expected
-	if (form.mode == 'add') {
-		$scope.form.data.accessiondate = new Date();
-	}
-	$scope.minDate = $scope.minDate ? null : new Date(2012,(10 - 1), 25);
-	$scope.maxDate = $scope.maxDate ? null : new Date();
-
-	$scope.dateOptions = {
-		'startingDay': 1,
-	};
-
-	$scope.format = 'dd.MM.yyyy';
-
-	$scope.datepicker = true;
-	$scope.birthdayPicker = false;
-
-});
-
-
-
-
-
-clubAdminApp.controller('userListController', function ($scope, $rootScope, $http, $routeParams, clubAuth, $modal, growl) {
-
-	$scope.users = {};
-	$scope.users.data = null;
-	$scope.users.remove = remove;
-	$scope.users.resetpw = resetpw;
-	$scope.userlistLoading = true;
-
-	refresh();
-
-
-
-	/*** functions ***/
-
-	function refresh() {
-		$scope.userlistLoading = true;
-		$http.get(apiPath + '/user').
-			success(function (data) {
-			$scope.users.data = data;
-			$scope.userlistLoading = false;
-		});
-	}
-
-	function remove(user) {
-		var modal = $modal.open({
-			templateUrl: 'templates/usermanage/deletemodal.html',
-			controller: 'delModalController',
-			resolve: {
-				user: function () {
-					return $rootScope.user = user;
-				}
-			}
-		});
-
-		modal.result.then(function () {
-			$http.delete(apiPath + '/user/' + user.username)
-				.success(function (data) {
-						growl.success('Der Nutzer ' + user.username + ' wurde erfolgreich entfernt.');
-						refresh();
-				});
-		});
-
-
-	}
-
-
-
-
-	function resetpw(user) {
-		var modal = $modal.open({
-			templateUrl: 'templates/usermanage/passwordresetmodal.html',
-			controller: 'resetpwModalController',
-			resolve: {
-				user: function () {
-					return $rootScope.user = user;
-				}
-			}
-		});
-
-		modal.result.then(function () {
-			$http.get(apiPath + '/user/' + user.username + '/resetPw')
-				.success(function () {
-					growl.success('Passwort wurde zurückgesetzt.');
-				});
-		});
-
-	}
-
+    $scope.datepicker = true;
+    $scope.birthdayPicker = false;
 
 });
 
 
 
 
-clubAdminApp.controller('delModalController', function ($scope, $modalInstance, user) {
-	$scope.ok = function () {
-		$modal.close(user);
-	};
-	$scope.cancel = function () {
-		$modal.dismiss('cancel');
-	};
+
+clubAdminApp.controller('userListController', function($scope, $rootScope, $http, $routeParams, clubAuth, $modal, growl) {
+
+    $scope.users = {};
+    $scope.users.data = null;
+    $scope.users.remove = remove;
+    $scope.users.resetpw = resetpw;
+    $scope.userlistLoading = true;
+
+    refresh();
+
+
+
+    /*** functions ***/
+
+    function refresh() {
+        $scope.userlistLoading = true;
+        $http.get(apiPath + '/user').
+        success(function(data) {
+            $scope.users.data = data;
+            $scope.userlistLoading = false;
+        });
+    }
+
+    function remove(user) {
+        var modal = $modal.open({
+            templateUrl: 'templates/usermanage/deletemodal.html',
+            controller: 'delModalController',
+            resolve: {
+                user: function() {
+                    return $rootScope.user = user;
+                }
+            }
+        });
+
+        modal.result.then(function() {
+            $http.delete(apiPath + '/user/' + user.username)
+                .success(function(data) {
+                    growl.success('Der Nutzer ' + user.username + ' wurde erfolgreich entfernt.');
+                    refresh();
+                });
+        });
+
+
+    }
+
+
+
+
+    function resetpw(user) {
+        var modal = $modal.open({
+            templateUrl: 'templates/usermanage/passwordresetmodal.html',
+            controller: 'resetpwModalController',
+            resolve: {
+                user: function() {
+                    return $rootScope.user = user;
+                }
+            }
+        });
+
+        modal.result.then(function() {
+            $http.get(apiPath + '/user/' + user.username + '/resetPw')
+                .success(function() {
+                    growl.success('Passwort wurde zurückgesetzt.');
+                });
+        });
+
+    }
+
+
 });
 
 
 
-clubAdminApp.controller('resetpwModalController', function ($scope, $modalInstance, user) {
-	$scope.ok = function () {
-		$modal.close(user);
-	};
-	$scope.cancel = function () {
-		$modal.dismiss('cancel');
-	};
+
+clubAdminApp.controller('delModalController', function($scope, $modalInstance, user) {
+    $scope.ok = function() {
+        $modal.close(user);
+    };
+    $scope.cancel = function() {
+        $modal.dismiss('cancel');
+    };
+});
+
+
+
+clubAdminApp.controller('resetpwModalController', function($scope, $modalInstance, user) {
+    $scope.ok = function() {
+        $modal.close(user);
+    };
+    $scope.cancel = function() {
+        $modal.dismiss('cancel');
+    };
 });

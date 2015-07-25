@@ -3,13 +3,16 @@
 </div>
 <div class="modal-body">
 	<p>
-		Das Protokoll <strong>{{protocol.title}} {{protocol.date | date:longDate}}</strong> wird gelöscht.
+		Das Protokoll
+		<strong>{{protocol.title}} {{protocol.date | date:longDate}}</strong> wird gelöscht.
 	</p>
 	<form>
 		<div class="form-group">
-	    <label for="input">Zur Bestätigung tippe bitte folgendes ein: <code>{{checkWord}}</code></label>
-	    <input ng-model="inputCheckWord" type="text" class="form-control" id="input" placeholder="">
-	  </div>
+			<label for="input">Zur Bestätigung tippe bitte folgendes ein:
+				<code>{{checkWord}}</code>
+			</label>
+			<input ng-model="inputCheckWord" type="text" class="form-control" id="input" placeholder="">
+		</div>
 	</form>
 </div>
 <div class="modal-footer">

@@ -4,11 +4,11 @@ var config = require('../config');
 var blacklist = {};
 
 
-exports.add = function(token){
-	blacklist[token] = true;
-	return true;
+exports.add = function(token) {
+    blacklist[token] = true;
+    return true;
 }
 
-exports.find = function(token){
-	return blacklist.hasOwnProperty(token);
+exports.find = function(token) {
+    return blacklist.hasOwnProperty(token);
 }

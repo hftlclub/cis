@@ -1,37 +1,36 @@
-var moment       = require('moment');
-var jwt          = require('jwt-simple');
-var config       = require('../config');
-var userservice  = require('../services/userservice');
+var moment = require('moment');
+var jwt = require('jwt-simple');
+var config = require('../config');
+var userservice = require('../services/userservice');
 var jwtblacklist = require('../modules/jwtblacklist');
 
 
 
-exports.login = function(req, res, next){
+exports.login = function(req, res, next) {
 
     //error if uid or password not set
-    if (!req.body.username || !req.body.password){
+    if (!req.body.username || !req.body.password) {
         res.send(null, 400);
         return;
     }
 
     //login user
-    userservice.checkpassword(req.body.username, req.body.password, function(err, success){
+    userservice.checkpassword(req.body.username, req.body.password, function(err, success) {
         //error if login failed or error occured
-        if(err || !success){
+        if (err || !success) {
             return res.send(null, 401);
         }
-        
+
         //get user
-        userservice.getUserByUid(req.body.username, function(err, user){
-            if(err || !user){
+        userservice.getUserByUid(req.body.username, function(err, user) {
+            if (err || !user) {
                 res.send(null, 401);
                 return;
             }
 
             //user is authenticated and fetched --> send token
             var expires = moment().add('days', 7).valueOf()
-            var token = jwt.encode(
-                {
+            var token = jwt.encode({
                     uid: user.username,
                     exp: expires
                 },
@@ -50,16 +49,16 @@ exports.login = function(req, res, next){
 
 
 
-exports.logout = function(req, res, next){
-	var token = req.headers['x-access-token'];
+exports.logout = function(req, res, next) {
+    var token = req.headers['x-access-token'];
 
-	//error if no token set
-    if(!token){
+    //error if no token set
+    if (!token) {
         return next();
     }
-    
+
     jwtblacklist.add(token);
-    
+
     res.send();
 }
 
@@ -67,35 +66,35 @@ exports.logout = function(req, res, next){
 
 
 
-exports.externallogin = function(req, res, next){
+exports.externallogin = function(req, res, next) {
     //error if uid or password not set
-    if (!req.body.username || !req.body.password){
+    if (!req.body.username || !req.body.password) {
         res.send(null, 400);
         return;
     }
-	
+
 
     //login user
-    userservice.checkpassword(req.body.username, req.body.password, function(err, success){
+    userservice.checkpassword(req.body.username, req.body.password, function(err, success) {
         //error if login failed or error occured
-        if(err || !success){
+        if (err || !success) {
             res.send('failed', 401);
             return;
         }
 
         //get user
-        userservice.getUserByUid(req.body.username, function(err, user){
-            if(err || !user){
+        userservice.getUserByUid(req.body.username, function(err, user) {
+            if (err || !user) {
                 res.send('could not find user', 401);
                 return;
             }
-			
-			//if not all types are allowed and user is not of allowed type
-			if(req.params.type != 'all' && user.type != req.params.type){
-				res.send('user type is not allowed', 401);
-				return;
-			}
-			
+
+            //if not all types are allowed and user is not of allowed type
+            if (req.params.type != 'all' && user.type != req.params.type) {
+                res.send('user type is not allowed', 401);
+                return;
+            }
+
             res.send('success', 200);
             return;
 

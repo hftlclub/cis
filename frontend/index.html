@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="de" ng-app="clubAdminApp">
-	<head>
+
+<head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -59,6 +60,7 @@
 	<![endif]-->
 
 </head>
+
 <body ng-controller="MainController">
 
 	<nav class="navbar navbar-default navbar-static-top" role="navigation">
@@ -79,11 +81,17 @@
 	<nav class="navbar navbar-default navbar-fixed-bottom">
 		<div class="container">
 			<ul class="nav navbar-nav hidden-xs">
-        <li><a ng-href="#/about"><span class="glyphicon glyphicon-info-sign"></span> Info</a></li>
+				<li>
+					<a ng-href="#/about">
+						<span class="glyphicon glyphicon-info-sign"></span> Info</a>
+				</li>
 			</ul>
 
 			<ul class="nav navbar-nav hidden-xs">
-				<li><a ng-click="openFeedbackModal()"><span class="glyphicon glyphicon-envelope"></span> Fehler entdeckt oder Probleme?</a></li>
+				<li>
+					<a ng-click="openFeedbackModal()">
+						<span class="glyphicon glyphicon-envelope"></span> Fehler entdeckt oder Probleme?</a>
+				</li>
 			</ul>
 
 			<ul class="nav navbar-nav navbar-right">
@@ -93,11 +101,12 @@
 					</a>
 				</li>
 			</ul>
-	  </div>
+		</div>
 	</nav>
 
-<div growl></div>
+	<div growl></div>
 
 
 </body>
+
 </html>

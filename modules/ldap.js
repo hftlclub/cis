@@ -7,8 +7,7 @@ var client = ldapjs.createClient({
 });
 
 //bind to LDAP server
-client.bind(config.ldap.admindn, config.ldap.adminpw, function(err) { });
+client.bind(config.ldap.admindn, config.ldap.adminpw, function(err) {});
 
 
 exports.client = client;
-

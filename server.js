@@ -1,7 +1,7 @@
-var express          = require('express');
+var express = require('express');
 var expressValidator = require('express-validator');
-var bodyParser       = require('body-parser');
-var cors             = require('cors');
+var bodyParser = require('body-parser');
+var cors = require('cors');
 
 var app = express();
 var api = express.Router();
@@ -9,33 +9,35 @@ var api = express.Router();
 
 var config = require('./config');
 
-var authController       = require('./controllers/auth');
+var authController = require('./controllers/auth');
 var usermanageController = require('./controllers/usermanage');
-var membersController    = require('./controllers/members');
-var settingsController   = require('./controllers/settings');
-var feedbackController   = require('./controllers/feedback');
-var keylistController    = require('./controllers/keylist');
-var protocolsController  = require('./controllers/protocols');
-var deployController     = require('./controllers/deploy');
+var membersController = require('./controllers/members');
+var settingsController = require('./controllers/settings');
+var feedbackController = require('./controllers/feedback');
+var keylistController = require('./controllers/keylist');
+var protocolsController = require('./controllers/protocols');
+var deployController = require('./controllers/deploy');
 
 
-var jwtauth      = require('./middleware/jwtauth')
-var reqm         = require('./middleware/requiremode');
+var jwtauth = require('./middleware/jwtauth')
+var reqm = require('./middleware/requiremode');
 var errorhandler = require('./middleware/errorhandler');
 
 
-api.use(cors({ origin: '*' }));
+api.use(cors({
+    origin: '*'
+}));
 api.use(bodyParser.json());
 api.use(bodyParser.urlencoded({
     extended: true
 }));
 
 app.use(expressValidator({
-	customValidators: {
-		error: function(value, error) {
-			return !error;
-    	}
-	}   
+    customValidators: {
+        error: function(value, error) {
+            return !error;
+        }
+    }
 }));
 
 
@@ -47,7 +49,7 @@ app.use(expressValidator({
 api.post('/login', authController.login);
 api.get('/logout', authController.logout);
 api.post('/feedback', feedbackController.sendFeedback);
-api.get('/userdata', jwtauth, reqm('auth'), function(req, res){
+api.get('/userdata', jwtauth, reqm('auth'), function(req, res) {
     res.json(req.user);
 });
 
@@ -103,6 +105,6 @@ app.use(express.static(__dirname + '/frontend'));
 
 
 //start server
-app.listen(config.port, function(err){
+app.listen(config.port, function(err) {
     console.log('Club Admin started on port ' + config.port);
 });

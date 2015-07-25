@@ -6,13 +6,13 @@ exports.tokensecret = require('crypto').randomBytes(20).toString('hex');
 
 //LDAP settings
 exports.ldap = {
-    "server"   : "10.12.114.138",
-    "port"     : 389,
-    "basedn"   : "dc=club,dc=hft-leipzig,dc=de",
-    "userbase" : "ou=users",
+    "server": "10.12.114.138",
+    "port": 389,
+    "basedn": "dc=club,dc=hft-leipzig,dc=de",
+    "userbase": "ou=users",
     "groupbase": "ou=groups",
-    "admindn"  : "cn=admin,dc=club,dc=hft-leipzig,dc=de",
-    "adminpw"  : ""
+    "admindn": "cn=admin,dc=club,dc=hft-leipzig,dc=de",
+    "adminpw": ""
 };
 
 //MySQL settings
@@ -36,8 +36,8 @@ exports.smtp = {
 };
 
 exports.mailsettings = {
-	"from": "HfTL Club <club@hft-leipzig.de>",
-	"tplpath": require('path').dirname(process.mainModule.filename) + "/templates/email/"
+    "from": "HfTL Club <club@hft-leipzig.de>",
+    "tplpath": require('path').dirname(process.mainModule.filename) + "/templates/email/"
 };
 
 

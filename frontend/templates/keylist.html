@@ -1,78 +1,78 @@
 <style type="text/css" media="print" href="print.pdf">
-  @media print {
-    html,
-    body,
-    .container {
-      margin: 0 !important;
-      padding: 0 !important;
+    @media print {
+        html,
+        body,
+        .container {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
     }
-  }
 </style>
 
 <div ng-if="members.data">
-  <div class="page-header">
+    <div class="page-header">
 
-    <div class="pull-right hidden-print">
-      <a href="javascript:window.print()" class="btn btn-success">
-        <span class="glyphicon glyphicon-print"></span>
-        <span ng-if="keylistFilter">Gefilterte</span> Schlüsselliste drucken
-      </a>
-    </div>
-
-    <h2>
-	    Schlüsselliste
-	    <span ng-if="isPublic">HfTL-Club</span>
-	</h2>
-    <span class="visible-print pull-right"> (Stand: {{date | date:'dd.MM.yyyy'}})</span>
-  </div>
-
-
-  <helpbox class="hidden-print" label="Hilfe" active="true">
-    <div ng-include="'templates/helpbox/content/keylist.html'"></div>
-  </helpbox>
-  <span class="help-block hidden-print"></span>
-
-  <form class="form horizontal hidden-print">
-    <div class="form-group">
-      <div class="input-group">
-        <span class="input-group-btn">
-          <button class="btn" ng-class="{'btn-warning': keylistFilter, 'btn-default disabled': !keylistFilter}" ng-click="keylistFilter = ''" type="button">
-            Filter
-            <span class="glyphicon glyphicon glyphicon-filter" ng-if="!keylistFilter"></span>
-            <span class="glyphicon glyphicon-remove" ng-if="keylistFilter"></span>
-          </button>
-        </span>
-        <input class="form-control" ng-model="keylistFilter" placeholder="Nach einer Person suchen" type="text">
-      </div>
-    </div>
-  </form>
-
-  <div class="table-responsive">
-    <table class="table table-striped table-bordered table-condensed table-hover" ng-if="members.data">
-      <thead>
-        <tr>
-          <th class="text-center">#</th>
-          <th>Name</th>
-          <th ng-repeat="key in keys" tooltip-placement="top" tooltip-trigger="mouseenter" tooltip-append-to-body="true" tooltip="{{key.name}}" class="text-center">{{key.key}}</th>
-          <th ng-if="isSuperuser" class="text-center hidden-print">
-            <span class="glyphicon glyphicon-cog"></span>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-if="member.type != 'other'" ng-repeat="member in members.data | orderBy: 'lastname' | filter:keylistFilter">
-          <td style="width: 30px" class="text-center">{{ $index + 1 }}</td>
-          <td>{{ member.lastname }}, {{ member.firstname }}</td>
-          <td ng-repeat="key in keys" class="text-center">
-            <span ng-if="member.keyPermissions[key.key]" class="glyphicon glyphicon-ok-sign"></span>
-          </td>
-          <td ng-if="isSuperuser" class="text-center hidden-print" style="width: 33px">
-            <a ng-href="#/users/edit/{{member.username}}" type="button" class="btn btn-xs btn-default">
-              <span class="glyphicon glyphicon-pencil"></span>
+        <div class="pull-right hidden-print">
+            <a href="javascript:window.print()" class="btn btn-success">
+                <span class="glyphicon glyphicon-print"></span>
+                <span ng-if="keylistFilter">Gefilterte</span> Schlüsselliste drucken
             </a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+        </div>
+
+        <h2>
+            Schlüsselliste
+            <span ng-if="isPublic">HfTL-Club</span>
+        </h2>
+        <span class="visible-print pull-right"> (Stand: {{date | date:'dd.MM.yyyy'}})</span>
+    </div>
+
+
+    <helpbox class="hidden-print" label="Hilfe" active="true">
+        <div ng-include="'templates/helpbox/content/keylist.html'"></div>
+    </helpbox>
+    <span class="help-block hidden-print"></span>
+
+    <form class="form horizontal hidden-print">
+        <div class="form-group">
+            <div class="input-group">
+                <span class="input-group-btn">
+                    <button class="btn" ng-class="{'btn-warning': keylistFilter, 'btn-default disabled': !keylistFilter}" ng-click="keylistFilter = ''" type="button">
+                        Filter
+                        <span class="glyphicon glyphicon glyphicon-filter" ng-if="!keylistFilter"></span>
+                        <span class="glyphicon glyphicon-remove" ng-if="keylistFilter"></span>
+                    </button>
+                </span>
+                <input class="form-control" ng-model="keylistFilter" placeholder="Nach einer Person suchen" type="text">
+            </div>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-condensed table-hover" ng-if="members.data">
+            <thead>
+                <tr>
+                    <th class="text-center">#</th>
+                    <th>Name</th>
+                    <th ng-repeat="key in keys" tooltip-placement="top" tooltip-trigger="mouseenter" tooltip-append-to-body="true" tooltip="{{key.name}}" class="text-center">{{key.key}}</th>
+                    <th ng-if="isSuperuser" class="text-center hidden-print">
+                        <span class="glyphicon glyphicon-cog"></span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-if="member.type != 'other'" ng-repeat="member in members.data | orderBy: 'lastname' | filter:keylistFilter">
+                    <td style="width: 30px" class="text-center">{{ $index + 1 }}</td>
+                    <td>{{ member.lastname }}, {{ member.firstname }}</td>
+                    <td ng-repeat="key in keys" class="text-center">
+                        <span ng-if="member.keyPermissions[key.key]" class="glyphicon glyphicon-ok-sign"></span>
+                    </td>
+                    <td ng-if="isSuperuser" class="text-center hidden-print" style="width: 33px">
+                        <a ng-href="#/users/edit/{{member.username}}" type="button" class="btn btn-xs btn-default">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
