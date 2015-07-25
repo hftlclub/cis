@@ -1,8 +1,15 @@
 // controller for protocol form
 clubAdminApp.controller('protocolFormController', function($scope, $http, $routeParams, $interval, $route, $window, clubAuth, hotkeys, growl) {
 
-  $scope.users = [];
+	$scope.options = {
+	  commonTitles: ['Clubsitzung', 'Mitgliederversammlung', 'Planungstreffen'],
+	  aceOptions: {
+	  	mode: 'markdown'
+	  }
+  }
 
+
+  $scope.users = [];
 
   var form = $scope.form = {
     id: $routeParams.id,
@@ -16,32 +23,43 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
     }
   }
 
-  $scope.commonTitles = ['Clubsitzung', 'Mitgliederversammlung', 'Planungstreffen'];
+  //models for timepickers // create new when form mode is "add"
+  $scope.times = {
+    date: null,
+    start: null,
+    end: null
+  };
 
 
-  // options for textbox
-  $scope.aceOptions = {
-    mode: 'markdown'
+  /*************************
+    * Datepicker
+    *************************/
+  
+  //only create new datepicker if there's no data expected
+  $scope.minDate = $scope.minDate ? null : new Date(2012, (10 - 1), 25);
+  $scope.maxDate = $scope.maxDate ? null : new Date();
+
+  $scope.datePicker = {
+    format: 'dd.MM.yyyy',
+    open: function($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+      this.opened = true;
+    },
+    opened: false,
+    options: {
+      formatYear: 'yy',
+      startingDay: 1
+    }
   }
 
 
-  // You can pass it an object.  This hotkey will not be unbound unless manually removed
-   // using the hotkeys.del() method
-   hotkeys.add({
-     combo:  ['ctrl+s', 'meta+s'],
-     description: 'This will save any changes',
-     allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-     callback: function(event, hotkey) {
-       if (event.preventDefault) {
-            event.preventDefault();
-        } else {
-            // internet explorer
-            event.returnValue = false;
-        }
-       $scope.save();
-     }
-   });
 
+
+
+   /*************************
+    * Autosave
+    *************************/
 
   $scope.autoSave = {
     isActive: true,
@@ -71,71 +89,42 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
 
   // catch location change event and save if in edit mode
   $scope.$on('$locationChangeStart', function(event, next, current) {
-    if (form.mode == 'edit') saveOnLeave(event);
+    if(form.mode == 'edit' && $scope.autoSave.isActive && $scope.protocolForm.$dirty){ //if edit mode, autosave active and form dirty: autosave!
+		$scope.save(1, 1);
+	}
   });
-  // catch close/reload event and save if in edit mode
+  
+  // catch close/reload event and show confirmation message
   $window.addEventListener("beforeunload", function(event) {
-    if (form.mode == 'edit') saveOnLeave(event);
+    var confirmationMessage = '';
+    (event || window.event).returnValue = confirmationMessage; //Gecko + IE
+    return confirmationMessage; //Webkit, Safari, Chrome
   });
-
-  function saveOnLeave(event) {
-    // autosave if form is dirty
-    if ($scope.protocolForm.$dirty) {
-      $scope.save(1, 1);
-    }
-
-    // if  beforeunload event was fired (close tab, reload page)
-    if (event.name != '$locationChangeStart') {
-      var confirmationMessage = '';
-      (event || window.event).returnValue = confirmationMessage; //Gecko + IE
-      return confirmationMessage; //Webkit, Safari, Chrome
-    }
-  }
-
-
-
-  //models for timepickers // create new when form mode is "add"
-  $scope.times = {
-    date: null,
-    start: null,
-    end: null
-  };
-
-  //stuff for the "attendee is later" popover
-  $scope.laterPopover = {
-    template: '/templates/protocols/laterPopover.html',
-    setInitial: function(att) {
-      att.later = new Date();
-      $scope.protocolForm.$setDirty();
-    },
-    removeTime: function(att){
-	    att.later = null;
-		$scope.protocolForm.$setDirty();
-    }
-  }
+  
+  //Strg + S / Cmd + S for save
+  hotkeys.add({
+     combo:  ['ctrl+s', 'meta+s'],
+     description: 'This will save any changes',
+     allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+     callback: function(event, hotkey) {
+       if (event.preventDefault) {
+            event.preventDefault();
+        } else {
+            // internet explorer
+            event.returnValue = false;
+        }
+       $scope.save();
+     }
+   });
+   
+   
+   
+   
 
 
-  /* Date picker */
-  //only create new datepicker if there's no data expected
-  $scope.minDate = $scope.minDate ? null : new Date(2012, (10 - 1), 25);
-  $scope.maxDate = $scope.maxDate ? null : new Date();
-
-  $scope.datePicker = {
-    format: 'dd.MM.yyyy',
-    open: function($event) {
-      $event.preventDefault();
-      $event.stopPropagation();
-      this.opened = true;
-    },
-    opened: false,
-    options: {
-      formatYear: 'yy',
-      startingDay: 1
-    }
-  }
-
-
-  //stuff for attendants
+  /*************************
+    * Attendants
+    *************************/
   $scope.attendants = {
     input: null,
     count: {
@@ -172,9 +161,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
 	    att.type = type;
 	    $scope.protocolForm.$setDirty();
     },
-    countAtt: function(){
-	    console.log('count now');
-	    
+    countAtt: function(){    
 	    var count = {
 			members: 0,
 			applicants: 0,
@@ -200,10 +187,29 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
 
 
 
+  /*************************
+   * "attendee is later" popover
+   *************************/
+  $scope.laterPopover = {
+    template: '/templates/protocols/laterPopover.html',
+    setInitial: function(att) {
+      att.later = new Date();
+      $scope.protocolForm.$setDirty();
+    },
+    removeTime: function(att){
+	    att.later = null;
+		$scope.protocolForm.$setDirty();
+    }
+  }
+
+
+
+
+
   // check whether title is a common title, then load template if available
   $scope.checkTitle = function() {
-    for (i = 0; i < $scope.commonTitles.length; i++) { //go through common titles
-      if ($scope.commonTitles[i] == form.data.title && !form.data.text) { //if current title matches a common title and there's no text in the field
+    for (i = 0; i < $scope.options.commonTitles.length; i++) { //go through common titles
+      if ($scope.options.commonTitles[i] == form.data.title && !form.data.text) { //if current title matches a common title and there's no text in the field
         //get protocol and fill textfield with it
         $http.get('/templates/protocols/presets/clubsitzung.md').success(function(data) {
           form.data.text = data;
@@ -213,6 +219,9 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
   }
 
 
+  /*************************
+   * save function
+   *************************/
 
   $scope.save = function(autosaved, nosetpristine) {
     var succMsg = (autosaved) ? "Automatisch gespeichert!" : "Gespeichert!"
@@ -269,8 +278,13 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
         });
     }
   }
-
-
+  
+  
+  
+  /*************************
+   * refresh function
+   *************************/
+   
   function refresh() {
     $http.get(apiPath + '/members').success(function(data) {
       //build array with just names and only current members
@@ -300,7 +314,9 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
 
 
 
-  /******************************/
+  /**************************************************
+  ***************************************************
+  ****************************************************/
 
 
 
@@ -321,6 +337,8 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
 
 
 });
+
+
 
 
 
@@ -359,6 +377,9 @@ clubAdminApp.controller('protocolListController', function($scope, $http, $route
 
 });
 
+
+
+
 // delete modal
 clubAdminApp.controller('delProtocolController', function($scope, $rootScope, $modalInstance) {
   $scope.checkWord = $rootScope.getCheckWord();
@@ -370,6 +391,15 @@ clubAdminApp.controller('delProtocolController', function($scope, $rootScope, $m
     }
   };
 });
+
+
+
+
+
+
+
+
+
 
 
 // controller for protocol details
