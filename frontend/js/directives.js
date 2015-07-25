@@ -44,7 +44,7 @@ clubAdminApp.directive('helpbox', function($location) {
 			active: '@',
 			label: '@',
 		},
-		templateUrl: 'templates/helpbox.html'
+		templateUrl: 'templates/helpbox/helpbox.html'
 	}
 });
 

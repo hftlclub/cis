@@ -27,10 +27,8 @@
   </div>
 
 
-  <helpbox class="hidden-print">
-      <h4>Schlüsselberechtigungen</h4>
-      <p>Auf dieser Seite findest du eine Übersicht mit allen Schlüsselberechtigungen.</p>
-      <p>Die mit einem  <span class="glyphicon glyphicon-ok-sign"></span>-Symbol gekennzeichneten Felder zeigen nicht welches der Mitglieder einen Schlüssel besitzt, sondern dienen als Hinweis darauf, welche Schlüssel man sich aus der Verwaltung holen kann. Zum abholen der Schlüssel solltet ihr euch bei Frau Pihaule melden.</p>
+  <helpbox class="hidden-print" label="Hilfe" active="true">
+    <div ng-include="'templates/helpbox/content/keylist.html'"></div>
   </helpbox>
   <span class="help-block hidden-print"></span>
 
