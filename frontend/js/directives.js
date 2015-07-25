@@ -35,12 +35,14 @@ clubAdminApp.directive('helpbox', function($location) {
 	return {
 		restrict: 'E',
 		transclude: true,
+		require: '?label',
 		link: function(scope, element) {
 			if(scope.active != 'true') scope.isCollapsed = true;
 			else scope.isCollapsed = false;
 		},
 		scope: {
-			active: '@'
+			active: '@',
+			label: '@',
 		},
 		templateUrl: 'templates/helpbox.html'
 	}
