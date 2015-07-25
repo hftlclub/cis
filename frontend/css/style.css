@@ -55,3 +55,17 @@ span.largeicon {
 #attendantsToolbar .btn-group {
   margin-bottom: 5px;
 }
+
+/* timepicker row in protocol form */
+#dateAndTimePicker a.btn-link {
+  padding: 0px;
+}
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  #dateAndTimePicker p.datepicker {
+    padding-top: 24px;
+  }
+  #dateAndTimePicker label {
+    padding-top: 30px;
+  }
+}

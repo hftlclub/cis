@@ -44,10 +44,10 @@
     </div>
   </div>
 
-  <div class="form-group" ng-class="{'has-error has-feedback': form.errors.date}">
+  <div class="form-group" id="dateAndTimePicker" ng-class="{'has-error has-feedback': form.errors.date}">
     <label for="inputDate" class="col-sm-2 control-label">Datum</label>
     <div class="col-md-2">
-      <p class="input-group">
+      <p class="input-group datepicker">
         <input type="text" class="form-control" datepicker-popup="{{datePicker.format}}" ng-model="times.date" is-open="datePicker.opened" datepicker-options="datePicker.options" ng-required="true" close-text="Close" tooltip-placement="bottom" tooltip-trigger="focus" tooltip="Wann wurde das Protokoll erstellt?"/>
         <span class="input-group-btn">
           <button type="button" class="btn btn-default" ng-click="datePicker.open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
