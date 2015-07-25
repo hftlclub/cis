@@ -82,25 +82,30 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
   };
   $scope.autoSave.setTimer(); //initially start timer
 
-  //destroy timer on location change
-  $scope.$on('$destroy', function() {
-    $scope.autoSave.stopTimer();
-  });
-
-  // catch location change event and save if in edit mode
+  
+  // catch location change event
   $scope.$on('$locationChangeStart', function(event, next, current) {
     if(form.mode == 'edit' && $scope.autoSave.isActive && $scope.protocolForm.$dirty){ //if edit mode, autosave active and form dirty: autosave!
 		$scope.save(1, 1);
 	}
   });
   
+  //destroy timer and unloadListener on location change
+  $scope.$on('$destroy', function() {
+    $scope.autoSave.stopTimer();
+    $window.removeEventListener("beforeunload", unloadListener);
+  });
+
+   
   // catch close/reload event and show confirmation message
-  $window.addEventListener("beforeunload", function(event) {
+  $window.addEventListener("beforeunload", unloadListener);
+  function unloadListener(event) {
     var confirmationMessage = '';
     (event || window.event).returnValue = confirmationMessage; //Gecko + IE
     return confirmationMessage; //Webkit, Safari, Chrome
-  });
-  
+  }
+
+
   //Strg + S / Cmd + S for save
   hotkeys.add({
      combo:  ['ctrl+s', 'meta+s'],
