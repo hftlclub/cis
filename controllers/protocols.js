@@ -149,8 +149,13 @@ exports.getDetail = function(req, res, next) {
             var att = row.attendants[i];
 
             if (att.later) {
-                out.attendants.later.push(att.name + ' (' + moment(att.later).format('HH:mm') + ' Uhr)');
-                continue;
+                att.name += ' (' + moment(att.later).format('HH:mm') + ' Uhr)';
+                
+                //push later members to "later" list, applicants and guests stay in their own list, even if delayed
+                if(att.type == 'member'){
+                    out.attendants.later.push(att.name);
+                    continue;
+                }
             }
 
             if (att.type == 'member') {
