@@ -1,5 +1,5 @@
 // controller for protocol form
-clubAdminApp.controller('protocolFormController', function($scope, $http, $routeParams, $interval, $route, $window, clubAuth, hotkeys, growl) {
+angular.module('app.cis').controller('ProtocolFormController', function($scope, $http, $routeParams, $interval, $route, $window, clubAuth, hotkeys, growl, appConf) {
 
     $scope.options = {
         commonTitles: ['Clubsitzung', 'Mitgliederversammlung', 'Planungstreffen'],
@@ -240,7 +240,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
 
 
         if (form.mode == 'edit' && form.id) {
-            $http.put(apiPath + '/protocols/' + form.id, form.data)
+            $http.put(appConf.api + '/protocols/' + form.id, form.data)
                 .success(function(data) {
                     growl.success(succMsg);
                     if (!nosetpristine) $scope.protocolForm.$setPristine();
@@ -262,7 +262,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
 
 
         } else if (form.mode == 'add') {
-            $http.post(apiPath + '/protocols', form.data)
+            $http.post(appConf.api + '/protocols', form.data)
                 .success(function(data) {
                     growl.info('Das Protokoll wurde angelegt!');
                     if (!nosetpristine) $scope.protocolForm.$setPristine();
@@ -296,7 +296,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
      *************************/
 
     function refresh() {
-        $http.get(apiPath + '/members').success(function(data) {
+        $http.get(appConf.api + '/members').success(function(data) {
             //build array with just names and only current members
             $scope.users = [];
             data.forEach(function(row) {
@@ -310,7 +310,7 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
         //in edit mode: go and get the protocol we want to edit
         if (form.mode == 'edit' && form.id) {
             // get data from specific protocol if mode is 'edit'
-            $http.get(apiPath + '/protocols/raw/' + form.id).success(function(data) {
+            $http.get(appConf.api + '/protocols/raw/' + form.id).success(function(data) {
                 form.data = data;
                 $scope.times.date = new Date(data.date);
                 $scope.times.start = new Date(data.start);
@@ -357,14 +357,14 @@ clubAdminApp.controller('protocolFormController', function($scope, $http, $route
 
 
 // controller for protocol list
-clubAdminApp.controller('protocolListController', function($scope, $http, $routeParams, clubAuth, $modal, $location) {
+angular.module('app.cis').controller('ProtocolListController', function($scope, $http, $routeParams, clubAuth, $modal, $location, appConf) {
     $scope.protocols = [];
     refresh();
 
     /*** functions ***/
 
     function refresh() {
-        $http.get(apiPath + '/protocols?grouped').success(function(data) {
+        $http.get(appConf.api + '/protocols?grouped').success(function(data) {
             $scope.protocols = data;
         });
     }
@@ -374,7 +374,7 @@ clubAdminApp.controller('protocolListController', function($scope, $http, $route
 
         var modal = $modal.open({
             templateUrl: 'templates/protocols/deletemodal.html',
-            controller: 'delProtocolModalController',
+            controller: 'DelProtModalController',
             resolve: {
                 protocol: function() {
                     return prot;
@@ -383,7 +383,7 @@ clubAdminApp.controller('protocolListController', function($scope, $http, $route
         });
 
         modal.result.then(function() {
-            $http.delete(apiPath + '/protocols/' + prot.id).
+            $http.delete(appConf.api + '/protocols/' + prot.id).
             success(refresh);
         });
     }
@@ -398,7 +398,7 @@ clubAdminApp.controller('protocolListController', function($scope, $http, $route
 
 
 // delete modal
-clubAdminApp.controller('delProtocolModalController', function($scope, $rootScope, $modalInstance, protocol) {
+angular.module('app.cis').controller('DelProtModalController', function($scope, $rootScope, $modalInstance, protocol) {
     $scope.protocol = protocol;
     $scope.checkWord = $rootScope.getCheckWord();
 
@@ -419,7 +419,7 @@ clubAdminApp.controller('delProtocolModalController', function($scope, $rootScop
 
 
 // controller for protocol details
-clubAdminApp.controller('protocolDetailController', function($scope, $http, $routeParams, clubAuth) {
+angular.module('app.cis').controller('ProtocolDetailController', function($scope, $http, $routeParams, clubAuth, appConf) {
     $scope.protocolid = $routeParams.id;
     $scope.protocol = {};
 
@@ -427,7 +427,7 @@ clubAdminApp.controller('protocolDetailController', function($scope, $http, $rou
     /*** functions ***/
 
     function refresh() {
-        $http.get(apiPath + '/protocols/detail/' + $scope.protocolid).success(function(data) {
+        $http.get(appConf.api + '/protocols/detail/' + $scope.protocolid).success(function(data) {
             $scope.protocol = data;
         });
     }

@@ -1,5 +1,4 @@
-clubAdminApp.config(function($routeProvider) {
-    var wipecache = '20140831';
+angular.module('app.cis').config(function($routeProvider) {
 
     $routeProvider.
     when('/', {
@@ -8,20 +7,20 @@ clubAdminApp.config(function($routeProvider) {
     }).
 
     when('/login', {
-        templateUrl: 'templates/login.html?wipecache=' + wipecache,
+        templateUrl: 'templates/login.html',
         controller: 'LoginController',
     }).
 
     /* settings */
 
     when('/settings', {
-        templateUrl: 'templates/settings/index.html?wipecache=' + wipecache,
+        templateUrl: 'templates/settings/index.html',
         controller: 'SettingsIndexController',
     }).
 
     when('/settings/profile', {
-        templateUrl: 'templates/usermanage/form.html?wipecache=' + wipecache,
-        controller: 'userFormController',
+        templateUrl: 'templates/usermanage/form.html',
+        controller: 'UserFormController',
         resolve: {
             clubMode: function() {
                 return 'profile';
@@ -30,25 +29,25 @@ clubAdminApp.config(function($routeProvider) {
     }).
 
     when('/settings/changepassword', {
-        templateUrl: 'templates/settings/changepassword.html?wipecache=' + wipecache,
+        templateUrl: 'templates/settings/changepassword.html',
         controller: 'SettingsChangePasswordController',
     }).
 
     /* manage users */
 
     when('/users', {
-        templateUrl: 'templates/usermanage/list.html?wipecache=' + wipecache,
-        controller: 'userListController',
+        templateUrl: 'templates/usermanage/list.html',
+        controller: 'UserListController',
     }).
 
     when('/users/filter/:filter*', {
-        templateUrl: 'templates/usermanage/list.html?wipecache=' + wipecache,
-        controller: 'userListController',
+        templateUrl: 'templates/usermanage/list.html',
+        controller: 'UserListController',
     }).
 
     when('/users/add', {
-        templateUrl: 'templates/usermanage/form.html?wipecache=' + wipecache,
-        controller: 'userFormController',
+        templateUrl: 'templates/usermanage/form.html',
+        controller: 'UserFormController',
         resolve: {
             clubMode: function() {
                 return 'add';
@@ -57,8 +56,8 @@ clubAdminApp.config(function($routeProvider) {
     }).
 
     when('/users/edit/:id', {
-        templateUrl: 'templates/usermanage/form.html?wipecache=' + wipecache,
-        controller: 'userFormController',
+        templateUrl: 'templates/usermanage/form.html',
+        controller: 'UserFormController',
         resolve: {
             clubMode: function() {
                 return 'edit';
@@ -69,32 +68,32 @@ clubAdminApp.config(function($routeProvider) {
     /* member list */
 
     when('/memberlist', {
-        templateUrl: 'templates/memberlist.html?wipecache=' + wipecache,
-        controller: 'memberListController',
+        templateUrl: 'templates/memberlist.html',
+        controller: 'MemberListController',
     }).
 
     /* key permission list */
 
     when('/keylist', {
-        templateUrl: 'templates/keylist.html?wipecache=' + wipecache,
-        controller: 'keyListController',
+        templateUrl: 'templates/keylist.html',
+        controller: 'KeyListController',
     }).
 
     when('/keylist/:accesskey', {
-        templateUrl: 'templates/keylist.html?wipecache=' + wipecache,
-        controller: 'publicKeyListController',
+        templateUrl: 'templates/keylist.html',
+        controller: 'PublicKeyListController',
     }).
 
     /* club protocol routes */
 
     when('/protocols', {
-        templateUrl: 'templates/protocols/list.html?wipecache=' + wipecache,
-        controller: 'protocolListController',
+        templateUrl: 'templates/protocols/list.html',
+        controller: 'ProtocolListController',
     }).
 
     when('/protocols/add', {
-        templateUrl: 'templates/protocols/form.html?wipecache=' + wipecache,
-        controller: 'protocolFormController',
+        templateUrl: 'templates/protocols/form.html',
+        controller: 'ProtocolFormController',
         resolve: {
             clubMode: function() {
                 return 'add';
@@ -103,8 +102,8 @@ clubAdminApp.config(function($routeProvider) {
     }).
 
     when('/protocols/edit/:id', {
-        templateUrl: 'templates/protocols/form.html?wipecache=' + wipecache,
-        controller: 'protocolFormController',
+        templateUrl: 'templates/protocols/form.html',
+        controller: 'ProtocolFormController',
         resolve: {
             clubMode: function() {
                 return 'edit';
@@ -113,14 +112,14 @@ clubAdminApp.config(function($routeProvider) {
     }).
 
     when('/protocols/show/:id', {
-        templateUrl: 'templates/protocols/details.html?wipecache=' + wipecache,
-        controller: 'protocolDetailController',
+        templateUrl: 'templates/protocols/details.html',
+        controller: 'ProtocolDetailController',
     }).
 
     /* about section */
 
     when('/about', {
-        templateUrl: 'templates/about.html?wipecache=' + wipecache,
+        templateUrl: 'templates/about.html',
     });
 
 });

@@ -1,11 +1,11 @@
-clubAdminApp.factory('clubAuth', function($http, $location, $rootScope) {
+angular.module('app.cis').factory('clubAuth', function($http, $location, $rootScope, appConf) {
     var clubAuth = {};
 
     $rootScope.clubAuth = clubAuth;
 
     clubAuth.refresh = function() {
 
-        $http.get(apiPath + '/userdata').
+        $http.get(appConf.api + '/userdata').
         success(function(data) {
             clubAuth.user = data;
             $rootScope.$broadcast('clubAuthRefreshed');
@@ -26,7 +26,7 @@ clubAdminApp.factory('clubAuth', function($http, $location, $rootScope) {
     }
 
     clubAuth.logout = function() {
-        $http.get(apiPath + '/logout').
+        $http.get(appConf.api + '/logout').
         success(function() {
             clubAuth.refresh();
         });

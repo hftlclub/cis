@@ -1,4 +1,4 @@
-clubAdminApp.directive('clubActiveState', function($location) {
+angular.module('app.cis').directive('clubActiveState', function($location) {
     return {
         restrict: 'AC',
         link: function(scope, element, attr) {
@@ -35,7 +35,9 @@ clubAdminApp.directive('clubActiveState', function($location) {
 
 });
 
-clubAdminApp.directive('helpbox', function($location) {
+
+
+angular.module('app.cis').directive('helpbox', function($location) {
     return {
         restrict: 'E',
         transclude: true,
@@ -52,7 +54,9 @@ clubAdminApp.directive('helpbox', function($location) {
     }
 });
 
-clubAdminApp.directive('ngEnter', function() {
+
+
+angular.module('app.cis').directive('ngEnter', function() {
     return function(scope, element, attrs) {
         element.bind("keydown keypress", function(event) {
             if (event.which === 13) {
@@ -68,9 +72,11 @@ clubAdminApp.directive('ngEnter', function() {
     };
 });
 
-clubAdminApp.directive("scroll", function($window) {
+
+
+angular.module('app.cis').directive('scroll', function($window) {
     return function(scope, element, attrs) {
-        angular.element($window).bind("scroll", function() {
+        angular.element($window).bind('scroll', function() {
             if (this.pageYOffset >= 800) { // distance from top
                 scope.boolChangeClass = true;
             } else {

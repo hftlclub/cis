@@ -1,21 +1,3 @@
-var clubAdminApp = angular.module('clubAdminApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.dropdown',
-    'ui.bootstrap.modal', 'ui.bootstrap.datepicker', 'ui.ace', 'ngAudio', 'ngSanitize', 'cfp.hotkeys', 'angular-growl', 'ngAnimate'
-]);
-
-clubAdminApp.run(function($http) {
-    var token = (localStorage.getItem('accessToken')) ? localStorage.getItem('accessToken') : null;
-    $http.defaults.headers.common['X-Access-Token'] = token;
-});
-
-
-clubAdminApp.config(['growlProvider', function(growlProvider) {
-    growlProvider.globalTimeToLive(3000);
-    growlProvider.onlyUniqueMessages(false);
-    growlProvider.globalDisableCountDown(true);
-}]);
-
-
-
 /* hack to fix autofill bug (firefox triggers no event on autofilling forms) */
 function fixAutofillBug() {
     $('input[ng-model], select[ng-model]').each(function() {
@@ -23,7 +5,9 @@ function fixAutofillBug() {
     });
 }
 
-clubAdminApp.controller('MainController', function($scope, $rootScope, $route, $routeParams, $location, $interval, clubAuth, $timeout, $modal, $http, $anchorScroll, $window) {
+
+
+angular.module('app.cis').controller('MainController', function($scope, $rootScope, $route, $routeParams, $location, $interval, clubAuth, $timeout, $modal, $http, $anchorScroll, $window, appConf) {
     $scope.scrollToTop = function() {
         $anchorScroll('scrollToTopTarget');
     }
@@ -71,7 +55,7 @@ clubAdminApp.controller('MainController', function($scope, $rootScope, $route, $
         });
 
         modalInstance.result.then(function(data) {
-            $http.post(apiPath + '/feedback', data);
+            $http.post(appConf.api + '/feedback', data);
         });
     };
 
@@ -79,7 +63,7 @@ clubAdminApp.controller('MainController', function($scope, $rootScope, $route, $
 
 
 
-clubAdminApp.controller('IndexController', function($location, clubAuth) {
+angular.module('app.cis').controller('IndexController', function($location, clubAuth) {
 
     if (clubAuth.user) {
         $location.path('/settings');
@@ -92,7 +76,7 @@ clubAdminApp.controller('IndexController', function($location, clubAuth) {
 
 
 
-clubAdminApp.controller('FeedbackModalController', function($scope, $rootScope, $modalInstance) {
+angular.module('app.cis').controller('FeedbackModalController', function($scope, $rootScope, $modalInstance) {
     $scope.data = {};
     $scope.nameSet = false;
 

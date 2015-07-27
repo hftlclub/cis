@@ -1,4 +1,4 @@
-clubAdminApp.controller('memberListController', function($scope, $rootScope, $http, $routeParams, clubAuth) {
+angular.module('app.cis').controller('MemberListController', function($scope, $rootScope, $http, $routeParams, clubAuth, appConf) {
 
     $scope.members = {};
     $scope.members.data = null;
@@ -16,11 +16,11 @@ clubAdminApp.controller('memberListController', function($scope, $rootScope, $ht
         // show loading bar
         $scope.memberlistLoading = true;
 
-        $http.get(apiPath + '/members').
+        $http.get(appConf.api + '/members').
         success(function(data) {
             $scope.members.data = data;
 
-            $http.get(apiPath + '/keylist').
+            $http.get(appConf.api + '/keylist').
             success(function(data) {
                 $scope.members.data.forEach(function(user) {
                     data.forEach(function(key) {

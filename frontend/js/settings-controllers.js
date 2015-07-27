@@ -1,4 +1,4 @@
-clubAdminApp.controller('SettingsIndexController', function($scope, clubAuth) {
+angular.module('app.cis').controller('SettingsIndexController', function($scope, clubAuth, appConf) {
 
     $scope.settings = {};
 
@@ -11,7 +11,7 @@ clubAdminApp.controller('SettingsIndexController', function($scope, clubAuth) {
 
 });
 
-clubAdminApp.controller('SettingsChangePasswordController', function($scope, $http, $timeout, $location, growl) {
+angular.module('app.cis').controller('SettingsChangePasswordController', function($scope, $http, $timeout, $location, growl, appConf) {
 
     $scope.form = {};
     $scope.form.data = {};
@@ -21,7 +21,7 @@ clubAdminApp.controller('SettingsChangePasswordController', function($scope, $ht
     $scope.form.submit = submit;
 
     function submit() {
-        $http.post(apiPath + '/settings/changepassword', $scope.form.data).
+        $http.post(appConf.api + '/settings/changepassword', $scope.form.data).
         success(function(data) {
             $scope.form.data = {};
             $scope.form.errors = {};

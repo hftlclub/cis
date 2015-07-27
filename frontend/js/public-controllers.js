@@ -1,4 +1,4 @@
-clubAdminApp.controller('LoginController', function($scope, $http, $location, clubAuth, $modal, $timeout, ngAudio) {
+angular.module('app.cis').controller('LoginController', function($scope, $http, $location, clubAuth, $modal, $timeout, ngAudio, appConf) {
 
     $scope.login = {};
     $scope.login.data = {};
@@ -11,7 +11,7 @@ clubAdminApp.controller('LoginController', function($scope, $http, $location, cl
 
     function submit() {
         //fixAutofillBug();
-        $http.post(apiPath + '/login', {
+        $http.post(appConf.api + '/login', {
             'username': $scope.login.data.username,
             'password': $scope.login.data.password
         }).

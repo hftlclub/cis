@@ -1,4 +1,4 @@
-clubAdminApp.controller('userFormController', function($scope, $rootScope, $routeParams, $route, $http, $location, $modal, $timeout, clubAuth, growl) {
+angular.module('app.cis').controller('UserFormController', function($scope, $rootScope, $routeParams, $route, $http, $location, $modal, $timeout, clubAuth, growl, appConf) {
     var form = {};
     $scope.form = form;
 
@@ -22,7 +22,7 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
         }]
     };
 
-    $scope.keys = doorKeyList;
+    $scope.keys = appConf.doorKeyList;
 
     form.id = $routeParams.id;
     form.mode = $route.current.locals.clubMode;
@@ -54,15 +54,15 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 
         if (form.mode == 'add') {
             req.method = 'POST';
-            req.url = apiPath + '/user';
+            req.url = appConf.api + '/user';
 
         } else if (form.mode == 'edit') {
             req.method = 'PUT';
-            req.url = apiPath + '/user/' + form.id;
+            req.url = appConf.api + '/user/' + form.id;
 
         } else if (form.mode == 'profile') {
             req.method = 'PUT';
-            req.url = apiPath + '/settings/profile';
+            req.url = appConf.api + '/settings/profile';
         }
 
         $http(req).
@@ -116,7 +116,7 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
             //superuser edits other user
         } else if (clubAuth.user.superuser && form.mode == 'edit') {
 
-            $http.get(apiPath + '/user/' + form.id).
+            $http.get(appConf.api + '/user/' + form.id).
             success(function(data) {
                 form.data = data;
             });
@@ -150,7 +150,7 @@ clubAdminApp.controller('userFormController', function($scope, $rootScope, $rout
 
 
 
-clubAdminApp.controller('userListController', function($scope, $rootScope, $http, $routeParams, clubAuth, $modal, growl) {
+angular.module('app.cis').controller('UserListController', function($scope, $rootScope, $http, $routeParams, clubAuth, $modal, growl, appConf) {
 
     $scope.users = {};
     $scope.users.data = null;
@@ -166,7 +166,7 @@ clubAdminApp.controller('userListController', function($scope, $rootScope, $http
 
     function refresh() {
         $scope.userlistLoading = true;
-        $http.get(apiPath + '/user').
+        $http.get(appConf.api + '/user').
         success(function(data) {
             $scope.users.data = data;
             $scope.userlistLoading = false;
@@ -176,7 +176,7 @@ clubAdminApp.controller('userListController', function($scope, $rootScope, $http
     function remove(user) {
         var modal = $modal.open({
             templateUrl: 'templates/usermanage/deletemodal.html',
-            controller: 'delModalController',
+            controller: 'UserDelModalController',
             resolve: {
                 user: function() {
                     return $rootScope.user = user;
@@ -185,7 +185,7 @@ clubAdminApp.controller('userListController', function($scope, $rootScope, $http
         });
 
         modal.result.then(function() {
-            $http.delete(apiPath + '/user/' + user.username)
+            $http.delete(appConf.api + '/user/' + user.username)
                 .success(function(data) {
                     growl.success('Der Nutzer ' + user.username + ' wurde erfolgreich entfernt.');
                     refresh();
@@ -201,7 +201,7 @@ clubAdminApp.controller('userListController', function($scope, $rootScope, $http
     function resetpw(user) {
         var modal = $modal.open({
             templateUrl: 'templates/usermanage/passwordresetmodal.html',
-            controller: 'resetpwModalController',
+            controller: 'ResetPwModalController',
             resolve: {
                 user: function() {
                     return $rootScope.user = user;
@@ -210,7 +210,7 @@ clubAdminApp.controller('userListController', function($scope, $rootScope, $http
         });
 
         modal.result.then(function() {
-            $http.get(apiPath + '/user/' + user.username + '/resetPw')
+            $http.get(appConf.api + '/user/' + user.username + '/resetPw')
                 .success(function() {
                     growl.success('Passwort wurde zurückgesetzt.');
                 });
@@ -224,7 +224,7 @@ clubAdminApp.controller('userListController', function($scope, $rootScope, $http
 
 
 
-clubAdminApp.controller('delModalController', function($scope, $modalInstance, user) {
+angular.module('app.cis').controller('UserDelModalController', function($scope, $modalInstance, user) {
     $scope.ok = function() {
         $modal.close(user);
     };
@@ -235,7 +235,7 @@ clubAdminApp.controller('delModalController', function($scope, $modalInstance, u
 
 
 
-clubAdminApp.controller('resetpwModalController', function($scope, $modalInstance, user) {
+angular.module('app.cis').controller('ResetPwModalController', function($scope, $modalInstance, user) {
     $scope.ok = function() {
         $modal.close(user);
     };
