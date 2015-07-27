@@ -48,13 +48,13 @@
             <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-btn">
-                        <button class="btn" ng-class="{'btn-warning': memberFilter, 'btn-default disabled': !memberFilter}" ng-click="memberFilter = ''" type="button">
+                        <button class="btn" ng-class="{'btn-warning': listFilter, 'btn-default disabled': !listFilter}" ng-click="listFilter = ''" type="button">
                             Filter
-                            <span class="glyphicon glyphicon glyphicon-filter" ng-if="!memberFilter"></span>
-                            <span class="glyphicon glyphicon-remove" ng-if="memberFilter"></span>
+                            <span class="glyphicon glyphicon glyphicon-filter" ng-if="!listFilter"></span>
+                            <span class="glyphicon glyphicon-remove" ng-if="listFilter"></span>
                         </button>
                     </span>
-                    <input class="form-control" ng-model="memberFilter" placeholder="Mitgliederliste durchsuchen" type="text">
+                    <input class="form-control" ng-model="listFilter" placeholder="Mitgliederliste durchsuchen" type="text">
                 </div>
             </div>
         </form>
@@ -74,7 +74,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-class="{'text-muted': member.former}" ng-hide="formerHidden && member.former" ng-if="member.type != 'other'" ng-repeat="member in members.data | orderBy:attrs[orderByCol].order:reverseSort | filter:memberFilter">
+                <tr ng-class="{'text-muted': member.former}" ng-hide="formerHidden && member.former" ng-if="member.type != 'other'" ng-repeat="member in members.data | orderBy:attrs[orderByCol].order:reverseSort | filter:listFilter">
                     <td ng-if="attrs.index.state">{{ $index + 1 }}</td>
                     <td>{{ member.lastname }}, {{ member.firstname }}</td>
                     <td ng-if="attrs.alias.state">{{ member.alias }}</td>

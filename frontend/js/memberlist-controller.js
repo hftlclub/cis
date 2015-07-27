@@ -1,4 +1,5 @@
 angular.module('app.cis').controller('MemberListController', function($scope, $rootScope, $http, $routeParams, clubAuth, appConf) {
+    $scope.listFilter = '';
 
     $scope.members = {};
     $scope.members.data = null;

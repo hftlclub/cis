@@ -22,13 +22,13 @@
         <div class="form-group">
             <div class="input-group">
                 <span class="input-group-btn">
-                    <button class="btn" ng-class="{'btn-warning': userFilter, 'btn-default disabled': !userFilter}" ng-click="userFilter = ''" type="button">
+                    <button class="btn" ng-class="{'btn-warning': userFilter, 'btn-default disabled': !listFilter}" ng-click="listFilter = ''" type="button">
                         Filter
-                        <span class="glyphicon glyphicon glyphicon-filter" ng-if="!userFilter"></span>
+                        <span class="glyphicon glyphicon glyphicon-filter" ng-if="!listFilter"></span>
                         <span class="glyphicon glyphicon-remove" ng-if="userFilter"></span>
                     </button>
                 </span>
-                <input class="form-control" ng-model="userFilter" placeholder="Benutzerliste durchsuchen" type="text">
+                <input class="form-control" ng-model="listFilter" placeholder="Benutzerliste durchsuchen" type="text">
             </div>
         </div>
     </form>
@@ -51,7 +51,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="user in users.data | filter:users.filter.fn | orderBy:'lastname' | filter:userFilter" ng-class="{'text-muted': user.former}">
+            <tr ng-repeat="user in users.data | filter:users.filter.fn | orderBy:'lastname' | filter:listFilter" ng-class="{'text-muted': user.former}">
                 <td>{{ $index + 1 }}</td>
                 <td>{{ user.username }}</td>
                 <td>{{ user.lastname }}, {{ user.firstname }}</td>

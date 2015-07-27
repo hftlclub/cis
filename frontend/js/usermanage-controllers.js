@@ -151,6 +151,7 @@ angular.module('app.cis').controller('UserFormController', function($scope, $roo
 
 
 angular.module('app.cis').controller('UserListController', function($scope, $rootScope, $http, $routeParams, clubAuth, $modal, growl, appConf) {
+    $scope.listFilter = '';
 
     $scope.users = {};
     $scope.users.data = null;
