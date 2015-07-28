@@ -7,15 +7,10 @@ angular.module('app.cis').controller('UserFormController', function($scope, $roo
     form.errors = {};
     form.message = null;
 
-
-    console.log($rootScope.clubUser);
-    
-    //if
+    //if superuser edits their own profile, go to the "big" edit page
     if (form.mode == 'profile' && $rootScope.clubUser.superuser) {
         $location.path('/users/edit/' + $rootScope.clubUser.username);
     }
-    
-    console.log(form.mode);
     
 
     $scope.options = {
