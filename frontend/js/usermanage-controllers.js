@@ -132,17 +132,32 @@ angular.module('app.cis').controller('UserFormController', function($scope, $roo
     if (form.mode == 'add') {
         $scope.form.data.accessiondate = new Date();
     }
-    $scope.minDate = $scope.minDate ? null : new Date(2012, (10 - 1), 25);
-    $scope.maxDate = $scope.maxDate ? null : new Date();
 
-    $scope.dateOptions = {
-        'startingDay': 1,
-    };
-
-    $scope.format = 'dd.MM.yyyy';
-
-    $scope.datepicker = true;
-    $scope.birthdayPicker = false;
+    $scope.datePicker = {
+        format: 'dd.MM.yyyy',
+        options: {
+            formatYear: 'yy',
+            startingDay: 1
+        },
+        birthday: {
+          opened: false,
+          open: function($event) {
+              $event.preventDefault();
+              $event.stopPropagation();
+              this.opened = true;
+          },
+        },
+        accessiondate : {
+          opened: false,
+          minDate : new Date(2012, (10 - 1), 25),
+          maxDate : new Date(),
+          open: function($event) {
+              $event.preventDefault();
+              $event.stopPropagation();
+              this.opened = true;
+          },
+        }
+    }
 
 });
 
