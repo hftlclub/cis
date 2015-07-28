@@ -1,9 +1,11 @@
+<!-- ########## header ########-->
 <div class="page-header">
-    <h2 ng-if="form.mode=='profile'">Profil bearbeiten</h2>
+    <h2 ng-if="form.mode=='profile'">Dein Profil bearbeiten</h2>
     <h2 ng-if="form.mode=='add'">Benutzer hinzufügen</h2>
     <h2 ng-if="form.mode=='edit'">Benutzer bearbeiten</h2>
 </div>
 
+<!-- ########## helpboxes ########-->
 <helpbox ng-if="form.mode=='profile'" label="Hilfe" active="true">
     <div ng-include="'templates/helpbox/content/editProfile.html'"></div>
 </helpbox>
@@ -15,88 +17,89 @@
 <div class="row">
     <div class="col-md-8 col-md-offset-2">
 
+        <!-- ########## Formular start ########-->
         <form class="form-horizontal" role="form" ng-submit="form.submit()" ng-if="form.data">
 
-            <div class="form-group" ng-class="{'has-error has-feedback': form.errors.username}">
-                <label for="inputUsername" class="col-sm-3 control-label">Benutzername</label>
-                <div class="col-sm-9">
-                    <input type="text" ng-model="form.data.username" ng-disabled="(form.mode != 'add')" class="form-control" id="inputUsername" placeholder="Benutzername" tooltip-placement="right" tooltip-trigger="focus" tooltip="Benutzername: nur alphanumerisch in Kleinbuchstaben!">
-                    <span ng-if="form.errors.username" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+           <!-- ########## Username and Login-Shell ########-->
+            <div class="form-group" ng-init="showLoginShell = (form.data.superuser || form.mode != 'profile' || form.data.loginShell != '/bin/false')">
+                <div ng-class="{'has-error has-feedback': form.errors.username}">
+                    <label for="inputUsername" class="col-sm-3 control-label">Benutzername</label>
+                    <div ng-class="showLoginShell ? 'col-sm-3 col-lg-4' : 'col-sm-9'">
+                        <input type="text" ng-model="form.data.username" ng-disabled="(form.mode != 'add')" class="form-control" id="inputUsername" placeholder="Benutzername" tooltip-placement="right" tooltip-trigger="focus" tooltip="Benutzername: nur alphanumerisch in Kleinbuchstaben!">
+                        <span ng-if="form.errors.username" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group" ng-class="{'has-error has-feedback': form.errors.type}">
-                <label class="col-sm-3 control-label">Nutzerrechte</label>
-                <div class="col-sm-7">
-                    <select class="form-control" ng-options="opt.value as opt.label for opt in options.usertypes" ng-model="form.data.type" ng-disabled="(form.mode == 'profile')"></select>
-                </div>
-                <div class="col-sm-2">
-                    <div class="checkbox">
-                        <label>
-                            <input ng-model="form.data.superuser" ng-disabled="(form.mode == 'profile')" type="checkbox"> Superuser
-                        </label>
+                <div ng-class="{'has-error has-feedback': form.errors.loginShell}" ng-if="showLoginShell">
+                    <label for="inputLoginShell" class="col-sm-3 col-lg-2 control-label">Login-Shell</label>
+                    <div class="col-sm-3">
+                        <select class="form-control" ng-options="opt.value as opt.label for opt in options.shells" ng-model="form.data.loginShell" ng-disabled="(form.mode == 'profile')"></select>
                     </div>
                 </div>
             </div>
 
-            <div class="form-group" ng-class="{'has-error has-feedback': form.errors.loginShell}" ng-if="form.data.superuser">
-                <label for="inputLoginShell" class="col-sm-3 control-label">Login-Shell</label>
-                <div class="col-sm-9">
-                    <select class="form-control" ng-options="opt.value as opt.label for opt in options.shells" ng-model="form.data.loginShell" ng-disabled="(form.mode == 'profile')">
-                        <option ng-repeat="shell in shells" value="{{shell}}">{{shell}}</option>
-                    </select>
+            <!-- ########## user permissions, accessiondate ########-->
+            <div class="form-group">
+
+                <div ng-class="{'has-error has-feedback': form.errors.type}">
+                    <label class="col-sm-3 control-label">Nutzerrechte</label>
+                    <div ng-class="(form.data.type == 'club') ? 'col-sm-3 col-lg-4' : 'col-sm-9'">
+                        <select class="form-control" ng-options="opt.value as opt.label for opt in options.usertypes" ng-model="form.data.type" ng-disabled="(form.mode == 'profile')"></select>
+                    </div>
                 </div>
+
+                <div ng-if="form.data.type == 'club'" class="form-group" ng-class="{'has-error has-feedback': form.errors.accessiondate}">
+                    <label for="inputAccessiondate" class="col-sm-3 col-lg-2 control-label">Eintrittsdatum</label>
+                    <div class="col-sm-3">
+                      <p class="input-group datepicker">
+                          <input type="text" class="form-control" ng-disabled="(form.mode == 'profile')" ng-model="form.data.accessiondate" datepicker-popup="{{datePicker.format}}" placeholder="dd.mm.yyyy" is-open="datePicker.accessiondate.opened" datepicker-options="datePicker.options" min-date="datePicker.accessiondate.minDate" max-date="datePicker.accessiondate.maxDate" tooltip-placement="right" tooltip-trigger="focus" tooltip="Wann ist der Nutzer dem Club beigetreten?" />
+                          <span class="input-group-btn">
+                              <button type="button" class="btn btn-default" ng-click="datePicker.accessiondate.open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                          </span>
+                          <span ng-if="form.errors.accessiondate" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                      </p>
+                    </div>
+                </div>
+
             </div>
 
-
+            <!-- ########## checkboxes for groups and key permissions ########-->
             <div ng-if="form.data.type == 'club'" class="form-group" ng-class="{'has-error has-feedback': form.errors.role}">
-                <label for="inputKeyPermissions" class="col-sm-3 control-label">Schlüsselberechtigungen</label>
-                <div ng-repeat="key in keys" ng-if="form.data.type == 'club'" class="col-sm-offset-3 col-sm-9">
-                    <div class="checkbox">
-                        <label>
-                            <input ng-model="form.data.keyPermissions[key.key]" ng-disabled="(form.mode == 'profile')" type="checkbox"> {{key.key}} ({{key.name}})
-                        </label>
+
+                <div ng-if="form.data.type == 'club'" class="col-sm-offset-3 col-sm-4">
+                    <label>Rollen</label>
+                    <div ng-repeat="group in groups">
+                        <div class="checkbox" ng-hide="form.mode == 'profile' && !form.data[group.key]">
+                            <label>
+                                <input ng-model="form.data[group.key]" ng-disabled="(form.mode == 'profile')" type="checkbox">{{group.label}}
+                            </label>
+                        </div>
                     </div>
                 </div>
+
+                <div ng-if="form.data.type == 'club'" class="col-sm-offset-1 col-sm-4">
+                    <label>Schlüsselberechtigungen</label>
+                    <div ng-repeat="key in keys">
+                        <div class="checkbox">
+                            <label>
+                                <input ng-model="form.data.keyPermissions[key.key]" ng-disabled="(form.mode == 'profile')" type="checkbox"> {{key.key}} ({{key.name}})
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
+            <!-- ########## role ########-->
             <div class="form-group" ng-class="{'has-error has-feedback': form.errors.role}">
                 <label for="inputRole" class="col-sm-3 control-label">Position</label>
-                <div ng-class="form.data.type == 'club' ? 'col-sm-5' : 'col-sm-9'">
+                <div class="col-sm-9">
                     <input type="text" ng-model="form.data.role" ng-disabled="(form.mode == 'profile')" class="form-control" id="inputRole" placeholder="Position" tooltip-placement="top" tooltip-trigger="focus" tooltip="zusätzliche Position (z.B. Vorstandsmitglied, etc.)">
                     <span ng-if="form.errors.role" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                 </div>
-                <div ng-if="form.data.type == 'club'" class="col-sm-2">
-                    <div class="checkbox">
-                        <label>
-                            <input ng-model="form.data.honorary" ng-disabled="(form.mode == 'profile')" type="checkbox"> Ehrenmitglied
-                        </label>
-                    </div>
-                </div>
-                <div ng-if="form.data.type == 'club' && !(form.mode == 'profile' && !form.data.former)" class="col-sm-2">
-                    <div class="checkbox">
-                        <label>
-                            <input ng-model="form.data.former" ng-disabled="(form.mode == 'profile')" type="checkbox"> Ehemalig
-                        </label>
-                    </div>
-                </div>
             </div>
 
-
-            <div ng-if="form.data.type == 'club'" class="form-group" ng-class="{'has-error has-feedback': form.errors.accessiondate}">
-                <label for="inputAccessiondate" class="col-sm-3 control-label">Eintrittsdatum</label>
-                <div class="col-sm-9">
-                  <p class="input-group datepicker">
-                      <input type="text" class="form-control" ng-disabled="(form.mode == 'profile')" ng-model="form.data.accessiondate" datepicker-popup="{{datePicker.format}}" placeholder="dd.mm.yyyy" is-open="datePicker.accessiondate.opened" datepicker-options="datePicker.options" min-date="datePicker.accessiondate.minDate" max-date="datePicker.accessiondate.maxDate" tooltip-placement="right" tooltip-trigger="focus" tooltip="Hier kannst du deinen Geburtstag eintragen." />
-                      <span class="input-group-btn">
-                          <button type="button" class="btn btn-default" ng-click="datePicker.accessiondate.open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-                      </span>
-                      <span ng-if="form.errors.accessiondate" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-                  </p>
-                </div>
-            </div>
-
-
+            <!-- ########## E-Mail ########-->
             <div class="form-group" ng-class="{'has-error has-feedback': form.errors.email}">
                 <label for="inputEmail" class="col-sm-3 control-label">E-Mail</label>
                 <div ng-class="form.mode == 'add' ? 'col-sm-5' : 'col-sm-9'">
@@ -112,22 +115,21 @@
                 </div>
             </div>
 
-            <div class="form-group" ng-class="{'has-error has-feedback': form.errors.firstname}">
-                <label for="inputFirstname" class="col-sm-3 control-label">Vorname</label>
-                <div class="col-sm-9">
-                    <input type="text" ng-model="form.data.firstname" class="form-control" id="inputFirstname" placeholder="Vorname" tooltip-placement="right" tooltip-trigger="focus" tooltip="Wie lautet der Vorname?">
+            <hr>
+
+            <!-- ########## Name inputs ########-->
+            <div class="form-group">
+                <label for="inputFirstname" class="col-sm-3 control-label">Name</label>
+                <div class="col-sm-5" ng-class="{'has-error has-feedback': form.errors.firstname}">
+                    <input type="text" ng-model="form.data.firstname" class="form-control" id="inputFirstname" placeholder="Vorname">
                     <span ng-if="form.errors.firstname" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                 </div>
-            </div>
 
-            <div class="form-group" ng-class="{'has-error has-feedback': form.errors.lastname}">
-                <label for="inputLastname" class="col-sm-3 control-label">Nachname</label>
-                <div class="col-sm-9">
-                    <input type="text" ng-model="form.data.lastname" class="form-control" id="inputLastname" placeholder="Nachname" tooltip-placement="right" tooltip-trigger="focus" tooltip="Wie lautet der Nachname?">
+                <div class="col-sm-4" ng-class="{'has-error has-feedback': form.errors.lastname}">
+                    <input type="text" ng-model="form.data.lastname" class="form-control" id="inputLastname" placeholder="Nachname">
                     <span ng-if="form.errors.lastname" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                 </div>
             </div>
-
             <div class="form-group" ng-class="{'has-error has-feedback': form.errors.alias}">
                 <label for="inputAlias" class="col-sm-3 control-label">Spitzname</label>
                 <div class="col-sm-9">
@@ -136,6 +138,16 @@
                 </div>
             </div>
 
+            <hr>
+
+            <!-- ########## telephone and birthday ########-->
+             <div class="form-group" ng-class="{'has-error has-feedback': form.errors.tel}">
+                <label for="inputTel" class="col-sm-3 control-label">Telefon</label>
+                <div class="col-sm-9">
+                    <input type="text" ng-model="form.data.tel" class="form-control" id="inputTel" placeholder="Telefon" tooltip-placement="right" tooltip-trigger="focus" tooltip="Unter welcher Nummer kann man dich erreichen?">
+                    <span ng-if="form.errors.tel" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                </div>
+            </div>
             <div class="form-group" ng-class="{'has-error has-feedback': form.errors.birthday}">
                 <label for="inputBirthday" class="col-sm-3 control-label">Geburtstag</label>
                 <div class="col-sm-9">
@@ -149,38 +161,28 @@
                 </div>
             </div>
 
+            <!-- ########## Adress ########-->
             <div class="form-group" ng-class="{'has-error has-feedback': form.errors.street}">
-                <label for="inputStreet" class="col-sm-3 control-label">Straße, Hausnummer</label>
+                <label for="inputStreet" class="col-sm-3 control-label">Adresse</label>
                 <div class="col-sm-9">
                     <input type="text" ng-model="form.data.street" class="form-control" id="inputStreet" placeholder="Straße, Hausnummer" tooltip-placement="right" tooltip-trigger="focus" tooltip="Wo wohnst du?">
                     <span ng-if="form.errors.street" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                 </div>
             </div>
-
-            <div class="form-group" ng-class="{'has-error has-feedback': form.errors.zip}">
-                <label for="inputZip" class="col-sm-3 control-label">PLZ</label>
-                <div class="col-sm-9">
-                    <input type="text" ng-model="form.data.zip" class="form-control" id="inputZip" placeholder="PLZ" tooltip-placement="right" tooltip-trigger="focus" tooltip="Wo wohnst du?">
+            <div class="form-group">
+                <div class="col-xs-3 col-sm-2 col-sm-offset-3" ng-class="{'has-error has-feedback': form.errors.zip}">
+                    <input type="text" ng-model="form.data.zip" class="form-control" id="inputZip" placeholder="PLZ">
                     <span ng-if="form.errors.zip" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                 </div>
-            </div>
-
-            <div class="form-group" ng-class="{'has-error has-feedback': form.errors.city}">
-                <label for="inputCity" class="col-sm-3 control-label">Stadt</label>
-                <div class="col-sm-9">
+                <div class="col-xs-9 col-sm-7" ng-class="{'has-error has-feedback': form.errors.city}">
                     <input type="text" ng-model="form.data.city" class="form-control" id="inputCity" placeholder="Stadt" tooltip-placement="right" tooltip-trigger="focus" tooltip="Wo wohnst du?">
                     <span ng-if="form.errors.city" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                 </div>
             </div>
 
-            <div class="form-group" ng-class="{'has-error has-feedback': form.errors.tel}">
-                <label for="inputTel" class="col-sm-3 control-label">Telefon</label>
-                <div class="col-sm-9">
-                    <input type="text" ng-model="form.data.tel" class="form-control" id="inputTel" placeholder="Telefon" tooltip-placement="right" tooltip-trigger="focus" tooltip="Unter welcher Nummer kann man dich erreichen?">
-                    <span ng-if="form.errors.tel" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-                </div>
-            </div>
+            <hr>
 
+            <!-- ########## teamdrive ########-->
             <div class="form-group" ng-class="{'has-error has-feedback': form.errors.teamdrive}">
                 <label for="inputTD" class="col-sm-3 control-label">Teamdrive-Account</label>
                 <div class="col-sm-9">
@@ -189,17 +191,17 @@
                 </div>
             </div>
 
+            <!-- ########## Formular buttons ########-->
             <div class="form-group">
                 <div class="col-sm-offset-3">
                     <button type="submit" ng-if="(form.mode == 'edit') || (form.mode == 'profile')" class="btn btn-default">Speichern</button>
                     <button type="submit" ng-if="(form.mode == 'add')" class="btn btn-default">Hinzufügen</button>
-
                     <a ng-if="(form.mode == 'profile')" class="btn btn-danger" href="#/settings">Abbrechen</a>
                     <a ng-if="(form.mode == 'edit') || (form.mode == 'add')" class="btn btn-danger" href="#/users">Abbrechen</a>
                 </div>
             </div>
 
-
         </form>
+
     </div>
 </div>

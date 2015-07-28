@@ -4,24 +4,29 @@ angular.module('app.cis').factory('clubAuth', function($http, $location, $rootSc
     $rootScope.clubAuth = clubAuth;
 
     clubAuth.refresh = function() {
-
-        $http.get(appConf.api + '/userdata').
-        success(function(data) {
-            clubAuth.user = data;
-            $rootScope.$broadcast('clubAuthRefreshed');
-            $rootScope.clubUser = data;
-
-            if ($location.path() == '/login') $location.path('/');
-
-        }).
-        error(function(data, status) {
-            clubAuth.user = {};
-            $rootScope.$broadcast('clubAuthRefreshed');
-            $rootScope.clubUser = {};
-
-            if (!isPublicPage($location.path()))
-                $location.path('/login');
-
+        return new Promise(function(resolve, reject){
+            $http.get(appConf.api + '/userdata').
+            success(function(data) {
+                clubAuth.user = data;
+                $rootScope.$broadcast('clubAuthRefreshed');
+                $rootScope.clubUser = data;
+    
+                if ($location.path() == '/login') $location.path('/');
+                
+                resolve();
+    
+            }).
+            error(function(data, status) {
+                clubAuth.user = {};
+                $rootScope.$broadcast('clubAuthRefreshed');
+                $rootScope.clubUser = {};
+    
+                if (!isPublicPage($location.path()))
+                    $location.path('/login');
+                
+                reject();
+                
+            });
         });
     }
 
@@ -35,9 +40,9 @@ angular.module('app.cis').factory('clubAuth', function($http, $location, $rootSc
         clubAuth.refresh();
     }
 
-    $rootScope.$on('$locationChangeStart', function() {
+    /*$rootScope.$on('$locationChangeStart', function() {
         clubAuth.refresh();
-    });
+    });*/
 
 
 
