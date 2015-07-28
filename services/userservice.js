@@ -275,7 +275,7 @@ exports.addUser = function(data, callback) {
             
             groupsadd.forEach(function(row) {
                 var action = 0;
-                if (row.hasOwnProperty(condition)) {
+                if (row.hasOwnProperty('condition')) {
                     if (row.condition) action = 1;
                 } else {
                     action = 1;
