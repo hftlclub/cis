@@ -39,7 +39,7 @@
                 </div>
             </div>
 
-            <div class="form-group" ng-class="{'has-error has-feedback': form.errors.loginShell}" ng-if="form.data.superuser">
+            <div class="form-group" ng-class="{'has-error has-feedback': form.errors.loginShell}" ng-if="form.data.superuser || form.mode != 'profile' || form.data.loginShell != '/bin/false'">
                 <label for="inputLoginShell" class="col-sm-3 control-label">Login-Shell</label>
                 <div class="col-sm-9">
                     <select class="form-control" ng-options="opt.value as opt.label for opt in options.shells" ng-model="form.data.loginShell" ng-disabled="(form.mode == 'profile')">
