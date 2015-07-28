@@ -106,6 +106,8 @@ exports.edituser = function(req, res, next) {
         type: req.body.type,
         former: req.body.former,
         honorary: req.body.honorary,
+        executive: req.body.executive,
+        applicant: req.body.applicant,
         alias: req.body.alias,
         email: req.body.email,
         firstname: req.body.firstname,
@@ -132,7 +134,7 @@ exports.edituser = function(req, res, next) {
 
 
 
-    //you can only change superuser state of others
+    //you can only change superuser state of others (not your own)
     if (uid != req.user.username) {
         data.superuser = req.body.superuser;
     } else {
@@ -140,11 +142,12 @@ exports.edituser = function(req, res, next) {
     }
 
     //loginShell only for superusers
-    if (data.superuser) {
+    /*if (data.superuser) {
         data.loginShell = req.body.loginShell;
     } else {
         data.loginShell = '/bin/false';
-    }
+    }*/
+    if(!req.body.loginShell) req.body.loginShell = '/bin/false';
 
     //edit user!
     userservice.editUser(uid, data, function(err, success) {
