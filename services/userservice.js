@@ -104,7 +104,7 @@ exports.getUserByUid = function(uid, callback) {
             exports.getGroupsByUid(uid, function(err, groups) {
                 
                 //set flags according to groups user belongs to
-                var groups = [
+                var groupsadd = [
                     {
                         group: 'clubadmins',
                         key: 'superuser'
@@ -127,7 +127,7 @@ exports.getUserByUid = function(uid, callback) {
                     },
                 ];
                 
-                groups.forEach(function(row) {
+                groupsadd.forEach(function(row) {
                     user[row.key] = (groups.indexOf(row.group) >= 0) ? true : false;
                 });
                 
