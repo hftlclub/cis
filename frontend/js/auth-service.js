@@ -33,11 +33,12 @@ angular.module('app.cis').factory('clubAuth', function($http, $location, $rootSc
     clubAuth.logout = function() {
         $http.get(appConf.api + '/logout').
         success(function() {
-            clubAuth.refresh();
+            clubAuth.refresh().then(function(){}, function(){});
         });
         localStorage.removeItem('accessToken');
         $http.defaults.headers.common['X-Access-Token'] = null;
-        clubAuth.refresh();
+        
+        clubAuth.refresh().then(function(){}, function(){});
     }
 
     /*$rootScope.$on('$locationChangeStart', function() {

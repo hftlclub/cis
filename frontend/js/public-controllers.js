@@ -9,6 +9,8 @@ angular.module('app.cis').controller('LoginController', function($scope, $http, 
 
     $scope.chord = ngAudio.load('media/cismajor.mp3');
 
+    clubAuth.refresh().then(function(){}, function(){});
+
     function submit() {
         //fixAutofillBug();
         $http.post(appConf.api + '/login', {
@@ -16,18 +18,15 @@ angular.module('app.cis').controller('LoginController', function($scope, $http, 
             'password': $scope.login.data.password
         }).
         success(function(data) {
-            setMessage('success');
             localStorage.setItem('accessToken', data.token);
             $http.defaults.headers.common['X-Access-Token'] = data.token;
 
 
             $scope.chord.play();
 
-            clubAuth.refresh();
+            clubAuth.refresh().then(function(){}, function(){});
         }).
-        error(function(data, status) {
-            setMessage('invalid');
-        });
+        error(function(data, status) {  });
 
     }
 

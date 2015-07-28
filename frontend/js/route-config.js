@@ -16,14 +16,12 @@ angular.module('app.cis').config(function($routeProvider) {
     $routeProvider.
     when('/', {
         controller: 'IndexController',
-        template: '',
-        resolve: { refresh: refreshAuth }
+        template: ''
     }).
 
     when('/login', {
         templateUrl: 'templates/login.html',
-        controller: 'LoginController',
-        resolve: { refresh: refreshAuth }
+        controller: 'LoginController'
     }).
 
     /* settings */
