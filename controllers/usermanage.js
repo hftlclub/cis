@@ -119,6 +119,7 @@ exports.edituser = function(req, res, next) {
         teamdrive: req.body.teamdrive,
         role: req.body.role,
         birthday: req.body.birthday,
+        loginShell: req.body.loginShell,
         keyPermissions: req.body.keyPermissions
     };
 
@@ -141,13 +142,8 @@ exports.edituser = function(req, res, next) {
         data.superuser = req.user.superuser;
     }
 
-    //loginShell only for superusers
-    /*if (data.superuser) {
-        data.loginShell = req.body.loginShell;
-    } else {
-        data.loginShell = '/bin/false';
-    }*/
-    if(!req.body.loginShell) req.body.loginShell = '/bin/false';
+    //sanitize 
+    if(!data.loginShell) data.loginShell = '/bin/false';
 
     //edit user!
     userservice.editUser(uid, data, function(err, success) {
