@@ -1,6 +1,22 @@
 angular.module('app.cis').controller('UserFormController', function($scope, $rootScope, $routeParams, $route, $http, $location, $modal, $timeout, clubAuth, growl, appConf) {
     var form = {};
     $scope.form = form;
+    
+    form.id = $routeParams.id;
+    form.mode = $route.current.locals.clubMode;
+    form.errors = {};
+    form.message = null;
+
+
+    console.log($rootScope.clubUser);
+    
+    //if
+    if (form.mode == 'profile' && $rootScope.clubUser.superuser) {
+        $location.path('/users/edit/' + $rootScope.clubUser.username);
+    }
+    
+    console.log(form.mode);
+    
 
     $scope.options = {
         shells: [{
@@ -23,11 +39,30 @@ angular.module('app.cis').controller('UserFormController', function($scope, $roo
     };
 
     $scope.keys = appConf.doorKeyList;
+    $scope.groups = [
+        {
+            key: 'former',
+            label: 'Ehemalig'
+        },
+        {
+            key: 'honorary',
+            label: 'Ehrenmitglied'
+        },
+        {
+            key: 'superuser',
+            label: 'Superuser'
+        },
+        {
+            key: 'applicant',
+            label: 'Anwärter'
+        },
+        {
+            key: 'executive',
+            label: 'Vorstand'
+        }
+    ];
+    
 
-    form.id = $routeParams.id;
-    form.mode = $route.current.locals.clubMode;
-    form.errors = {};
-    form.message = null;
 
     form.submit = submit;
 
