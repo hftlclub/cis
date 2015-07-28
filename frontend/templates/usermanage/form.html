@@ -85,14 +85,14 @@
 
             <div ng-if="form.data.type == 'club'" class="form-group" ng-class="{'has-error has-feedback': form.errors.accessiondate}">
                 <label for="inputAccessiondate" class="col-sm-3 control-label">Eintrittsdatum</label>
-                <div ng-class="datepicker ? 'col-sm-4' : 'col-sm-9'">
-                    <input ng-focus="datepicker = true" type="text" class="form-control" ng-disabled="(form.mode == 'profile')" ng-model="form.data.accessiondate" datepicker-popup="{{format}}" tooltip-placement="bottom" tooltip-trigger="focus" tooltip="Wann ist der Nutzer dem Club beigetreten?" />
-                    <span ng-if="form.errors.accessiondate" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-                </div>
-                <div ng-if="form.mode != 'profile'" class="col-sm-5">
-                    <div class="pull-right" style="display:inline-block; min-height:200px;">
-                        <datepicker ng-model="form.data.accessiondate" min-date="minDate" datepicker-options="dateOptions" max-date="maxDate" class="well well-sm"></datepicker>
-                    </div>
+                <div class="col-sm-9">
+                  <p class="input-group datepicker">
+                      <input type="text" class="form-control" ng-disabled="(form.mode == 'profile')" ng-model="form.data.accessiondate" datepicker-popup="{{datePicker.format}}" placeholder="dd.mm.yyyy" is-open="datePicker.accessiondate.opened" datepicker-options="datePicker.options" min-date="datePicker.accessiondate.minDate" max-date="datePicker.accessiondate.maxDate" tooltip-placement="right" tooltip-trigger="focus" tooltip="Hier kannst du deinen Geburtstag eintragen." />
+                      <span class="input-group-btn">
+                          <button type="button" class="btn btn-default" ng-click="datePicker.accessiondate.open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                      </span>
+                      <span ng-if="form.errors.accessiondate" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                  </p>
                 </div>
             </div>
 
@@ -136,6 +136,19 @@
                 </div>
             </div>
 
+            <div class="form-group" ng-class="{'has-error has-feedback': form.errors.birthday}">
+                <label for="inputBirthday" class="col-sm-3 control-label">Geburtstag</label>
+                <div class="col-sm-9">
+                    <p class="input-group datepicker">
+                        <input type="text" class="form-control" ng-model="form.data.birthday" datepicker-popup="{{datePicker.format}}" placeholder="dd.mm.yyyy" is-open="datePicker.birthday.opened" datepicker-options="datePicker.options" tooltip-placement="right" tooltip-trigger="focus" tooltip="Hier kannst du deinen Geburtstag eintragen." />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="datePicker.birthday.open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                        <span ng-if="form.errors.birthday" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                    </p>
+                </div>
+            </div>
+
             <div class="form-group" ng-class="{'has-error has-feedback': form.errors.street}">
                 <label for="inputStreet" class="col-sm-3 control-label">Straße, Hausnummer</label>
                 <div class="col-sm-9">
@@ -176,19 +189,6 @@
                 </div>
             </div>
 
-            <div class="form-group" ng-class="{'has-error has-feedback': form.errors.birthday}">
-                <label for="inputBirthday" class="col-sm-3 control-label">Geburtstag</label>
-                <div ng-class="birthdayPicker ? 'col-sm-4' : 'col-sm-9'">
-                    <input ng-focus="birthdayPicker = true" type="text" class="form-control" ng-model="form.data.birthday" datepicker-popup="{{format}}" placeholder="dd.mm.yyyy" tooltip-placement="right" tooltip-trigger="focus" tooltip="Hier kannst du deinen Geburtstag eintragen." />
-                    <span ng-if="form.errors.birthday" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-                </div>
-                <div ng-if="birthdayPicker" class="col-sm-5">
-                    <div class="pull-right" style="display:inline-block; min-height:200px;">
-                        <datepicker ng-model="form.data.birthday" datepicker-options="dateOptions" max-date="maxDate" class="well well-sm"></datepicker>
-                    </div>
-                </div>
-            </div>
-
             <div class="form-group">
                 <div class="col-sm-offset-3">
                     <button type="submit" ng-if="(form.mode == 'edit') || (form.mode == 'profile')" class="btn btn-default">Speichern</button>
@@ -197,9 +197,9 @@
                     <a ng-if="(form.mode == 'profile')" class="btn btn-danger" href="#/settings">Abbrechen</a>
                     <a ng-if="(form.mode == 'edit') || (form.mode == 'add')" class="btn btn-danger" href="#/users">Abbrechen</a>
                 </div>
-
-
             </div>
+
+
         </form>
     </div>
 </div>
