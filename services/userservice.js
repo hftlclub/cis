@@ -86,7 +86,7 @@ exports.checkpassword = function(uid, password, callback) {
 //get one user by uid
 exports.getUserByUid = function(uid, callback) {
     var opts = {
-        'attributes': userLDAPAttrs()
+        'attributes': userldapattrs
     };
 
     ldap.client.search(uidtodn(uid), opts, function(err, res) {
@@ -200,44 +200,44 @@ exports.addUser = function(data, callback) {
     }*/
     
     if (data.loginShell) {
-        user[getLDAPAttrName('loginShell')] = data.loginShell;
+        user[ldapattrs['loginShell']] = data.loginShell;
     }
 
     if (data.street) {
-        user[getLDAPAttrName('street')] = data.street;
+        user[ldapattrs['street']] = data.street;
     }
 
     if (data.zip) {
-        user[getLDAPAttrName('zip')] = data.zip;
+        user[ldapattrs['zip']] = data.zip;
     }
 
     if (data.city) {
-        user[getLDAPAttrName('city')] = data.city;
+        user[ldapattrs['city']] = data.city;
     }
 
     if (data.tel) {
-        user[getLDAPAttrName('tel')] = data.tel;
+        user[ldapattrs['tel']] = data.tel;
     }
 
     if (data.teamdrive) {
-        user[getLDAPAttrName('teamdrive')] = data.teamdrive;
+        user[ldapattrs['teamdrive']] = data.teamdrive;
     }
 
     if (data.role) {
-        user[getLDAPAttrName('role')] = data.role;
+        user[ldapattrs['role']] = data.role;
     }
 
     if (data.alias) {
-        user[getLDAPAttrName('alias')] = data.alias;
+        user[ldapattrs['alias']] = data.alias;
     }
 
     if (data.birthday) {
-        user[getLDAPAttrName('birthday')] = data.birthday;
+        user[ldapattrs['birthday']] = data.birthday;
     }
 
     //accessiondate for clubmembers only
     if (data.accessiondate && data.type == 'club') {
-        user[getLDAPAttrName('accessiondate')] = data.accessiondate;
+        user[ldapattrs['accessiondate']] = data.accessiondate;
     }
 
     //add user to LDAP tree
@@ -323,7 +323,7 @@ exports.editUser = function(uid, data, callback) {
     //go through sent data
     for (var key in data) {
         //find LDAP key name
-        var ldapattr = getLDAPAttrName(key);
+        var ldapattr = ldapattrs[key];
         if (!ldapattr) continue;
 
         //modification
@@ -481,7 +481,7 @@ exports.getUsers = function(callback) {
         if (err) return callback(err);
 
         var opts = {
-            'attributes': userLDAPAttrs(),
+            'attributes': userldapattrs,
             'scope': 'one'
         };
 
