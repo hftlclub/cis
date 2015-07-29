@@ -1,10 +1,10 @@
-angular.module('app.cis').factory('clubAuth', function($http, $location, $rootScope, appConf) {
+angular.module('app.cis').factory('clubAuth', function($http, $location, $rootScope, $q, appConf) {
     var clubAuth = {};
 
     $rootScope.clubAuth = clubAuth;
 
     clubAuth.refresh = function() {
-        return new Promise(function(resolve, reject){
+        return $q(function(resolve, reject){
             $http.get(appConf.api + '/userdata').
             success(function(data) {
                 clubAuth.user = data;
