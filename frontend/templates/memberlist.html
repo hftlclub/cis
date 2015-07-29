@@ -76,7 +76,13 @@
             <tbody>
                 <tr ng-class="{'text-muted': member.former}" ng-hide="formerHidden && member.former" ng-if="member.type != 'other'" ng-repeat="member in members.data | orderBy:attrs[orderByCol].order:reverseSort | filter:listFilter">
                     <td ng-if="attrs.index.state">{{ $index + 1 }}</td>
-                    <td>{{ member.lastname }}, {{ member.firstname }}</td>
+                    <td>
+                        {{ member.lastname }}, {{ member.firstname }}
+                        <div class="pull-right">
+                            <span ng-if="member.applicant" class="glyphicon glyphicon-asterisk text-primary" title="Anwärter"></span>
+                            <span ng-if="member.executive" class="glyphicon glyphicon-tower text-danger" title="Vorstand"></span>
+                        </div>
+                    </td>
                     <td ng-if="attrs.alias.state">{{ member.alias }}</td>
                     <td ng-if="attrs.tel.state">
                         <a class="hidden-print" href="tel:{{ member.tel }}" ng-if="member.tel">{{ member.tel }}</a>
@@ -86,7 +92,13 @@
                         <a class="hidden-print" href="mailto:{{ member.email }}" ng-if="member.email">{{ member.email }}</a>
                         <span class="visible-print" ng-if="member.email">{{ member.email }}</span>
                     </td>
-                    <td ng-if="attrs.role.state">{{ member.role }}</td>
+                    <td ng-if="attrs.role.state">
+                        {{ member.role }}
+                        <div class="pull-right">
+                            <span ng-if="member.honorary" class="glyphicon glyphicon-star text-danger" title="Ehrenmitglied"></span>
+                        </div>
+                        
+                    </td>
                     <td ng-if="attrs.td.state">{{ member.teamdrive }}</td>
                     <td ng-if="attrs.addr.state">{{ member.street }}
                         <br>{{ member.zip }} {{ member.city }}</td>
@@ -100,7 +112,6 @@
                     <td>
                         <span class="label label-success" ng-if="!member.former">Aktiv</span>
                         <span class="label label-default" ng-if="member.former">Ehemalig</span>
-                        <span class="pull-right glyphicon glyphicon-star text-danger" ng-if="member.honorary" title="Ehrenmitglied"></span>
                     </td>
                     <td class="text-center hidden-print" ng-if="isSuperuser" style="width: 33px">
                         <a class="btn btn-xs btn-default" ng-href="#/users/edit/{{member.username}}" type="button">
