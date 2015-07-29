@@ -95,6 +95,7 @@
                     <td ng-if="attrs.role.state">
                         {{ member.role }}
                         <div class="pull-right">
+                            <span ng-if="member.superuser && isSuperuser" class="glyphicon glyphicon-user" title="Superuser"></span>
                             <span ng-if="member.honorary" class="glyphicon glyphicon-star text-danger" title="Ehrenmitglied"></span>
                         </div>
                         
