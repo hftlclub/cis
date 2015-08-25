@@ -17,22 +17,23 @@ angular.module('app.cis').controller('MemberListController', function($scope, $r
         // show loading bar
         $scope.memberlistLoading = true;
 
-        $http.get(appConf.api + '/members').
-        success(function(data) {
-            $scope.members.data = data;
+        $http.get(appConf.api + '/members')
+          .success(function(data) {
+              $scope.members.data = data;
 
-            $http.get(appConf.api + '/keylist').
-            success(function(data) {
-                $scope.members.data.forEach(function(user) {
-                    data.forEach(function(key) {
-                        if (user.username == key.username)
-                            user.keyPermissions = key.keyPermissions;
+              $http.get(appConf.api + '/keylist')
+                .success(function(data) {
+                    $scope.members.data.forEach(function(user) {
+                        data.forEach(function(key) {
+                            if (user.username == key.username)
+                                user.keyPermissions = key.keyPermissions;
+                        });
                     });
                 });
-                // hide loading bar
-                $scope.memberlistLoading = false;
-            });
-        });
+
+              // hide loading bar
+              $scope.memberlistLoading = false;
+          });
 
     }
 
