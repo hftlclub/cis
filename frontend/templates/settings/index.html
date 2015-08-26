@@ -1,10 +1,59 @@
-<div class="row">
-    <div class="col-lg-offset-2 col-lg-4 col-md-offset-2 col-md-4 offset-sm-0 col-sm-6 col-xs-12">
-        <a ng-href="#/settings/changepassword" type="button" class="btn btn-default btn-lg btn-block btn-xl">
-            <span class="glyphicon glyphicon-lock"></span> Passwort ändern</a>
+<div class="page-header">
+    <h2>Einstellungen</h2>
+</div>
+<!--
+<div class="media">
+  <div class="media-left">
+    <a ng-href="#/settings/changepassword" type="button" class="btn btn-default btn-lg">
+        <span class="glyphicon glyphicon-lock"></span> Passwort ändern
+    </a>
+  </div>
+  <div class="media-body">
+    <h4 class="media-heading">Passwort ändern</h4>
+    Hier kannst du dein eigenes passwort ändern. Beachte, dass nach Änderung des Passwortes sich auch dein WLAN Passwort ändert.
+  </div>
+</div>
+<div class="media">
+  <div class="media-left">
+    <a ng-href="#/settings/profile" type="button" class="btn btn-default btn-lg">
+        <span class="glyphicon glyphicon-user"></span>
+    </a>
+  </div>
+  <div class="media-body">
+    <h4 class="media-heading">Profildaten bearbeiten</h4>
+    Hier kannst du die Details zu deinem Profil bearbeiten.
+  </div>
+</div>
+
+-->
+
+<div class="list-group">
+
+  <a ng-href="#/settings/changepassword" class="list-group-item">
+    <div class="row">
+      <div style="width:50px; float:left;">
+        <h2 style="margin: 0px; padding: 2px 0px 0px 10px;">
+          <span class="glyphicon glyphicon-lock"></span>
+        </h2>
+      </div>
+      <div>
+        <h4 class="list-group-item-heading">Passwort ändern</h4>
+        <p class="list-group-item-text hidden-xs">Hier kannst du dein eigenes Passwort ändern.</p>
+      </div>
     </div>
-    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-        <a ng-href="#/settings/profile" type="button" class="btn btn-default btn-lg btn-block btn-xl">
-            <span class="glyphicon glyphicon-user"></span> Profil bearbeiten</a>
+  </a>
+
+  <a ng-href="#/settings/profile" class="list-group-item">
+    <div class="row">
+      <div style="width:50px; float:left;">
+        <h2 style="margin: 0px; padding: 2px 0px 0px 10px;">
+          <span class="glyphicon glyphicon-user"></span>
+        </h2>
+      </div>
+      <div>
+        <h4 class="list-group-item-heading">Profildaten bearbeiten</h4>
+        <p class="list-group-item-text hidden-xs">Hier kannst du die Details zu deinem Profil bearbeiten.</p>
+      </div>
     </div>
+  </a>
 </div>

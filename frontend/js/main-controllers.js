@@ -68,7 +68,7 @@ angular.module('app.cis').controller('IndexController', function($location, club
     clubAuth.refresh().then(function(){}, function(){});
 
     if (clubAuth.user) {
-        $location.path('/settings');
+        $location.path('/');
     } else {
         $location.path('/login');
     }

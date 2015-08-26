@@ -1,0 +1,19 @@
+	<!--
+    <img src="img/stecker.svg" width="60%"/>
+  -->
+
+<div class="jumbotron">
+  <h1>Herzlich Willkommen im CIS <span class="pull-right glyphicon glyphicon-heart"></span></h1>
+  <p>
+    Im <b>C</b>lub <b>I</b>nformation <b>S</b>ystem findest du wichtige Informationen über unseren Club.
+    <br>
+    Die wichtigesten Funktionen sind:
+  </p>
+
+  <p>
+    <a class="btn btn-primary btn-lg" ng-href="#/settings" role="button"><span class="glyphicon glyphicon-cog"></span> Mein Profil</a>
+    <a ng-if="user.type=='club'" class="btn btn-primary btn-lg" ng-href="#/memberlist" role="button"><span class="glyphicon glyphicon-user"></span> Mitgliederliste</a>
+    <a ng-if="user.type=='club'" class="btn btn-primary btn-lg" ng-href="#/protocols" role="button"><span class="glyphicon glyphicon-file"></span> Protokolle</a>
+    <a class="btn btn-primary btn-lg" ng-href="#/wlan" role="button"><span class="glyphicon glyphicon-signal"></span> Nutzung des WLAN</a>
+  </p>
+</div>

@@ -10,13 +10,13 @@ angular.module('app.cis').config(function($routeProvider) {
     var refreshAuth = function (clubAuth){
         return clubAuth.refresh();
     }
-    
-    
+
+
 
     $routeProvider.
     when('/', {
-        controller: 'IndexController',
-        template: ''
+        templateUrl: 'templates/landingPage.html',
+        controller: 'IndexController'
     }).
 
     when('/login', {
@@ -140,6 +140,13 @@ angular.module('app.cis').config(function($routeProvider) {
     when('/protocols/show/:id', {
         templateUrl: 'templates/protocols/details.html',
         controller: 'ProtocolDetailController',
+        resolve: { refresh: refreshAuth }
+    }).
+
+    /* WLAN documentation */
+
+    when('/wlan', {
+        templateUrl: 'templates/wlan.html',
         resolve: { refresh: refreshAuth }
     }).
 
