@@ -81,7 +81,7 @@ api.put('/user/:uid', jwtauth, reqm('auth'), reqm('su'), usermanageController.ed
 api.delete('/user/:uid', jwtauth, reqm('auth'), reqm('su'), usermanageController.deleteuser);
 api.get('/user/:uid/resetPw', jwtauth, reqm('auth'), reqm('su'), usermanageController.resetPassword);
 
-api.get('/keylist', jwtauth, reqm('auth'), reqm('su'), keylistController.getDoorKeyList);
+api.get('/keylist', jwtauth, reqm('auth'), reqm('club'), keylistController.getDoorKeyList);
 api.get('/keylist/:accesskey', reqm('pubaccess'), keylistController.getDoorKeyList);
 
 
