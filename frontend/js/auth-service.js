@@ -1,4 +1,4 @@
-angular.module('app.cis').factory('clubAuth', function($http, $location, $rootScope, $q, appConf) {
+angular.module('app.cis').factory('clubAuth', function($http, $location, $rootScope, $q, growl, appConf) {
     var clubAuth = {};
 
     $rootScope.clubAuth = clubAuth;
@@ -33,6 +33,7 @@ angular.module('app.cis').factory('clubAuth', function($http, $location, $rootSc
     clubAuth.logout = function() {
         $http.get(appConf.api + '/logout').
         success(function() {
+            growl.success('Du wurdest abgemeldet!');
             clubAuth.refresh().then(function(){}, function(){});
         });
         localStorage.removeItem('accessToken');
@@ -41,9 +42,6 @@ angular.module('app.cis').factory('clubAuth', function($http, $location, $rootSc
         clubAuth.refresh().then(function(){}, function(){});
     }
 
-    /*$rootScope.$on('$locationChangeStart', function() {
-        clubAuth.refresh();
-    });*/
 
 
 

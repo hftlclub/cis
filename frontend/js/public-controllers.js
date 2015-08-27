@@ -1,10 +1,7 @@
-angular.module('app.cis').controller('LoginController', function($scope, $http, $location, clubAuth, $modal, $timeout, ngAudio, appConf) {
+angular.module('app.cis').controller('LoginController', function($scope, $http, $location, clubAuth, $modal, $timeout, ngAudio, growl, appConf) {
 
     $scope.login = {};
     $scope.login.data = {};
-    $scope.login.message = null;
-    $scope.login.status = null;
-
     $scope.login.submit = submit;
 
     $scope.chord = ngAudio.load('media/cismajor.mp3');
@@ -20,28 +17,15 @@ angular.module('app.cis').controller('LoginController', function($scope, $http, 
         success(function(data) {
             localStorage.setItem('accessToken', data.token);
             $http.defaults.headers.common['X-Access-Token'] = data.token;
-
-
+            
+            growl.success('Erfolgreich angemeldet!');
             $scope.chord.play();
 
             clubAuth.refresh().then(function(){}, function(){});
         }).
-        error(function(data, status) {  });
+        error(function(data, status) { 
+            growl.error('Benutzername oder Passwort nicht korrekt.');
+        });
 
     }
-
-    var setMessagePromise;
-
-    function setMessage(key) {
-        if (setMessagePromise) {
-            $timeout.cancel(setMessagePromise);
-            setMessagePromise = null;
-        }
-
-        $scope.login.message = key;
-        setMessagePromise = $timeout(function() {
-            $scope.login.message = null;
-        }, 5000);
-    }
-
 });
