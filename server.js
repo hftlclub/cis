@@ -106,5 +106,5 @@ app.use(express.static(__dirname + '/frontend'));
 
 //start server
 app.listen(config.port, function(err) {
-    console.log('Club Admin started on port ' + config.port);
+    console.log('CIS Server started on port ' + config.port);
 });
