@@ -1,4 +1,4 @@
-var xlsx = require('node-xlsx');
+//var xlsx = require('node-xlsx');
 var moment = require('moment');
 var config = require('../config');
 var membersservice = require('../services/membersservice');
@@ -16,7 +16,7 @@ exports.listmembers = function(req, res, next) {
 
 
 
-exports.makexlsx = function(req, res, next) {
+/*exports.makexlsx = function(req, res, next) {
     membersservice.getMembers(function(err, members) {
         if (err) return next(err);
 
@@ -46,4 +46,4 @@ exports.makexlsx = function(req, res, next) {
         }]);
         res.send(buffer);
     });
-}
+}*/

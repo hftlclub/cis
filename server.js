@@ -60,7 +60,7 @@ api.post('/settings/changepassword', jwtauth, reqm('auth'), settingsController.c
 api.put('/settings/profile', jwtauth, reqm('auth'), settingsController.changeprofile);
 
 api.get('/members', jwtauth, reqm('auth'), reqm('club'), membersController.listmembers);
-api.get('/members/xlsx', jwtauth, reqm('auth'), reqm('club'), membersController.makexlsx);
+//api.get('/members/xlsx', jwtauth, reqm('auth'), reqm('club'), membersController.makexlsx);
 
 
 //protocols
