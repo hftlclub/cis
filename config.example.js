@@ -41,8 +41,22 @@ exports.mailsettings = {
 };
 
 
+exports.seafile = {
+    token: 'abcdefg123456789',
+    url: 'https://url.to.sf',
+    usersuffix: '@hftl.club',
+    groups: { //internal key : seafile group ID
+        werbung: 1,
+        vorstand: 2,
+        technik: 3,
+        finanzen: 4,
+        allgemein: 5
+    }
+}
+
+
 //recipient for feedback emails
-exports.feedbackmail = "ferdinand.malcher@hft-leipzig.de, mail@d-koppenhagen.de";
+exports.feedbackmail = "mail@ferdinand-malcher.de, mail@d-koppenhagen.de";
 
 //list of all door keys
 exports.doorkeys = ["26", "180", "181", "182", "183"];
