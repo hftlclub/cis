@@ -62,7 +62,7 @@ angular.module('app.cis').controller('MemberListController', function($scope, $r
     $scope.orderByCol = 'status';
     $scope.reverseSort = 0;
 
-    $scope.attrlist = ['index', 'name', 'alias', 'tel', 'email', 'role', 'td', 'addr', 'birthday', 'accdate', 'keyPermissions', 'status'];
+    $scope.attrlist = ['index', 'name', 'alias', 'tel', 'email', 'role', 'addr', 'birthday', 'accdate', 'keyPermissions', 'status'];
     $scope.attrs = {
         'index': {
             'label': 'Nr.',
@@ -90,11 +90,6 @@ angular.module('app.cis').controller('MemberListController', function($scope, $r
             'order': 'role',
             'state': true,
             'label': 'Rolle/Position'
-        },
-        'td': {
-            'order': 'teamdrive',
-            'state': false,
-            'label': 'TeamDrive'
         },
         'addr': {
             'state': false,

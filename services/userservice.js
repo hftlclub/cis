@@ -20,7 +20,6 @@ var userattrs = {
     'mail': 'email',
     'telephoneNumber': 'tel',
     'loginShell': 'loginShell',
-    'registeredAddress': 'teamdrive',
     'employeeType': 'role',
     'title': 'alias',
     'dialupAccess': 'birthday',
@@ -212,10 +211,6 @@ exports.addUser = function(data, callback) {
 
     if (data.tel) {
         user[ldapattrs['tel']] = data.tel;
-    }
-
-    if (data.teamdrive) {
-        user[ldapattrs['teamdrive']] = data.teamdrive;
     }
 
     if (data.role) {

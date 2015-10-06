@@ -116,7 +116,6 @@ exports.edituser = function(req, res, next) {
         zip: req.body.zip,
         city: req.body.city,
         tel: req.body.tel,
-        teamdrive: req.body.teamdrive,
         role: req.body.role,
         birthday: req.body.birthday,
         loginShell: req.body.loginShell,
@@ -142,7 +141,7 @@ exports.edituser = function(req, res, next) {
         data.superuser = req.user.superuser;
     }
 
-    //sanitize 
+    //sanitize
     if(!data.loginShell) data.loginShell = '/bin/false';
 
     //edit user!
