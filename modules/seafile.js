@@ -41,11 +41,33 @@ exports.createUser = function(user) {
 }
 
 
+
+exports.updateUser = function(username, update) {
+    return new Promise(function(resolve, reject) {
+        update.email = username + config.seafile.usersuffix;
+
+        sf.updateAccount(update, function(err) {
+            if (err) {
+                console.log(err);
+                reject();
+                return;
+            }
+
+            resolve();
+        });
+    });
+
+}
+
+
+
+
+
 exports.deleteUser = function(username) {
     return new Promise(function(resolve, reject) {
         var email = username + config.seafile.usersuffix;
 
-        exports.removeFromAllGroups(username).then(function(){
+        exports.removeFromAllGroups(username).then(function() {
             sf.deleteAccount(email, function(err) {
                 if (err) {
                     console.log(err);
@@ -61,10 +83,10 @@ exports.deleteUser = function(username) {
 
 
 
-exports.removeFromAllGroups = function(username){
+exports.removeFromAllGroups = function(username) {
     return new Promise(function(resolve, reject) {
         var proms = [];
-        for(var key in config.seafile.groups){
+        for (var key in config.seafile.groups) {
             proms.push(exports.removeFromGroup(username, key));
         }
         Promise.all(proms).then(resolve).catch(reject);

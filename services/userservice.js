@@ -2,6 +2,7 @@ var ldapjs = require('ldapjs');
 var ssha = require('ssha');
 var smbhash = require('smbhash');
 var moment = require('moment');
+var Promise = require('promise');
 var ldap = require('../modules/ldap');
 var config = require('../config');
 var seafile = require('../modules/seafile');
@@ -240,12 +241,12 @@ exports.addUser = function(data, callback) {
 
         //add user to seafile
         seafile.createUser(data).then(function() {
-            if(data.type == 'club'){
+            if (data.type == 'club') {
                 //add club users to "allgemein" group, but not the applicants
-                if(!data.applicant) seafile.addToGroup(data.username, 'allgemein');
+                if (!data.applicant) seafile.addToGroup(data.username, 'allgemein');
 
                 //add executives to "vorstand" group
-                if(data.executive) seafile.addToGroup(data.username, 'vorstand');
+                if (data.executive) seafile.addToGroup(data.username, 'vorstand');
 
                 //other users will have no pre-assigned groups
             }
@@ -352,6 +353,27 @@ exports.editUser = function(uid, data, callback) {
     ldap.client.modify(uidtodn(uid), changes, function(err) {
         if (err) return callback(err);
 
+        //update seafile user
+        var sfupdate = {};
+        sfupdate.name = (data.firstname && data.lastname) ? data.firstname + ' ' + data.lastname : null;
+        sfupdate.is_active = (data.former) ? 0 : 1; //deactivate former users
+        sfupdate.is_staff = (data.superuser) ? 1 : 0;
+
+        seafile.updateUser(uid, sfupdate);
+
+        if (data.type == 'club') {
+            //add club users to "allgemein" group, but not the applicants
+            if (!data.applicant) seafile.addToGroup(uid, 'allgemein');
+
+            //add executives to "vorstand" group
+            if (data.executive) seafile.addToGroup(uid, 'vorstand');
+            else seafile.removeFromGroup(uid, 'vorstand');
+
+            //other users have no pre-assigned groups and thus, will not be changed
+        }
+
+
+
         //set groups: add user to given group but also remove them from the other groups
         if ('superuser' in data) {
             if (data.superuser) {
@@ -441,7 +463,7 @@ exports.deleteUser = function(uid, callback) {
         }
 
         //remove user from seafile
-        seafile.deleteUser(uid).then(function(){console.log('deleted');}).catch(function(){console.log('del caught');});
+        seafile.deleteUser(uid);
 
         return callback();
     });
