@@ -1,8 +1,17 @@
 Hallo {name},
-dein Passwort für das Clubnetzwerk / CIS wurde zurückgesetzt.
+Dein Passwort für das Clubnetzwerk / CIS wurde zurückgesetzt.
 
 Benutzername: {username}
 Passwort: {password}
 
-Bitte logge dich in das ClubInformationsSystem ein und ändere dein Passwort:
+Bitte logge Dich ins CIS ein und ändere Dein Passwort:
 https://cis.hftl.club
+
+
+
+Deinen Account brauchst Du für diese Dienste:
+1) Club-WLAN (hftl_club)
+2) CIS Club Information System: https://cis.hftl.club
+3) ClubDrive: https://drive.hftl.club (Login: {username}@hftl.club)
+4) Infoscreen (Fernseher): https://screen.hftl.club
+5) Netzwerkdosen im Club
