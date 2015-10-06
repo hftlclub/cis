@@ -490,6 +490,10 @@ exports.setPassword = function(uid, password, callback) {
 
     ldap.client.modify(uidtodn(uid), changes, function(err) {
         if (err) return callback(err);
+
+        //edit seafile user
+        seafile.updateUser(uid, { password: password });
+
         return callback();
     });
 }
