@@ -440,6 +440,9 @@ exports.deleteUser = function(uid, callback) {
             exports.removeFromGroup(uid, 'door' + config.doorkeys[i], function(err, success) {});
         }
 
+        //remove user from seafile
+        seafile.deleteUser(uid).then(function(){console.log('deleted');}).catch(function(){console.log('del caught');});
+
         return callback();
     });
 }

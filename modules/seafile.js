@@ -41,19 +41,81 @@ exports.createUser = function(user) {
 }
 
 
-exports.addToGroup = function(username, group){
+exports.deleteUser = function(username) {
+    return new Promise(function(resolve, reject) {
+        var email = username + config.seafile.usersuffix;
+
+        exports.removeFromAllGroups(username).then(function(){
+            sf.deleteAccount(email, function(err) {
+                if (err) {
+                    console.log(err);
+                    reject();
+                    return;
+                }
+
+                resolve();
+            });
+        });
+    });
+}
+
+
+
+exports.removeFromAllGroups = function(username){
+    return new Promise(function(resolve, reject) {
+        var proms = [];
+        for(var key in config.seafile.groups){
+            proms.push(exports.removeFromGroup(username, key));
+        }
+        Promise.all(proms).then(resolve).catch(reject);
+    });
+}
+
+
+
+exports.addToGroup = function(username, group) {
     return new Promise(function(resolve, reject) {
         var email = username + config.seafile.usersuffix;
 
         //get seafile group ID for this group string
         var gid = config.seafile.groups[group];
 
-        if(!gid){
+        if (!gid) {
             reject();
         }
 
         //add user to group
         sf.addGroupMember({
+            user_name: email,
+            group_id: gid,
+        }, function(err) {
+            if (err) {
+                reject();
+                return;
+            }
+
+            resolve();
+        });
+
+    });
+}
+
+
+
+
+exports.removeFromGroup = function(username, group) {
+    return new Promise(function(resolve, reject) {
+        var email = username + config.seafile.usersuffix;
+
+        //get seafile group ID for this group string
+        var gid = config.seafile.groups[group];
+
+        if (!gid) {
+            reject();
+        }
+
+        //add user to group
+        sf.deleteGroupMember({
             user_name: email,
             group_id: gid,
         }, function(err) {
