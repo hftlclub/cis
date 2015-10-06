@@ -4,7 +4,7 @@ var smbhash = require('smbhash');
 var moment = require('moment');
 var ldap = require('../modules/ldap');
 var config = require('../config');
-
+var seafile = require('../modules/seafile');
 
 
 var userattrs = {
@@ -102,37 +102,31 @@ exports.getUserByUid = function(uid, callback) {
 
             //get groups for user
             exports.getGroupsByUid(uid, function(err, groups) {
-                
+
                 //set flags according to groups user belongs to
-                var groupsadd = [
-                    {
-                        group: 'clubadmins',
-                        key: 'superuser'
-                    },
-                    {
-                        group: 'clubformer',
-                        key: 'former'
-                    },
-                    {
-                        group: 'clubhonorary',
-                        key: 'honorary'
-                    },
-                    {
-                        group: 'clubapplicants',
-                        key: 'applicant'
-                    },
-                    {
-                        group: 'clubexec',
-                        key: 'executive'
-                    },
-                ];
-                
+                var groupsadd = [{
+                    group: 'clubadmins',
+                    key: 'superuser'
+                }, {
+                    group: 'clubformer',
+                    key: 'former'
+                }, {
+                    group: 'clubhonorary',
+                    key: 'honorary'
+                }, {
+                    group: 'clubapplicants',
+                    key: 'applicant'
+                }, {
+                    group: 'clubexec',
+                    key: 'executive'
+                }, ];
+
                 groupsadd.forEach(function(row) {
                     user[row.key] = (groups.indexOf(row.group) >= 0) ? true : false;
                 });
-                
+
                 /**********/
-                
+
                 //sort into usertype groups
                 if (groups.indexOf('clubmembers') >= 0) {
                     user.type = 'club';
@@ -198,7 +192,7 @@ exports.addUser = function(data, callback) {
     } else {
         user[getLDAPAttrName('loginShell')] = '/bin/false';
     }*/
-    
+
     if (data.loginShell) {
         user[ldapattrs['loginShell']] = data.loginShell;
     }
@@ -244,6 +238,20 @@ exports.addUser = function(data, callback) {
     ldap.client.add(uidtodn(user.uid), user, function(err) {
         if (err) return callback(err);
 
+        //add user to seafile
+        seafile.createUser(data).then(function() {
+            if(data.type == 'club'){
+                //add club users to "allgemein" group, but not the applicants
+                if(!data.applicant) seafile.addToGroup(data.username, 'allgemein');
+
+                //add executives to "vorstand" group
+                if(data.executive) seafile.addToGroup(data.username, 'vorstand');
+
+                //other users will have no pre-assigned groups
+            }
+        });
+
+
 
         //set groups
         if (data.superuser) {
@@ -251,28 +259,24 @@ exports.addUser = function(data, callback) {
         }
 
         if (data.type == 'club') {
-            var groupsadd = [
-                {
-                    group: 'clubmembers'
-                },
-                {
-                    group: 'clubformer',
-                    condition: data.former
-                },
-                {
-                    group: 'clubhonorary',
-                    condition: data.honorary
-                },
-                {
-                    group: 'clubapplicants',
-                    condition: data.applicant
-                },
-                {
-                    group: 'clubexec',
-                    condition: data.executive
-                }
-            ];
-            
+
+            //find groups to add user to
+            var groupsadd = [{
+                group: 'clubmembers'
+            }, {
+                group: 'clubformer',
+                condition: data.former
+            }, {
+                group: 'clubhonorary',
+                condition: data.honorary
+            }, {
+                group: 'clubapplicants',
+                condition: data.applicant
+            }, {
+                group: 'clubexec',
+                condition: data.executive
+            }];
+
             groupsadd.forEach(function(row) {
                 var action = 0;
                 if (row.hasOwnProperty('condition')) {
@@ -364,36 +368,31 @@ exports.editUser = function(uid, data, callback) {
                 exports.removeFromGroup(uid, 'clubothers', function(err, success) {});
 
                 //optional groups
-                var groupsopt = [
-                    {
-                        group: 'clubformer',
-                        condition: data.former
-                    },
-                    {
-                        group: 'clubhonorary',
-                        condition: data.honorary
-                    },
-                    {
-                        group: 'clubapplicants',
-                        condition: data.applicant
-                    },
-                    {
-                        group: 'clubexec',
-                        condition: data.executive
-                    }
-                ];
-                
+                var groupsopt = [{
+                    group: 'clubformer',
+                    condition: data.former
+                }, {
+                    group: 'clubhonorary',
+                    condition: data.honorary
+                }, {
+                    group: 'clubapplicants',
+                    condition: data.applicant
+                }, {
+                    group: 'clubexec',
+                    condition: data.executive
+                }];
+
                 groupsopt.forEach(function(row) {
                     if (row.condition) exports.addToGroup(uid, row.group, function(err, success) {});
                     else exports.removeFromGroup(uid, row.group, function(err, success) {});
                 });
-                
-                
+
+
 
             } else { //others and undefined
                 exports.addToGroup(uid, 'clubothers', function(err, success) {});
                 var groupsremove = ['clubmembers', 'clubformer', 'clubhonorary', 'clubexec', 'clubapplicants'];
-                
+
                 groupsremove.forEach(function(row) {
                     exports.removeFromGroup(uid, row, function(err, success) {});
                 });
@@ -432,11 +431,11 @@ exports.deleteUser = function(uid, callback) {
 
         //remove user from groups
         var groupsremove = ['clubmembers', , 'clubothers', 'clubadmins', 'clubformer', 'clubhonorary', 'clubexec', 'clubapplicants'];
-                
+
         groupsremove.forEach(function(row) {
             exports.removeFromGroup(uid, row, function(err, success) {});
         });
-        
+
         for (var i = 0; i < config.doorkeys.length; i++) {
             exports.removeFromGroup(uid, 'door' + config.doorkeys[i], function(err, success) {});
         }
@@ -521,10 +520,10 @@ exports.getUsers = function(callback) {
 
                         } else if (groups[i].cn == 'clubhonorary') {
                             user.honorary = true;
-                        
+
                         } else if (groups[i].cn == 'clubapplicants') {
                             user.applicant = true;
-                        
+
                         } else if (groups[i].cn == 'clubexec') {
                             user.executive = true;
                         }
