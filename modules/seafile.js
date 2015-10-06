@@ -13,19 +13,19 @@ exports.createUser = function(user) {
         //create user first
         sf.createAccount({
             email: email,
-            password: user.password,
-            is_staff: user.superuser
-        }, function(err) {
+            password: user.password
+        }, function(err, body) {
             if (err) {
-                console.log(err);
+                console.log(err, body);
                 reject();
                 return;
             }
 
-            //set name for user
             sf.updateAccount({
                 email: email,
-                name: name
+                name: name,
+                is_active: !user.former, //former users are inactive
+                is_staff: user.superuser
             }, function(err) {
                 if (err) {
                     console.log(err);
