@@ -95,6 +95,18 @@ exports.removeFromAllGroups = function(username) {
 
 
 
+exports.addToAllGroups = function(username) {
+    return new Promise(function(resolve, reject) {
+        var proms = [];
+        for (var key in config.seafile.groups) {
+            proms.push(exports.addToGroup(username, key));
+        }
+        Promise.all(proms).then(resolve).catch(reject);
+    });
+}
+
+
+
 exports.addToGroup = function(username, group) {
     return new Promise(function(resolve, reject) {
         var email = username + config.seafile.usersuffix;

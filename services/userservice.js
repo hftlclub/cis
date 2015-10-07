@@ -240,8 +240,8 @@ exports.addUser = function(data, callback) {
                 //add club users to "allgemein" group, but not the applicants
                 if (!data.applicant) seafile.addToGroup(data.username, 'allgemein');
 
-                //add executives to "vorstand" group
-                if (data.executive) seafile.addToGroup(data.username, 'vorstand');
+                //add executives to all groups
+                if (data.executive) seafile.addToAllGroups(data.username);
 
                 //other users will have no pre-assigned groups
             }
@@ -360,8 +360,8 @@ exports.editUser = function(uid, data, callback) {
             //add club users to "allgemein" group, but not the applicants
             if (!data.applicant) seafile.addToGroup(uid, 'allgemein');
 
-            //add executives to "vorstand" group
-            if (data.executive) seafile.addToGroup(uid, 'vorstand');
+            //add executives to all groups / remove non-executives from "vorstand" group
+            if (data.executive) seafile.addToAllGroups(uid);
             else seafile.removeFromGroup(uid, 'vorstand');
 
             //other users have no pre-assigned groups and thus, will not be changed
