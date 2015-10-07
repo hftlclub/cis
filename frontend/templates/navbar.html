@@ -1,40 +1,66 @@
 <ul class="nav navbar-nav">
-	<li club-active-state>
-		<a ng-href="#/settings">
-			<span class="glyphicon glyphicon-cog"></span> Einstellungen
+  <li club-active-state>
+    <a ng-href="#/settings">
+      <span class="glyphicon glyphicon-cog"></span>
+      Einstellungen
+    </a>
+  </li>
+  <li club-active-state ng-if="user.superuser">
+    <a ng-href="#/users">
+      <span class="glyphicon glyphicon-user"></span>
+      Benutzer
+    </a>
+  </li>
+  <li club-active-state ng-if="user.type=='club'">
+    <a ng-href="#/memberlist">
+      <span class="glyphicon glyphicon-list"></span>
+      Mitgliederliste
+    </a>
+  </li>
+  <li club-active-state ng-if="user.type=='club' && user.superuser">
+    <a ng-href="#/keylist">
+      <span class="glyphicon glyphicon-list-alt"></span>
+      Schlüsselliste
+    </a>
+  </li>
+  <li club-active-state ng-if="user.type=='club'">
+    <a ng-href="#/protocols">
+      <span class="glyphicon glyphicon-file"></span>
+      Protokolle
+    </a>
+  </li>
+
+
+	<li club-active-state ng-if="user.type=='club'" dropdown>
+		<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" dropdown-toggle>
+			<span class="glyphicon glyphicon-share"></span> Dienste
 		</a>
+		<ul class="dropdown-menu" role="menu">
+			<li>
+				<a href="https://drive.hftl.club/" target="_blank"><span class="glyphicon glyphicon-hdd"></span> ClubDrive</a>
+			</li>
+			<li>
+				<a href="https://screen.hftl.club/" target="_blank"><span class="glyphicon glyphicon-info-sign"></span> Infoscreen</a>
+			</li>
+			<li>
+				<a href="https://pad.hftl.club/" target="_blank"><span class="glyphicon glyphicon-edit"></span> ClubPad</a>
+			</li>
+		</ul>
 	</li>
-	<li ng-if="user.superuser" club-active-state>
-		<a ng-href="#/users">
-			<span class="glyphicon glyphicon-user"></span> Benutzer
-		</a>
-	</li>
-	<li ng-if="user.type=='club'" club-active-state>
-		<a ng-href="#/memberlist">
-			<span class="glyphicon glyphicon-list"></span> Mitgliederliste
-		</a>
-	</li>
-	<li ng-if="user.type=='club' && user.superuser" club-active-state>
-		<a ng-href="#/keylist">
-			<span class="glyphicon glyphicon-list-alt"></span> Schlüsselliste
-		</a>
-	</li>
-	<li ng-if="user.type=='club'" club-active-state>
-		<a ng-href="#/protocols">
-			<span class="glyphicon glyphicon-file"></span> Protokolle
-		</a>
-	</li>
+
 </ul>
 
 <div class="navbar-right">
-	<p class="navbar-text">
-		<b><a href="#/settings/profile" class="navbar-link">{{ user.username }}</a></b>
-		<span ng-if="user.superuser" class="clubUserType">(Superuser)</span>
-		<span ng-if="!user.superuser">
-			<span ng-if="user.type=='club'" class="clubUserType">(Club)</span>
-			<span ng-if="user.type=='other'" class="clubUserType">(Extern)</span>
-		</span>
-	</p>
+  <p class="navbar-text">
+    <b>
+      <a class="navbar-link" href="#/settings/profile">{{ user.username }}</a>
+    </b>
+    <span class="clubUserType" ng-if="user.superuser">(Superuser)</span>
+    <span ng-if="!user.superuser">
+      <span class="clubUserType" ng-if="user.type=='club'">(Club)</span>
+      <span class="clubUserType" ng-if="user.type=='other'">(Extern)</span>
+    </span>
+  </p>
 
-	<button type="button" class="btn btn-xs btn-default navbar-btn navbar-right" ng-click="nav.logout()">Logout</button>
+  <button class="btn btn-xs btn-default navbar-btn navbar-right" ng-click="nav.logout()" type="button">Logout</button>
 </div>
