@@ -117,8 +117,7 @@ angular.module('app.cis').controller('MemberListController', function($scope, $r
     }
 
     $scope.formerFilter = function() {
-        if ($scope.formerHidden) $scope.formerHidden = false
-        else $scope.formerHidden = true;
+        $scope.formerHidden = !$scope.formerHidden;
     };
 
     $scope.isBirthday = function(birthday) {
