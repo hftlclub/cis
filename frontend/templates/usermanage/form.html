@@ -21,25 +21,26 @@
         <form class="form-horizontal" role="form" ng-submit="form.submit()" ng-if="form.data">
 
            <!-- ########## Username and Login-Shell ########-->
-            <div class="form-group" ng-init="showLoginShell = (form.data.superuser || form.mode != 'profile' || form.data.loginShell != '/bin/false')">
+            <div class="form-group required" ng-init="showLoginShell = (form.data.superuser || form.mode != 'profile' || form.data.loginShell != '/bin/false')">
                 <div ng-class="{'has-error has-feedback': form.errors.username}">
                     <label for="inputUsername" class="col-sm-3 control-label">Benutzername</label>
-                    <div ng-class="showLoginShell ? 'col-sm-3 col-lg-4' : 'col-sm-9'">
+                    <div class="col-sm-9">
                         <input type="text" ng-model="form.data.username" ng-disabled="(form.mode != 'add')" class="form-control" id="inputUsername" placeholder="Benutzername" tooltip-placement="right" tooltip-trigger="focus" tooltip="Benutzername: nur alphanumerisch in Kleinbuchstaben!">
                         <span ng-if="form.errors.username" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                     </div>
                 </div>
-
-                <div ng-class="{'has-error has-feedback': form.errors.loginShell}" ng-if="showLoginShell">
-                    <label for="inputLoginShell" class="col-sm-3 col-lg-2 control-label">Login-Shell</label>
-                    <div class="col-sm-3">
+            </div>
+            <div class="form-group" ng-if="showLoginShell">
+                <div ng-class="{'has-error has-feedback': form.errors.loginShell}">
+                    <label for="inputLoginShell" class="col-sm-3 control-label">Login-Shell</label>
+                    <div class="col-sm-9">
                         <select class="form-control" ng-options="opt.value as opt.label for opt in options.shells" ng-model="form.data.loginShell" ng-disabled="(form.mode == 'profile')"></select>
                     </div>
                 </div>
             </div>
 
             <!-- ########## user permissions, accessiondate ########-->
-            <div class="form-group">
+            <div class="form-group required">
 
                 <div ng-class="{'has-error has-feedback': form.errors.type}">
                     <label class="col-sm-3 control-label">Nutzerrechte</label>
@@ -100,7 +101,7 @@
             </div>
 
             <!-- ########## E-Mail ########-->
-            <div class="form-group" ng-class="{'has-error has-feedback': form.errors.email}">
+            <div class="form-group required" ng-class="{'has-error has-feedback': form.errors.email}">
                 <label for="inputEmail" class="col-sm-3 control-label">E-Mail</label>
                 <div ng-class="form.mode == 'add' ? 'col-sm-5' : 'col-sm-9'">
                     <input type="text" ng-model="form.data.email" class="form-control" id="inputEmail" placeholder="E-Mail" tooltip-placement="top" tooltip-trigger="focus" tooltip="Deine E-Mail Adresse für Club-Mails">
@@ -118,7 +119,7 @@
             <hr>
 
             <!-- ########## Name inputs ########-->
-            <div class="form-group">
+            <div class="form-group required">
                 <label for="inputFirstname" class="col-sm-3 control-label">Name</label>
                 <div class="col-sm-5" ng-class="{'has-error has-feedback': form.errors.firstname}">
                     <input type="text" ng-model="form.data.firstname" class="form-control" id="inputFirstname" placeholder="Vorname">

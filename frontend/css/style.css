@@ -134,3 +134,9 @@ span.largeicon {
     border-radius: 10px;
     background-color: #ffffff;
 }
+
+/* mark mandatory form fields with an asterisk */
+.form-group.required .control-label:after { 
+    content:"\00A0 *";
+    color:red;
+}
