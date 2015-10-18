@@ -1,5 +1,5 @@
 angular.module('app.cis', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.dropdown',
-    'ui.bootstrap.modal', 'ui.bootstrap.datepicker', 'ui.ace', 'ngAudio', 'ngSanitize', 'cfp.hotkeys', 'angular-growl', 'ngAnimate'
+    'ui.bootstrap.modal', 'ui.bootstrap.datepicker', 'ui.ace', 'ngAudio', 'ngSanitize', 'cfp.hotkeys', 'angular-growl', 'ngAnimate', 'datatables'
 ]);
 
 
