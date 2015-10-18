@@ -88,7 +88,7 @@
                     <span ng-if="attendants.count.guests" class="label label-default" title="Gäste">{{attendants.count.guests}}</span>
                 </span>
                 <input type="text" ng-model="attendants.input" ng-enter="attendants.addFromForm()" class="form-control" id="inputAttendants" typeahead="attendee for attendee in users | filter:$viewValue | limitTo:8" placeholder="Anwesende Personen" tooltip-placement="right"
-                tooltip-trigger="focus" tooltip="Welche Mitglieder sind anwesend?">
+                tooltip-trigger="focus" tooltip="Welche Mitglieder sind anwesend?" autocomplete="off">
                 <span ng-if="form.errors.attendants" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
             </div>
         </div>
@@ -104,9 +104,9 @@
                     <button type="button" class="btn btn-xs" ng-class="{'btn-success': (attendee.type == 'member'), 'btn-info': (attendee.type == 'applicant'), 'btn-default': (attendee.type == 'guest')}">{{attendee.name}}</button>
 
 
-                    <button popover-template="laterPopover.template" popover-mode="single" type="button" class="btn btn-xs" ng-class="{'btn-success': (attendee.type == 'member'), 'btn-info': (attendee.type == 'applicant'), 'btn-default': (attendee.type == 'guest'), 'btn-danger': (attendee.later)}">
+                    <div uib-popover-template="laterPopover.template" popover-is-open="true" ng-click="attendants.laterPopoverShow($event); $event.stopPropagation();" type="button" class="btn btn-xs" ng-class="{'btn-success': (attendee.type == 'member'), 'btn-info': (attendee.type == 'applicant'), 'btn-default': (attendee.type == 'guest'), 'btn-danger': (attendee.later)}">
                         <span class="glyphicon glyphicon-time"></span>
-                    </button>
+                    </div>
 
 
                     <button type="button" class="btn btn-xs dropdown-toggle" ng-class="{'btn-success': (attendee.type == 'member'), 'btn-info': (attendee.type == 'applicant'), 'btn-default': (attendee.type == 'guest')}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"

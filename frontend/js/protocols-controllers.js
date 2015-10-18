@@ -183,6 +183,22 @@ angular.module('app.cis').controller('ProtocolFormController', function($scope, 
                 }
 
                 $scope.attendants.count = count;
+            },
+            laterPopoverShow: function($event) {
+                // find all popovers triggered by 'show'
+                var popovers = document.querySelectorAll( 'div[popover-is-open="true"]' );
+                // close already opened popovers to show only one popover at a time
+                if(popovers) {
+                    for(var i=0; i<popovers.length; i++) {
+                        var popup = popovers[i];
+                        var popupElement = angular.element(popup);
+                        popupElement.attr('popover-is-open',false);
+                        //popupElement.triggerHandler('hide');
+                    }
+                }
+                // open the new popover
+                angular.element($event.currentTarget).attr('popover-is-open',true);
+                return true;
             }
 
         }
