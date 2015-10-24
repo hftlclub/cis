@@ -1,5 +1,5 @@
 // controller for protocol form
-angular.module('app.cis').controller('ProtocolFormController', function($scope, $http, $routeParams, $interval, $route, $window, clubAuth, hotkeys, growl, appConf) {
+angular.module('app.cis').controller('ProtocolFormController', function ($scope, $http, $routeParams, $interval, $route, $window, clubAuth, hotkeys, growl, appConf) {
 
     $scope.options = {
         commonTitles: ['Clubsitzung', 'Mitgliederversammlung', 'Planungstreffen'],
@@ -41,7 +41,7 @@ angular.module('app.cis').controller('ProtocolFormController', function($scope, 
 
     $scope.datePicker = {
         format: 'dd.MM.yyyy',
-        open: function($event) {
+        open: function ($event) {
             $event.preventDefault();
             $event.stopPropagation();
             this.opened = true;
@@ -63,20 +63,20 @@ angular.module('app.cis').controller('ProtocolFormController', function($scope, 
 
     $scope.autoSave = {
         isActive: true,
-        toggle: function() { // autosave function
+        toggle: function () { // autosave function
             this.isActive = !this.isActive;
             this.setTimer();
         },
-        setTimer: function() {
+        setTimer: function () {
             if (this.isActive) {
-                this.interval = $interval(function() {
+                this.interval = $interval(function () {
                     if ($scope.form.data.text) $scope.save(1);
                 }, 120000); // 120000 = autosave every 2 minutes
             } else {
                 this.stopTimer();
             }
         },
-        stopTimer: function() {
+        stopTimer: function () {
             $interval.cancel(this.interval)
         }
     };
@@ -84,14 +84,14 @@ angular.module('app.cis').controller('ProtocolFormController', function($scope, 
 
 
     // catch location change event
-    $scope.$on('$locationChangeStart', function(event, next, current) {
+    $scope.$on('$locationChangeStart', function (event, next, current) {
         if (form.mode == 'edit' && $scope.autoSave.isActive && $scope.protocolForm.$dirty) { //if edit mode, autosave active and form dirty: autosave!
             $scope.save(1, 1);
         }
     });
 
     //destroy timer and unloadListener on location change
-    $scope.$on('$destroy', function() {
+    $scope.$on('$destroy', function () {
         $scope.autoSave.stopTimer();
         $window.removeEventListener("beforeunload", unloadListener);
     });
@@ -112,7 +112,7 @@ angular.module('app.cis').controller('ProtocolFormController', function($scope, 
         combo: ['ctrl+s', 'meta+s'],
         description: 'This will save any changes',
         allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-        callback: function(event, hotkey) {
+        callback: function (event, hotkey) {
             if (event.preventDefault) {
                 event.preventDefault();
             } else {
@@ -132,78 +132,70 @@ angular.module('app.cis').controller('ProtocolFormController', function($scope, 
      * Attendants
      *************************/
     $scope.attendants = {
-            input: null,
-            count: {
+        input: null,
+        count: {
+            members: 0,
+            applicants: 0,
+            guests: 0
+        },
+        add: function (name) {
+            if (name) {
+                var attendee = {
+                    'name': name,
+                    'laterPopoverOpened': false,
+                    'type': 'member' //default is member
+                }
+
+                //check if person is already attendee, end this function if already in list
+                for (var i = 0; i < form.data.attendants.length; i++) {
+                    if (form.data.attendants[i].name == attendee.name) return;;
+                }
+
+                //attendee seems to be new. add it
+                form.data.attendants.push(attendee);
+            }
+        },
+        remove: function (index) {
+            form.data.attendants.splice(index, 1);
+            $scope.protocolForm.$setDirty();
+        },
+        addFromForm: function () {
+            this.add(this.input);
+            this.input = null;
+            $scope.protocolForm.$setDirty();
+        },
+        setType: function (att, type) {
+            att.type = type;
+            $scope.protocolForm.$setDirty();
+        },
+        countAtt: function () {
+            var count = {
                 members: 0,
                 applicants: 0,
                 guests: 0
-            },
-            add: function(name) {
-                if (name) {
-                    var attendee = {
-                        'name': name,
-                        'type': 'member' //default is member
-                    }
-
-                    //check if person is already attendee, end this function if already in list
-                    for (var i = 0; i < form.data.attendants.length; i++) {
-                        if (form.data.attendants[i].name == attendee.name) return;;
-                    }
-
-                    //attendee seems to be new. add it
-                    form.data.attendants.push(attendee);
-                }
-            },
-            remove: function(index) {
-                form.data.attendants.splice(index, 1);
-                $scope.protocolForm.$setDirty();
-            },
-            addFromForm: function() {
-                this.add(this.input);
-                this.input = null;
-                $scope.protocolForm.$setDirty();
-            },
-            setType: function(att, type) {
-                att.type = type;
-                $scope.protocolForm.$setDirty();
-            },
-            countAtt: function() {
-                var count = {
-                    members: 0,
-                    applicants: 0,
-                    guests: 0
-                }
-
-                if (form.data.attendants.length) {
-                    form.data.attendants.forEach(function(row) {
-                        if (row.type == 'member') count.members++;
-                        else if (row.type == 'applicant') count.applicants++;
-                        else if (row.type == 'guest') count.guests++;
-                    });
-                }
-
-                $scope.attendants.count = count;
-            },
-            laterPopoverShow: function($event) {
-                // find all popovers triggered by 'show'
-                var popovers = document.querySelectorAll( 'div[popover-is-open="true"]' );
-                // close already opened popovers to show only one popover at a time
-                if(popovers) {
-                    for(var i=0; i<popovers.length; i++) {
-                        var popup = popovers[i];
-                        var popupElement = angular.element(popup);
-                        popupElement.attr('popover-is-open',false);
-                        //popupElement.triggerHandler('hide');
-                    }
-                }
-                // open the new popover
-                angular.element($event.currentTarget).attr('popover-is-open',true);
-                return true;
             }
 
+            if (form.data.attendants.length) {
+                form.data.attendants.forEach(function (row) {
+                    if (row.type == 'member') count.members++;
+                    else if (row.type == 'applicant') count.applicants++;
+                    else if (row.type == 'guest') count.guests++;
+                });
+            }
+
+            $scope.attendants.count = count;
+        },
+        laterPopoverShow: function ($event) {
+            // close already opened popovers
+            angular.forEach(form.data.attendants, function (attendee) {
+                attendee.laterPopoverOpened = false;
+            });
+            return true;
         }
-        //watch for attendants changes and execute counting
-    $scope.$watch(function() {
+
+    }
+    //watch for attendants changes and execute counting
+    $scope.$watch(function () {
         return angular.toJson(form.data.attendants)
     }, $scope.attendants.countAtt);
 
@@ -214,11 +206,11 @@ angular.module('app.cis').controller('ProtocolFormController', function($scope, 
      *************************/
     $scope.laterPopover = {
         template: '/templates/protocols/laterPopover.html',
-        setInitial: function(att) {
+        setInitial: function (att) {
             att.later = new Date();
             $scope.protocolForm.$setDirty();
         },
-        removeTime: function(att) {
+        removeTime: function (att) {
             att.later = null;
             $scope.protocolForm.$setDirty();
         }
@@ -229,11 +221,11 @@ angular.module('app.cis').controller('ProtocolFormController', function($scope, 
 
 
     // check whether title is a common title, then load template if available
-    $scope.checkTitle = function() {
+    $scope.checkTitle = function () {
         for (i = 0; i < $scope.options.commonTitles.length; i++) { //go through common titles
             if ($scope.options.commonTitles[i] == form.data.title && !form.data.text) { //if current title matches a common title and there's no text in the field
                 //get protocol and fill textfield with it
-                $http.get('/templates/protocols/presets/clubsitzung.md').success(function(data) {
+                $http.get('/templates/protocols/presets/clubsitzung.md').success(function (data) {
                     form.data.text = data;
                 });
             }
@@ -245,7 +237,7 @@ angular.module('app.cis').controller('ProtocolFormController', function($scope, 
      * save function
      *************************/
 
-    $scope.save = function(autosaved, nosetpristine) {
+    $scope.save = function (autosaved, nosetpristine) {
         var succMsg = (autosaved) ? "Automatisch gespeichert!" : "Gespeichert!"
 
 
@@ -257,12 +249,12 @@ angular.module('app.cis').controller('ProtocolFormController', function($scope, 
 
         if (form.mode == 'edit' && form.id) {
             $http.put(appConf.api + '/protocols/' + form.id, form.data)
-                .success(function(data) {
+                .success(function (data) {
                     growl.success(succMsg);
                     if (!nosetpristine) $scope.protocolForm.$setPristine();
 
                 })
-                .error(function(data, status) {
+                .error(function (data, status) {
                     if (status == 400 && data.validationerror) {
                         growl.warning('Einige Felder sind fehlerhaft!', {
                             ttl: 10000
@@ -279,7 +271,7 @@ angular.module('app.cis').controller('ProtocolFormController', function($scope, 
 
         } else if (form.mode == 'add') {
             $http.post(appConf.api + '/protocols', form.data)
-                .success(function(data) {
+                .success(function (data) {
                     growl.info('Das Protokoll wurde angelegt!');
                     if (!nosetpristine) $scope.protocolForm.$setPristine();
 
@@ -290,7 +282,7 @@ angular.module('app.cis').controller('ProtocolFormController', function($scope, 
                     }
 
                 })
-                .error(function(data, status) {
+                .error(function (data, status) {
                     if (status == 400 && data.validationerror) {
                         growl.warning('Einige Felder sind fehlerhaft!', {
                             ttl: 10000
@@ -312,10 +304,10 @@ angular.module('app.cis').controller('ProtocolFormController', function($scope, 
      *************************/
 
     function refresh() {
-        $http.get(appConf.api + '/members').success(function(data) {
+        $http.get(appConf.api + '/members').success(function (data) {
             //build array with just names and only current members
             $scope.users = [];
-            data.forEach(function(row) {
+            data.forEach(function (row) {
                 if (!row.former) {
                     $scope.users.push(row.firstname + ' ' + row.lastname);
                 }
@@ -326,7 +318,7 @@ angular.module('app.cis').controller('ProtocolFormController', function($scope, 
         //in edit mode: go and get the protocol we want to edit
         if (form.mode == 'edit' && form.id) {
             // get data from specific protocol if mode is 'edit'
-            $http.get(appConf.api + '/protocols/raw/' + form.id).success(function(data) {
+            $http.get(appConf.api + '/protocols/raw/' + form.id).success(function (data) {
                 form.data = data;
                 $scope.times.date = new Date(data.date);
                 $scope.times.start = new Date(data.start);
@@ -373,38 +365,38 @@ angular.module('app.cis').controller('ProtocolFormController', function($scope, 
 
 
 // controller for protocol list
-angular.module('app.cis').controller('ProtocolListController', function($scope, $http, $routeParams, clubAuth, $modal, $location, appConf) {
+angular.module('app.cis').controller('ProtocolListController', function ($scope, $http, $routeParams, clubAuth, $uibModal, $location, appConf) {
     $scope.protocols = [];
     refresh();
 
     /*** functions ***/
 
     function refresh() {
-        $http.get(appConf.api + '/protocols?grouped').success(function(data) {
+        $http.get(appConf.api + '/protocols?grouped').success(function (data) {
             $scope.protocols = data;
         });
     }
 
     // function to open delete modal
-    $scope.deleteProtocol = function(prot) {
+    $scope.deleteProtocol = function (prot) {
 
-        var modal = $modal.open({
+        var modal = $uibModal.open({
             templateUrl: 'templates/protocols/deletemodal.html',
             controller: 'DelProtModalController',
             resolve: {
-                protocol: function() {
+                protocol: function () {
                     return prot;
                 }
             }
         });
 
-        modal.result.then(function() {
+        modal.result.then(function () {
             $http.delete(appConf.api + '/protocols/' + prot.id).
-            success(refresh);
+                success(refresh);
         });
     }
 
-    $scope.showProtocol = function(id) {
+    $scope.showProtocol = function (id) {
         $location.path('protocols/show/' + id);
     }
 
@@ -414,12 +406,12 @@ angular.module('app.cis').controller('ProtocolListController', function($scope, 
 
 
 // delete modal
-angular.module('app.cis').controller('DelProtModalController', function($scope, $rootScope, $modalInstance, protocol) {
+angular.module('app.cis').controller('DelProtModalController', function ($scope, $rootScope, $modalInstance, protocol) {
     $scope.protocol = protocol;
     $scope.checkWord = $rootScope.getCheckWord();
 
     // check if input is the same like the give phrase
-    $scope.checkInput = function() {
+    $scope.checkInput = function () {
         if ($scope.checkWord == $scope.inputCheckWord) {
             $modalInstance.close('success');
         }
@@ -435,7 +427,7 @@ angular.module('app.cis').controller('DelProtModalController', function($scope, 
 
 
 // controller for protocol details
-angular.module('app.cis').controller('ProtocolDetailController', function($scope, $http, $routeParams, clubAuth, appConf) {
+angular.module('app.cis').controller('ProtocolDetailController', function ($scope, $http, $routeParams, clubAuth, appConf) {
     $scope.protocolid = $routeParams.id;
     $scope.protocol = {};
 
@@ -443,7 +435,7 @@ angular.module('app.cis').controller('ProtocolDetailController', function($scope
     /*** functions ***/
 
     function refresh() {
-        $http.get(appConf.api + '/protocols/detail/' + $scope.protocolid).success(function(data) {
+        $http.get(appConf.api + '/protocols/detail/' + $scope.protocolid).success(function (data) {
             $scope.protocol = data;
         });
     }

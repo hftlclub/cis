@@ -7,7 +7,7 @@ function fixAutofillBug() {
 
 
 
-angular.module('app.cis').controller('MainController', function($scope, $rootScope, $route, $routeParams, $location, $interval, clubAuth, $timeout, $modal, $http, $anchorScroll, $window, appConf) {
+angular.module('app.cis').controller('MainController', function($scope, $rootScope, $route, $routeParams, $location, $interval, clubAuth, $timeout, $uibModal, $http, $anchorScroll, $window, appConf) {
     $scope.scrollToTop = function() {
         $anchorScroll('scrollToTopTarget');
     }
@@ -49,7 +49,7 @@ angular.module('app.cis').controller('MainController', function($scope, $rootSco
 
     $scope.openFeedbackModal = function() {
 
-        var modalInstance = $modal.open({
+        var modalInstance = $uibModal.open({
             templateUrl: 'templates/feedbackModal.html',
             controller: 'FeedbackModalController'
         });
@@ -89,9 +89,9 @@ angular.module('app.cis').controller('FeedbackModalController', function($scope,
     }
 
     $scope.ok = function() {
-        $modal.close();
+        $uibModal.close();
     };
     $scope.cancel = function() {
-        $modal.dismiss('cancel');
+        $uibModal.dismiss('cancel');
     };
 });
