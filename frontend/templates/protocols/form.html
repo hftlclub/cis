@@ -34,7 +34,7 @@
     <div class="form-group" ng-class="{'has-error has-feedback': form.errors.title}">
         <label for="inputTitle" class="col-sm-2 control-label">Titel</label>
         <div class="col-sm-10">
-            <input type="text" ng-enter="checkTitle()" ng-model="form.data.title" class="form-control" id="inputTitle" typeahead="title for title in options.commonTitles | filter:$viewValue" placeholder="Titel" tooltip-placement="right" tooltip-trigger="focus" tooltip="Sitzung? MV? Vorstand?">
+            <input type="text" ng-enter="checkTitle()" ng-model="form.data.title" class="form-control" id="inputTitle" uib-typeahead="title for title in options.commonTitles | filter:$viewValue" placeholder="Titel" tooltip-placement="right" tooltip-trigger="focus" uib-tooltip="Sitzung? MV? Vorstand?">
             <span ng-if="form.errors.title" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
         </div>
     </div>
@@ -42,7 +42,7 @@
     <div class="form-group" ng-class="{'has-error has-feedback': form.errors.recorder}">
         <label for="inputRecorder" class="col-sm-2 control-label">Protokollführer</label>
         <div class="col-sm-10">
-            <input type="text" ng-model="form.data.recorder" ng-required="true" class="form-control" id="inputRecorder" typeahead="user for user in users | filter:$viewValue | limitTo:8" placeholder="Protokollführer" tooltip-placement="right" tooltip-trigger="focus"
+            <input type="text" ng-model="form.data.recorder" ng-required="true" class="form-control" id="inputRecorder" uib-typeahead="user for user in users | filter:$viewValue | limitTo:8" placeholder="Protokollführer" tooltip-placement="right" tooltip-trigger="focus"
             tooltip="Wer ist Protokollführer?">
             <span ng-if="form.errors.recorder" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
         </div>
@@ -52,7 +52,7 @@
         <label for="inputDate" class="col-sm-2 control-label">Datum</label>
         <div class="col-md-2">
             <p class="input-group datepicker">
-                <input type="text" class="form-control" datepicker-popup="{{datePicker.format}}" ng-model="times.date" is-open="datePicker.opened" datepicker-options="datePicker.options" ng-required="true" close-text="Close" tooltip-placement="bottom" tooltip-trigger="focus"
+                <input type="text" class="form-control" uib-datepicker-popup="{{datePicker.format}}" ng-model="times.date" is-open="datePicker.opened" datepicker-options="datePicker.options" ng-required="true" close-text="Close" tooltip-placement="bottom" tooltip-trigger="focus"
                 tooltip="Wann wurde das Protokoll erstellt?" />
                 <span class="input-group-btn">
                     <button type="button" class="btn btn-default" ng-click="datePicker.open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
@@ -63,11 +63,11 @@
 
         <label for="inputStartTimeHours" class="col-sm-2 control-label">Beginn</label>
         <div class="col-sm-2">
-            <timepicker ng-model="times.start" show-meridian="false" mousewheel="false"></timepicker>
+            <uib-timepicker ng-model="times.start" show-meridian="false" mousewheel="false"></uib-timepicker>
         </div>
         <label for="inputEndTimeHours" class="col-sm-2 control-label">Ende</label>
         <div class="col-sm-2">
-            <timepicker ng-model="times.end" show-meridian="false" mousewheel="false"></timepicker>
+            <uib-timepicker ng-model="times.end" show-meridian="false" mousewheel="false"></uib-timepicker>
         </div>
     </div>
 
@@ -87,8 +87,8 @@
                     <span ng-if="attendants.count.applicants" class="label label-info" title="Anwärter">{{attendants.count.applicants}}</span>
                     <span ng-if="attendants.count.guests" class="label label-default" title="Gäste">{{attendants.count.guests}}</span>
                 </span>
-                <input type="text" ng-model="attendants.input" ng-enter="attendants.addFromForm()" class="form-control" id="inputAttendants" typeahead="attendee for attendee in users | filter:$viewValue | limitTo:8" placeholder="Anwesende Personen" tooltip-placement="right"
-                tooltip-trigger="focus" tooltip="Welche Mitglieder sind anwesend?" autocomplete="off">
+                <input type="text" ng-model="attendants.input" ng-enter="attendants.addFromForm()" class="form-control" id="inputAttendants" uib-typeahead="attendee for attendee in users | filter:$viewValue | limitTo:8" placeholder="Anwesende Personen" tooltip-placement="right"
+                tooltip-trigger="focus" uib-tooltip="Welche Mitglieder sind anwesend?" autocomplete="off">
                 <span ng-if="form.errors.attendants" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
             </div>
         </div>
@@ -100,17 +100,17 @@
         <div class="col-sm-10">
             <div id="attendantsToolbar" class="btn-toolbar" role="toolbar" aria-label="...">
                 <!-- Split button -->
-                <div class="btn-group" dropdown ng-repeat="attendee in form.data.attendants">
+                <div class="btn-group" uib-dropdown ng-repeat="attendee in form.data.attendants">
                     <button type="button" class="btn btn-xs" ng-class="{'btn-success': (attendee.type == 'member'), 'btn-info': (attendee.type == 'applicant'), 'btn-default': (attendee.type == 'guest')}">{{attendee.name}}</button>
 
 
-                    <div uib-popover-template="laterPopover.template" popover-is-open="true" ng-click="attendants.laterPopoverShow($event); $event.stopPropagation();" type="button" class="btn btn-xs" ng-class="{'btn-success': (attendee.type == 'member'), 'btn-info': (attendee.type == 'applicant'), 'btn-default': (attendee.type == 'guest'), 'btn-danger': (attendee.later)}">
+                    <div uib-popover-template="laterPopover.template" popover-is-open="attendee.laterPopoverOpened" ng-click="attendants.laterPopoverShow($event);" type="button" class="btn btn-xs" ng-class="{'btn-success': (attendee.type == 'member'), 'btn-info': (attendee.type == 'applicant'), 'btn-default': (attendee.type == 'guest'), 'btn-danger': (attendee.later)}">
                         <span class="glyphicon glyphicon-time"></span>
                     </div>
 
 
                     <button type="button" class="btn btn-xs dropdown-toggle" ng-class="{'btn-success': (attendee.type == 'member'), 'btn-info': (attendee.type == 'applicant'), 'btn-default': (attendee.type == 'guest')}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                    dropdown-toggle>
+                    uib-dropdown-toggle>
                         <span class="caret"></span>
                         <span class="sr-only">Toggle Dropdown</span>
                     </button>
