@@ -27,9 +27,9 @@
 
                     <div aria-label="..." class="btn-toolbar pull-right" role="toolbar">
 
-                        <div class="btn-group" dropdown>
+                        <div class="btn-group" uib-dropdown>
 
-                            <button class="btn btn-sm btn-primary" ng-if="protocol.comment" popover-trigger="mouseenter" popover="{{protocol.comment}}" type="button">
+                            <button class="btn btn-sm btn-primary" ng-if="protocol.comment" popover-trigger="mouseenter" uib-popover="{{protocol.comment}}" type="button">
                                 <span class="glyphicon glyphicon-comment"></span>
                             </button>
 
@@ -41,7 +41,7 @@
                                 <span class="glyphicon glyphicon-file"></span>
                             </a>
 
-                            <button class="btn btn-sm btn-default dropdown-toggle" dropdown-toggle type="button" ng-click="$event.stopPropagation()">
+                            <button class="btn btn-sm btn-default dropdown-toggle" uib-dropdown-toggle type="button" ng-click="$event.stopPropagation()">
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu pull-right" role="menu">
