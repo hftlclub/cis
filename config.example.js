@@ -66,3 +66,11 @@ exports.pubaccesskey = "abcdefg";
 
 //settings for git webhook deployment
 exports.deploykey = "hijklmnop";
+
+//protocols PDF settings
+exports.protocols = {
+    pdfInterval: 10, //interval [s] for background job checking
+    pdfFrontendPath: "/media/protocols/", //path for protocols in publicly available frontend folder
+    pdfDeleteTimeout: 600 //timeout [s] for deletion of publicly available PDF files
+}
+exports.protocols.pdfFullPath = require('path').dirname(process.mainModule.filename) + "/frontend" + exports.protocols.pdfFrontendPath

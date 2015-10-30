@@ -286,10 +286,9 @@ exports.makePdf = function(id, path, callback){
         var filename = moment(row.start).format('YYYY-MM-DD') + '-protokoll_' + row.title + '.pdf';
         filename = filename.replace(' ', '-');
         filename = filename.toLowerCase();
-
         filename = sanitize(filename);
 
-        var location = '/tmp/' + utils.uid(20) + '.pdf';
+        var location = path + utils.uid(20) + '.pdf';
 
         markdownpdf().from.string(outmd).to(location, function() {
             console.log('Created PDF for protocol', id);

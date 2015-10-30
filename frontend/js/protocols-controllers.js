@@ -428,7 +428,7 @@ angular.module('app.cis').controller('DelProtModalController', function ($scope,
 
 
 // controller for protocol details
-angular.module('app.cis').controller('ProtocolDetailController', function ($scope, $http, $routeParams, $window, clubAuth, appConf) {
+angular.module('app.cis').controller('ProtocolDetailController', function ($scope, $http, $routeParams, $window, $document, clubAuth, appConf) {
     $scope.protocolid = $routeParams.id;
     $scope.protocol = {};
 
@@ -437,9 +437,19 @@ angular.module('app.cis').controller('ProtocolDetailController', function ($scop
 
     $scope.pdf = {
         processing: 0,
-        download: function(id){
+        processed: 0,
+        path: null,
+        generate: function(id){
             $scope.pdf.processing = 1;
-            $window.location.href = appConf.api + '/protocols/pdf/' + id;
+
+            $http.get(appConf.api + '/protocols/pdf/' + id).then(function(res){
+                $scope.pdf.processing = 0;
+                $scope.pdf.processed = 1;
+                if(res.data) $scope.pdf.path = res.data;
+            });
+        },
+        reset: function(){
+            $scope.pdf.processed = 0;
         }
     }
 

@@ -72,7 +72,7 @@ api.get('/protocols/detail/:id', jwtauth, reqm('auth'), protocolsController.getD
 api.post('/protocols', jwtauth, reqm('auth'), protocolsController.addedit); //add
 api.put('/protocols/:id', jwtauth, reqm('auth'), protocolsController.addedit); //edit
 api.delete('/protocols/:id', jwtauth, reqm('auth'), protocolsController.del);
-api.get('/protocols/pdf/:id', protocolsController.pdf); //PDF file as HTTP attachment
+api.get('/protocols/pdf/:id', jwtauth, reqm('auth'), protocolsController.pdf); //PDF file as HTTP attachment
 
 
 

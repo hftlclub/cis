@@ -239,6 +239,8 @@ exports.del = function(req, res, next) {
 
 
 
+
+
 exports.pdf = function(req, res, next){
     var id = req.params.id;
 
@@ -249,20 +251,30 @@ exports.pdf = function(req, res, next){
         return next(err);
     }
 
-    //create pdf file
+
+
+
     protocolsservice.makePdf(id, '/tmp/', function(err, location, filename){
         if(err) return next(err);
 
-        //read temp PDF file
-        fs.readFile(location, function (err, content) {
-            if(err) return next(err);
+        //create destination folder
+        var subDir = utils.uid(32) + '/';
+        var dir = config.protocols.pdfFullPath + subDir;
 
-            //serve file for download
-            res.setHeader('Content-disposition', 'attachment; filename=' + filename);
-            res.end(content);
+        fs.mkdirSync(dir);
 
-            //delete temp file
-            fs.unlink(location);
-        });
+        //move temp file to destination folder
+        fs.renameSync(location, dir + filename);
+
+        //set timer for garbage collection
+        //TODO
+        /*
+        setTimeout(function(){
+
+        }, (config.protocols.deleteTimeout * 1000));
+        */
+
+        //send PDF filename
+        res.send(config.protocols.pdfFrontendPath + subDir + filename);
     });
 }

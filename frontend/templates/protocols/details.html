@@ -5,10 +5,19 @@
             <a class="btn btn-default" type="button" ng-href="#/protocols/edit/{{protocolid}}">
                 <span class="glyphicon glyphicon-pencil"></span>
                 Bearbeiten</a>
-            <a class="btn btn-default" ng-disabled="pdf.processing" type="button" ng-click="pdf.download(protocolid)">
+            <a class="btn btn-default" ng-if="!pdf.processed" ng-disabled="pdf.processing" type="button" ng-click="pdf.generate(protocolid)">
+                <span ng-if="!pdf.processing">
+                    <span class="glyphicon glyphicon-repeat"></span>
+                    PDF erzeugen
+                </span>
+                <span ng-if="pdf.processing">
+                    <span class="glyphicon glyphicon-time"></span>
+                    &nbsp;&nbsp;Bitte warten...&nbsp;&nbsp;
+                </span>
+            </a>
+            <a class="btn btn-success" ng-if="pdf.processed" type="button" ng-href="{{pdf.path}}" ng-click="pdf.reset()" target="_blank">
                 <span class="glyphicon glyphicon-download-alt"></span>
-                <span ng-if="!pdf.processing">Als PDF speichern</span>
-                <span ng-if="pdf.processing">&nbsp;&nbsp;Bitte warten...&nbsp;&nbsp;</span>
+                PDF herunterladen
             </a>
         </div>
     </div>

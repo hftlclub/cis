@@ -30,5 +30,5 @@ exports.startTimer = function() {
     }
 
     //start next timer
-    setTimeout(exports.startTimer, (config.protocolsPdfInterval * 1000));
+    setTimeout(exports.startTimer, (config.protocols.pdfInterval * 1000));
 }
