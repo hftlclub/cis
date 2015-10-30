@@ -1,7 +1,7 @@
 var protocolsservice = require('../services/protocolsservice');
 var config = require('../config');
 
-exports.jobs = {};
+exports.jobs = {'yAcTc2FIwEx4tvfkth1g4LiLt7ZBKtTA': 1};
 
 
 exports.startTimer = function() {
@@ -13,7 +13,12 @@ exports.startTimer = function() {
             continue;
         }
 
-        protocolsservice.makePdf(id, '/tmp/', function(location, filename){
+        protocolsservice.makePdf(id, '/tmp/', function(err, location, filename){
+            if(err){
+                console.log(err);
+                return;
+            }
+
             console.log('Created PDF', location, 'for filename', filename);
 
             //upload to seafile

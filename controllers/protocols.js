@@ -1,5 +1,6 @@
 var moment = require('moment');
-var md = require("markdown").markdown;
+var md = require('markdown').markdown;
+var fs = require('fs');
 var config = require('../config');
 var utils = require('../modules/utils');
 var protocolsservice = require('../services/protocolsservice');
@@ -150,7 +151,7 @@ exports.getDetail = function(req, res, next) {
 
             if (att.later) {
                 att.name += ' (' + moment(att.later).format('HH:mm') + ' Uhr)';
-                
+
                 //push later members to "later" list, applicants and guests stay in their own list, even if delayed
                 if(att.type == 'member'){
                     out.attendants.later.push(att.name);
@@ -233,5 +234,35 @@ exports.del = function(req, res, next) {
         if (err) return next(err);
 
         return res.send();
+    });
+}
+
+
+
+exports.pdf = function(req, res, next){
+    var id = req.params.id;
+
+    //no id given
+    if (!id) {
+        var err = new Error('ID missing');
+        err.status = 400;
+        return next(err);
+    }
+
+    //create pdf file
+    protocolsservice.makePdf(id, '/tmp/', function(err, location, filename){
+        if(err) return next(err);
+
+        //read temp PDF file
+        fs.readFile(location, function (err, content) {
+            if(err) return next(err);
+
+            //serve file for download
+            res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+            res.end(content);
+
+            //delete temp file
+            fs.unlink(location);
+        });
     });
 }

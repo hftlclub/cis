@@ -189,6 +189,11 @@ exports.del = function(id, callback) {
 exports.makePdf = function(id, path, callback){
     //get protocol
     exports.get(id, function(err, row){
+        //break if error occured or return value empty
+        if(err || !row){
+            return callback(new Error('Unknown ID'));
+        }
+
         //group attendants
         var attendants = {
             'members': [],
@@ -288,7 +293,7 @@ exports.makePdf = function(id, path, callback){
 
         markdownpdf().from.string(outmd).to(location, function() {
             console.log('Created PDF for protocol', id);
-            callback(location, filename);
+            callback(null, location, filename);
         })
 
     })
