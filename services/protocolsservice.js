@@ -1,3 +1,5 @@
+var markdownpdf = require('markdown-pdf');
+var moment = require('moment');
 var mysql = require('../modules/mysql');
 var config = require('../config');
 var utils = require('../modules/utils');
@@ -177,4 +179,109 @@ exports.del = function(id, callback) {
 
         return callback();
     });
+}
+
+
+
+
+
+exports.makePdf = function(id, callback){
+    //get protocol
+    exports.get(id, function(err, row){
+        //group attendants
+        var attendants = {
+            'members': [],
+            'later': [],
+            'applicants': [],
+            'guests': []
+        };
+
+        for (var i = 0; i < row.attendants.length; i++) { //go through attendants and put them into groups
+            var att = row.attendants[i];
+
+            if (att.later) {
+                att.name += ' (' + moment(att.later).format('HH:mm') + ' Uhr)';
+
+                //push later members to "later" list, applicants and guests stay in their own list, even if delayed
+                if(att.type == 'member'){
+                    attendants.later.push(att.name);
+                    continue;
+                }
+            }
+
+            if (att.type == 'member') {
+                attendants.members.push(att.name);
+                continue;
+            }
+
+            if (att.type == 'applicant') {
+                attendants.applicants.push(att.name);
+                continue;
+            }
+
+            if (att.type == 'guest') {
+                attendants.guests.push(att.name);
+                continue;
+            }
+        }
+
+
+        //build text
+        var out = [];
+
+        //date
+        var date = moment(row.start).format('DD.MM.YYYY');
+
+        //headline
+        out.push('# ' + row.title + ' ' + date);
+
+        //separator line
+        out.push('---');
+
+        //dates
+        out.push('**Datum:** ' + date);
+        out.push('**Start:** ' + moment(row.start).format('HH:mm') + ' Uhr');
+        out.push('**Ende:** ' + moment(row.end).format('HH:mm') + ' Uhr');
+
+        //recorder
+        out.push('**Protokollführer:** ' + row.recorder);
+
+        out.push('\n');
+
+        //attendants, but show groups only when they have contents
+        var attLabel = {
+            'members': 'Teilnehmer',
+            'later': 'Später',
+            'applicants': 'Anwärter',
+            'guests': 'Gäste'
+        }
+        for(var key in attendants){
+            if(attendants[key].length){
+                out.push('**' + attLabel[key] + '**: ' + attendants[key].join(', '));
+            }
+        }
+
+
+        //comment, if set
+        if(row.comment){
+            out.push('\n');
+            out.push('**Kommentar:** ' + row.comment);
+        }
+
+        //separator line
+        out.push('---');
+
+        //protocol text
+        out.push(row.text);
+
+        var outmd = out.join('\n\n')
+        markdownpdf().from.string(outmd).to('./protokoll.pdf', function() {
+            console.log('Created PDF for protocol', id);
+            callback();
+        })
+
+
+
+
+    })
 }

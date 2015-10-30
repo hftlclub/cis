@@ -104,6 +104,7 @@ app.use('/api', api);
 app.use(express.static(__dirname + '/frontend'));
 
 
+
 //start server
 app.listen(config.port, function(err) {
     console.log('CIS Server started on port ' + config.port);
