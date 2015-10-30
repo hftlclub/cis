@@ -1,5 +1,7 @@
 var markdownpdf = require('markdown-pdf');
 var moment = require('moment');
+var sanitize = require('sanitize-filename');
+
 var mysql = require('../modules/mysql');
 var config = require('../config');
 var utils = require('../modules/utils');
@@ -184,8 +186,7 @@ exports.del = function(id, callback) {
 
 
 
-
-exports.makePdf = function(id, callback){
+exports.makePdf = function(id, path, callback){
     //get protocol
     exports.get(id, function(err, row){
         //group attendants
@@ -275,13 +276,20 @@ exports.makePdf = function(id, callback){
         out.push(row.text);
 
         var outmd = out.join('\n\n')
-        markdownpdf().from.string(outmd).to('./protokoll.pdf', function() {
+
+        //make filename
+        var filename = moment(row.start).format('YYYY-MM-DD') + '-protokoll_' + row.title + '.pdf';
+        filename = filename.replace(' ', '-');
+        filename = filename.toLowerCase();
+
+        filename = sanitize(filename);
+
+        var location = '/tmp/' + utils.uid(20) + '.pdf';
+
+        markdownpdf().from.string(outmd).to(location, function() {
             console.log('Created PDF for protocol', id);
-            callback();
+            callback(location, filename);
         })
-
-
-
 
     })
 }

@@ -18,6 +18,8 @@ var keylistController = require('./controllers/keylist');
 var protocolsController = require('./controllers/protocols');
 var deployController = require('./controllers/deploy');
 
+var protocolsPdf = require('./modules/protocolsPdf');
+
 
 var jwtauth = require('./middleware/jwtauth')
 var reqm = require('./middleware/requiremode');
@@ -103,6 +105,10 @@ app.use('/api', api);
 //static frontend
 app.use(express.static(__dirname + '/frontend'));
 
+
+
+//start protocols PDF job handler
+protocolsPdf.startTimer();
 
 
 //start server
