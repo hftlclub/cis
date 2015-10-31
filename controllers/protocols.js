@@ -252,8 +252,6 @@ exports.pdf = function(req, res, next){
     }
 
 
-
-
     protocolsservice.makePdf(id, '/tmp/', function(err, location, filename){
         if(err) return next(err);
 
@@ -261,20 +259,36 @@ exports.pdf = function(req, res, next){
         var subDir = utils.uid(32) + '/';
         var dir = config.protocols.pdfFullPath + subDir;
 
-        fs.mkdirSync(dir);
+        fs.mkdir(dir, function(err){
+            if(err) return next(err);
 
-        //move temp file to destination folder
-        fs.renameSync(location, dir + filename);
+            //move temp file to destination folder
+            fs.rename(location, dir + filename, function(err){
 
-        //set timer for garbage collection
-        //TODO
-        /*
-        setTimeout(function(){
+                //set timer for garbage collection
+                setTimeout(function(){
+                    //delete PDF file
+                    fs.unlink(dir + filename, function(err){
+                        //delete folder
+                        fs.rmdir(dir, function(err){
+                            //console.log('GC done');
+                        });
+                    });
 
-        }, (config.protocols.deleteTimeout * 1000));
-        */
+                }, (config.protocols.pdfDeleteTimeout * 1000));
 
-        //send PDF filename
-        res.send(config.protocols.pdfFrontendPath + subDir + filename);
+                //send PDF filename and delete timeout
+                var out = {
+                    pdf: config.protocols.pdfFrontendPath + subDir + filename,
+                    delTimeout: config.protocols.pdfDeleteTimeout
+                }
+                res.json(out);
+
+            });
+        });
+
+
+
+
     });
 }
