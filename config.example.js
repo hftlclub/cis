@@ -69,8 +69,9 @@ exports.deploykey = "hijklmnop";
 
 //protocols PDF settings
 exports.protocols = {
-    pdfInterval: 10, //interval [s] for background job checking
-    pdfFrontendPath: "/media/protocols/", //path for protocols in publicly available frontend folder
-    pdfDeleteTimeout: 600 //timeout [s] for deletion of publicly available PDF files
+    bgJobInterval: 15, //interval [s] for background job checking
+    bgJobActive: 0, //activate background job handler
+    pdfFrontendPath: "/media/protocols/", //path in frontend folder for user generated PDF files
+    pdfDeleteTimeout: 30 //timeout [s] for deletion of user generated PDF files
 }
 exports.protocols.pdfFullPath = require('path').dirname(process.mainModule.filename) + "/frontend" + exports.protocols.pdfFrontendPath

@@ -4,8 +4,19 @@ var config = require('../config');
 exports.jobs = {'yAcTc2FIwEx4tvfkth1g4LiLt7ZBKtTA': 1};
 
 
+exports.addJob = function(id){
+    exports.jobs[id] = 1;
+    return;
+}
+
+
 exports.startTimer = function() {
-    console.log('Protocol PDF job handler started...');
+    //cancel if job handler is inactive
+    if(!config.protocols.bgJobActive){
+        return;
+    }
+
+    //console.log('Protocol PDF job handler started...');
 
     for(var id in exports.jobs){
         //skip if this protocol doesnt have to be processed
@@ -19,7 +30,7 @@ exports.startTimer = function() {
                 return;
             }
 
-            console.log('Created PDF', location, 'for filename', filename);
+            console.log('Automatically created PDF', location, 'for filename', filename);
 
             //upload to seafile
             //TODO
@@ -30,5 +41,5 @@ exports.startTimer = function() {
     }
 
     //start next timer
-    setTimeout(exports.startTimer, (config.protocols.pdfInterval * 1000));
+    setTimeout(exports.startTimer, (config.protocols.bgJobInterval * 1000));
 }
