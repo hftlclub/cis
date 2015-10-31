@@ -1,4 +1,4 @@
-var markdownpdf = require('markdown-pdf');
+var pdc = require('pdc');
 var moment = require('moment');
 var sanitize = require('sanitize-filename');
 
@@ -290,16 +290,13 @@ exports.makePdf = function(id, path, callback){
 
         var location = path + utils.uid(20) + '.pdf';
 
-
-        var options = {
-            cssPath: config.abspath + '/templates/protocolspdf/protocolspdf.css',
-            runningsPath: config.abspath + '/templates/protocolspdf/runnings.js'
-        }
-
-        markdownpdf(options).from.string(outmd).to(location, function() {
+        pdc(outmd, 'markdown', 'latex', '--output=' + location, function(err, result){
             console.log('Created PDF for protocol', id);
-            callback(null, location, filename);
-        })
+            if(err) return callback(err);
+            if(result) console.log(result);
 
+            callback(null, location, filename);
+
+        });
     })
 }
