@@ -290,7 +290,13 @@ exports.makePdf = function(id, path, callback){
 
         var location = path + utils.uid(20) + '.pdf';
 
-        markdownpdf().from.string(outmd).to(location, function() {
+
+        var options = {
+            cssPath: './templates/protocolspdf/protocolspdf.css',
+            runningsPath: './templates/protocolspdf/runnings.js'
+        }
+
+        markdownpdf(options).from.string(outmd).to(location, function() {
             console.log('Created PDF for protocol', id);
             callback(null, location, filename);
         })
