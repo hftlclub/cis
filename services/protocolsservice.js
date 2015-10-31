@@ -292,8 +292,8 @@ exports.makePdf = function(id, path, callback){
 
 
         var options = {
-            cssPath: './templates/protocolspdf/protocolspdf.css',
-            runningsPath: './templates/protocolspdf/runnings.js'
+            cssPath: config.abspath + '/templates/protocolspdf/protocolspdf.css',
+            runningsPath: config.abspath + '/templates/protocolspdf/runnings.js'
         }
 
         markdownpdf(options).from.string(outmd).to(location, function() {

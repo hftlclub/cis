@@ -1,6 +1,9 @@
 //application port
 exports.port = 3000;
 
+//absolute root path
+exports.abspath = require('path').dirname(process.mainModule.filename);
+
 //session secret (random string)
 exports.tokensecret = require('crypto').randomBytes(20).toString('hex');
 
@@ -37,7 +40,7 @@ exports.smtp = {
 
 exports.mailsettings = {
     "from": "HfTL Club <club@hft-leipzig.de>",
-    "tplpath": require('path').dirname(process.mainModule.filename) + "/templates/email/"
+    "tplpath": exports.abspath + "/templates/email/"
 };
 
 
@@ -74,4 +77,4 @@ exports.protocols = {
     pdfFrontendPath: "/media/protocols/", //path in frontend folder for user generated PDF files
     pdfDeleteTimeout: 30 //timeout [s] for deletion of user generated PDF files
 }
-exports.protocols.pdfFullPath = require('path').dirname(process.mainModule.filename) + "/frontend" + exports.protocols.pdfFrontendPath
+exports.protocols.pdfFullPath = exports.abspath + "/frontend" + exports.protocols.pdfFrontendPath
