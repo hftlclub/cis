@@ -1,6 +1,7 @@
 var moment = require('moment');
 var md = require('markdown').markdown;
 var fs = require('fs');
+var mv = require('mv');
 var config = require('../config');
 var utils = require('../modules/utils');
 var protocolsservice = require('../services/protocolsservice');
@@ -258,19 +259,23 @@ exports.pdf = function(req, res, next){
         //create destination folder
         var subDir = utils.uid(32) + '/';
         var dir = config.protocols.pdfFullPath + subDir;
-
+	
         fs.mkdir(dir, function(err){
             if(err) return next(err);
 
             //move temp file to destination folder
-            fs.rename(location, dir + filename, function(err){
+            mv(location, (dir + filename), function(err){
+                if(err) console.log(err);
 
                 //set timer for garbage collection
                 setTimeout(function(){
                     //delete PDF file
                     fs.unlink(dir + filename, function(err){
+                        if(err) console.log(err);
+
                         //delete folder
                         fs.rmdir(dir, function(err){
+                            if(err) console.log(err);
                             //console.log('GC done');
                         });
                     });
