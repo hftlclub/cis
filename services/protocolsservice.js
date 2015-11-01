@@ -256,9 +256,14 @@ exports.makePdf = function(id, path, callback){
             'guests': 'gaeste'
         }
         for(var key in attendants){
+            var value = null;
+            
             if(attendants[key].length){
-                out.push(attLabel[key] + ': ' + attendants[key].join(', '));
+                value = attendants[key].join(', ');
+            }else{
+                value = 'keine';
             }
+            out.push(attLabel[key] + ': ' + value);
         }
 
         //comment, if set

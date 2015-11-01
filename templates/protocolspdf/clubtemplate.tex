@@ -42,17 +42,23 @@ $endif$
 
 \usepackage[none]{hyphenat}
 
+
+\usepackage[portrait,top=20mm,bottom=20mm,left=20mm,right=20mm,a4paper]{geometry}
+
+\usepackage[page]{totalcount}
+
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \pagenumbering{arabic}
 \lhead{\itshape $title$}
 \chead{}
-\rhead{\itshape{\nouppercase{\leftmark}}}
+%\rhead{\itshape{\nouppercase{\leftmark}}}
+\rhead{}
 \lfoot{}
 \cfoot{}
-\rfoot{\thepage}
+\rfoot{Seite \thepage{ }von \totalpages}
 
-\usepackage[portrait,top=30mm,bottom=30mm,left=30mm,right=30mm,a4paper]{geometry}
+
 
 $if(listings)$
 \usepackage{listings}
@@ -144,7 +150,6 @@ $if(title)$
         \begin{figure}[ht]
 	       \centering
            \includegraphics[width=0.7\textwidth]{$tplpath$stecker01.png}
-	       \label{fig_stecker}
         \end{figure}
         \vfill
 		\begin{center}
@@ -156,13 +161,14 @@ $if(title)$
 
 		\begin{table}[htb]
 		\begin{tabular}{lp{10cm}}
-			Protokollant: & $author$\\\\
-            Sitzungsdatum: & $date$\\\\
-            Beginn: & $begin$\\\\
-            Ende: & $end$\\\\
-            Anwesend: & $anwesend$\\\\
-            Später: & $spaeter$\\\\
-            Anwärter: & $anwaerter$\\\\
+			\textbf{Protokollführer:} & $author$\\\\
+            \textbf{Sitzungsdatum:} & $date$\\\\
+            \textbf{Beginn:} & $begin$\\\\
+            \textbf{Ende:} & $end$\\\\
+            \textbf{Anwesend:} & $anwesend$\\\\
+            \textbf{Später:} & $spaeter$\\\\
+            \textbf{Anwärter:} & $anwaerter$\\\\
+            \textbf{Gäste:} & $gaeste$\\\\
 		\end{tabular}
 		\end{table}
 
@@ -179,7 +185,7 @@ $endfor$
 {
 \hypersetup{linkcolor=black}
 \setcounter{tocdepth}{$toc-depth$}
-\tableofcontents
+%\tableofcontents
 \clearpage
 }
 
