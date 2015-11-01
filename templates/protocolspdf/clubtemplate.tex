@@ -1,0 +1,192 @@
+\documentclass[a4paper,12pt,ngerman,titlepage,oneside]{$documentclass$}
+\usepackage[default,scale=0.95]{opensans}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+% use microtype if available
+\IfFileExists{microtype.sty}{\usepackage{microtype}}{}
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[utf8]{inputenc}
+
+\providecommand{\tightlist}{%
+   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+$if(euro)$
+  \usepackage{eurosym}
+$endif$
+\else % if luatex or xelatex
+  \usepackage{fontspec}
+  \ifxetex
+    \usepackage{xltxtra,xunicode}
+  \fi
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+$if(mainfont)$
+    \setmainfont{$mainfont$}
+$endif$
+$if(sansfont)$
+    \setsansfont{$sansfont$}
+$endif$
+$if(monofont)$
+    \setmonofont{$monofont$}
+$endif$
+$if(mathfont)$
+    \setmathfont{$mathfont$}
+$endif$
+\fi
+
+\usepackage[none]{hyphenat}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\pagenumbering{arabic}
+\lhead{\itshape $title$}
+\chead{}
+\rhead{\itshape{\nouppercase{\leftmark}}}
+\lfoot{}
+\cfoot{}
+\rfoot{\thepage}
+
+\usepackage[portrait,top=30mm,bottom=30mm,left=30mm,right=30mm,a4paper]{geometry}
+
+$if(listings)$
+\usepackage{listings}
+$endif$
+$if(lhs)$
+\lstnewenvironment{code}{\lstset{language=Haskell,basicstyle=\small\ttfamily}}{}
+$endif$
+$if(highlighting-macros)$
+$highlighting-macros$
+$endif$
+$if(verbatim-in-note)$
+\usepackage{fancyvrb}
+$endif$
+$if(tables)$
+\usepackage{longtable,booktabs}
+$endif$
+
+\usepackage{graphicx}
+% We will generate all images so they have a width \maxwidth. This means
+% that they will get their normal width if they fit onto the page, but
+% are scaled down if they would overflow the margins.
+%\makeatletter
+%\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
+%\else\Gin@nat@width\fi}
+%\makeatother
+%\let\Oldincludegraphics\includegraphics
+%\renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=\maxwidth]{#1}}
+
+\ifxetex
+  \usepackage[setpagesize=false, % page size defined by xetex
+              unicode=false, % unicode breaks when used with xetex
+              xetex]{hyperref}
+\else
+  \usepackage[unicode=true]{hyperref}
+\fi
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={$author-meta$},
+            pdftitle={$title-meta$},
+            colorlinks=true,
+            urlcolor=$if(urlcolor)$$urlcolor$$else$blue$endif$,
+            linkcolor=$if(linkcolor)$$linkcolor$$else$magenta$endif$,
+            pdfborder={0 0 0}}
+$if(links-as-notes)$
+% Make links footnotes instead of hotlinks:
+\renewcommand{\href}[2]{#2\footnote{\url{#1}}}
+$endif$
+$if(strikeout)$
+\usepackage[normalem]{ulem}
+% avoid problems with \sout in headers with hyperref:
+\pdfstringdefDisableCommands{\renewcommand{\sout}{}}
+$endif$
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+
+% NUMBERING ONLY FOR FIRST LEVEL
+\setcounter{secnumdepth}{1}
+
+$if(verbatim-in-note)$
+\VerbatimFootnotes % allows verbatim text in footnotes
+$endif$
+
+\ifxetex
+  \usepackage{polyglossia}
+  \setmainlanguage{ngerman}
+\else
+  \usepackage[$lang$]{babel}
+\fi
+
+$for(header-includes)$
+$header-includes$
+$endfor$
+
+$if(title)$
+\title{$title$}
+$endif$
+\author{$for(author)$$author$$sep$ \and $endfor$}
+\date{$date$}
+
+\begin{document}
+$if(title)$
+	\thispagestyle{empty}
+	\begin{titlepage}
+		\thispagestyle{empty}
+		\normalfont
+
+        \vfill
+        \begin{figure}[ht]
+	       \centering
+           \includegraphics[width=0.7\textwidth]{$tplpath$stecker01.png}
+	       \label{fig_stecker}
+        \end{figure}
+        \vfill
+		\begin{center}
+			\LARGE
+			\textbf{$title$}
+            \par
+		\end{center}
+		\vfill
+
+		\begin{table}[htb]
+		\begin{tabular}{lp{10cm}}
+			Protokollant: & $author$\\\\
+            Sitzungsdatum: & $date$\\\\
+            Beginn: & $begin$\\\\
+            Ende: & $end$\\\\
+            Anwesend: & $anwesend$\\\\
+            Später: & $spaeter$\\\\
+            Anwärter: & $anwaerter$\\\\
+		\end{tabular}
+		\end{table}
+
+	\vfill
+\end{titlepage}
+\clearpage
+$endif$
+
+$for(include-before)$
+$include-before$
+
+$endfor$
+
+{
+\hypersetup{linkcolor=black}
+\setcounter{tocdepth}{$toc-depth$}
+\tableofcontents
+\clearpage
+}
+
+$body$
+
+$for(include-after)$
+$include-after$
+$endfor$
+
+\end{document}

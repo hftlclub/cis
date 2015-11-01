@@ -231,6 +231,7 @@ exports.makePdf = function(id, path, callback){
             }
         }
 
+        var tplpath = config.abspath + '/templates/protocolspdf/';
 
         //build text
         var out = [];
@@ -238,49 +239,39 @@ exports.makePdf = function(id, path, callback){
         //date
         var date = moment(row.start).format('DD.MM.YYYY');
 
-        //headline
-        out.push('# ' + row.title + ' ' + date);
+        out.push('---'); //header begin
+        out.push('tplpath: \'' + tplpath + '\'');
+        out.push('title: \'Protokoll ' + row.title + ' ' + date + '\'');
+        out.push('author: ' + row.recorder);
+        out.push('date: ' + date);
+        out.push('begin: ' + moment(row.start).format('HH:mm') + ' Uhr');
+        out.push('end: ' + moment(row.end).format('HH:mm') + ' Uhr');
 
-        //separator line
-        out.push('---');
-
-        //dates
-        out.push('**Datum:** ' + date);
-        out.push('**Start:** ' + moment(row.start).format('HH:mm') + ' Uhr');
-        out.push('**Ende:** ' + moment(row.end).format('HH:mm') + ' Uhr');
-
-        //recorder
-        out.push('**Protokollführer:** ' + row.recorder);
-
-        out.push('\n');
 
         //attendants, but show groups only when they have contents
         var attLabel = {
-            'members': 'Teilnehmer',
-            'later': 'Später',
-            'applicants': 'Anwärter',
-            'guests': 'Gäste'
+            'members': 'anwesend',
+            'later': 'spaeter',
+            'applicants': 'anwaerter',
+            'guests': 'gaeste'
         }
         for(var key in attendants){
             if(attendants[key].length){
-                out.push('**' + attLabel[key] + '**: ' + attendants[key].join(', '));
+                out.push(attLabel[key] + ': ' + attendants[key].join(', '));
             }
         }
 
-
         //comment, if set
         if(row.comment){
-            out.push('\n');
-            out.push('**Kommentar:** ' + row.comment);
+            out.push('kommentar: ' + row.comment);
         }
 
-        //separator line
-        out.push('---');
+        out.push('...'); //header end
 
         //protocol text
         out.push(row.text);
 
-        var outmd = out.join('\n\n')
+        var outmd = out.join('\n')
 
         //make filename
         var filename = moment(row.start).format('YYYY-MM-DD') + '-protokoll_' + row.title + '.pdf';
@@ -290,7 +281,13 @@ exports.makePdf = function(id, path, callback){
 
         var location = path + utils.uid(20) + '.pdf';
 
-        pdc(outmd, 'markdown', 'latex', '--output=' + location, function(err, result){
+
+        var args = [
+            '--template=' + tplpath + 'clubtemplate.tex',
+            '--output=' + location
+        ]
+
+        pdc(outmd, 'markdown', 'latex', args, function(err, result){
             console.log('Created PDF for protocol', id);
             if(err) return callback(err);
             if(result) console.log(result);
