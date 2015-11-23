@@ -67,13 +67,13 @@ api.get('/members', jwtauth, reqm('auth'), reqm('club'), membersController.listm
 
 
 //protocols
-api.get('/protocols', jwtauth, reqm('auth'), protocolsController.list);
-api.get('/protocols/raw/:id', jwtauth, reqm('auth'), protocolsController.get); //raw view
-api.get('/protocols/detail/:id', jwtauth, reqm('auth'), protocolsController.getDetail); //detailed view with HTML
-api.post('/protocols', jwtauth, reqm('auth'), protocolsController.addedit); //add
-api.put('/protocols/:id', jwtauth, reqm('auth'), protocolsController.addedit); //edit
-api.delete('/protocols/:id', jwtauth, reqm('auth'), protocolsController.del);
-api.get('/protocols/pdf/:id', jwtauth, reqm('auth'), protocolsController.pdf); //PDF file as HTTP attachment
+api.get('/protocols', jwtauth, reqm('auth'), reqm('club'), protocolsController.list);
+api.get('/protocols/raw/:id', jwtauth, reqm('auth'), reqm('club'), protocolsController.get); //raw view
+api.get('/protocols/detail/:id', jwtauth, reqm('auth'), reqm('club'), protocolsController.getDetail); //detailed view with HTML
+api.post('/protocols', jwtauth, reqm('auth'), reqm('club'), protocolsController.addedit); //add
+api.put('/protocols/:id', jwtauth, reqm('auth'), reqm('club'), protocolsController.addedit); //edit
+api.delete('/protocols/:id', jwtauth, reqm('auth'), reqm('club'), protocolsController.del);
+api.get('/protocols/pdf/:id', jwtauth, reqm('auth'), reqm('club'), protocolsController.pdf); //PDF file as HTTP attachment
 
 
 
@@ -90,8 +90,7 @@ api.get('/keylist/:accesskey', reqm('pubaccess'), keylistController.getDoorKeyLi
 
 
 //calendar
-api.get('/calendar', jwtauth, reqm('auth'), calendarController.listEvents);
-
+api.get('/calendar', jwtauth, reqm('auth'), reqm('club'), calendarController.listEvents);
 
 
 
