@@ -6,6 +6,8 @@ exports.retrieveIcs = function(url, callback) {
     rows = [];
 
     ical.fromURL(url, {}, function(err, data) {
+        if(err) return callback(err);
+
         for (var k in data){
             if (data.hasOwnProperty(k)) {
                 var ev = data[k];
@@ -21,8 +23,7 @@ exports.retrieveIcs = function(url, callback) {
                 rows.push(row);
             }
         }
-        if(!rows.length) return callback(null, false);
-
+        
         return callback(null, rows);
     });
 
