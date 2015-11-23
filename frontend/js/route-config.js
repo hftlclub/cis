@@ -85,6 +85,14 @@ angular.module('app.cis').config(function($routeProvider) {
         }
     }).
 
+
+    /* calendar list */
+
+    when('/calendar', {
+        templateUrl: 'templates/calendar/calendarlist.html',
+        resolve: { refresh: refreshAuth }
+    }).
+    
     /* member list */
 
     when('/memberlist', {
