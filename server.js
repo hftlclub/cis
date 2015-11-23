@@ -17,6 +17,7 @@ var feedbackController = require('./controllers/feedback');
 var keylistController = require('./controllers/keylist');
 var protocolsController = require('./controllers/protocols');
 var deployController = require('./controllers/deploy');
+var calendarController = require('./controllers/calendar');
 
 var protocolspdf = require('./modules/protocolspdf');
 
@@ -88,6 +89,8 @@ api.get('/keylist', jwtauth, reqm('auth'), reqm('club'), keylistController.getDo
 api.get('/keylist/:accesskey', reqm('pubaccess'), keylistController.getDoorKeyList);
 
 
+
+api.post('/calendar', calendarController.listEvents);
 
 api.post('/deploy/:key', deployController.deploy);
 

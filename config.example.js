@@ -78,3 +78,10 @@ exports.protocols = {
     pdfDeleteTimeout: 30 //timeout [s] for deletion of user generated PDF files
 }
 exports.protocols.pdfFullPath = exports.abspath + "/frontend" + exports.protocols.pdfFrontendPath
+
+
+//array of ICS URLs to show in calendar
+exports.icsurls = [
+    "http://stura.hft-leipzig.de/events/club/events.ics",
+    //"http://stura.hft-leipzig.de/events/events.ics"
+];
