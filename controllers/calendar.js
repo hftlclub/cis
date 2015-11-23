@@ -3,21 +3,24 @@ var config = require('../config');
 var calendarservice = require('../services/calendarservice');
 
 exports.listEvents = function(req, res, next) {
-    if(!config.ics.length) return next(new Error('No ICS sources given'));
-
     var events = {};
-    async.mapSeries(config.ics, function(ics, cb){
+    async.mapSeries(Object.keys(config.ics), function(key, cb){
 
-        calendarservice.retrieveIcs(ics.url, function(err, rows){
-            events[ics.name] = rows;
+        calendarservice.retrieveIcs(config.ics[key], function(err, rows){
+            events[key] = rows;
             cb(null, null);
         });
     }, function(err){
         if(err) console.log(err);
 
-
         res.json(events);
     });
 
 
+}
+
+
+
+exports.getUrls = function(req, res, next) {
+    res.json(config.ics);
 }

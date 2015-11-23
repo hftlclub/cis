@@ -91,7 +91,7 @@ api.get('/keylist/:accesskey', reqm('pubaccess'), keylistController.getDoorKeyLi
 
 //calendar
 api.get('/calendar', jwtauth, reqm('auth'), reqm('club'), calendarController.listEvents);
-
+api.get('/calendar/urls', jwtauth, reqm('auth'), reqm('club'), calendarController.getUrls);
 
 
 api.post('/deploy/:key', deployController.deploy);
