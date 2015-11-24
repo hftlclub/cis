@@ -80,14 +80,8 @@ exports.protocols = {
 exports.protocols.pdfFullPath = exports.abspath + "/frontend" + exports.protocols.pdfFrontendPath
 
 
-//array of ICS URLs to show in calendar
-exports.icsurls = [
-    {
-        "name": "public",
-        "url": "http://stura.hft-leipzig.de/events/club/events.ics"
-    },
-    {
-        "name": "internal",
-        "url": "http://stura.hft-leipzig.de/events/club/events.ics"
-    }
-];
+//ICS URLs to show in calendar
+exports.ics = {
+    "public": "http://stura.hft-leipzig.de/events/club/events.ics",
+    "internal": "http://stura.hft-leipzig.de/events/club/events.ics"
+}
