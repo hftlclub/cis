@@ -89,10 +89,11 @@ angular.module('app.cis').config(function($routeProvider) {
     /* calendar list */
 
     when('/calendar', {
-        templateUrl: 'templates/calendar/calendarlist.html',
+        templateUrl: 'templates/calendar/calendar.html',
+        controller: 'CalendarController',
         resolve: { refresh: refreshAuth }
     }).
-    
+
     /* member list */
 
     when('/memberlist', {
