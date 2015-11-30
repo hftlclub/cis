@@ -1,7 +1,18 @@
 <h2 class="page-header">Club-Kalender</h2>
 
-<ul>
+<ul ng-if="false">
     <li ng-repeat="ev in events">
         {{ ev.text }}
     </li>
 </ul>
+
+<div data="events" eventclick="onEventClick()" dhx-scheduler style="height:600px; width:800px;">
+    <div class="dhx_cal_prev_button">&nbsp;</div>
+    <div class="dhx_cal_next_button">&nbsp;</div>
+    <div class="dhx_cal_today_button"></div>
+    <div class="dhx_cal_date"></div>
+
+    <div dhx-template="event_bar_text">
+        <span ng-if="false">{{event.text}}</span>
+    </div>
+</div>

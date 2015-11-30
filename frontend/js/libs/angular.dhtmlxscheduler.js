@@ -1,7 +1,7 @@
 (function () {
   'use strict';
   angular.module('dhxScheduler', [])
-    .directive('dhxScheduler', function () {
+    .directive('dhxScheduler', ['$compile', function ($compile) {
       return {
         restrict: 'A',
         scope: false,
@@ -38,18 +38,31 @@
           }, function () {
             scheduler.setCurrentView();
           });
+          
+          //watch the eventClickCallbackFunction
+          var eventClickFunction = null;
+          $scope.$watch($attrs.eventclick, function (callbackFunction) {
+            eventClickFunction = callbackFunction;
+          }, true);
 
           //styling for dhtmlx scheduler
           $element.addClass("dhx_cal_container");
 
           //init scheduler
-          scheduler.init($element[0], $scope.scheduler.mode, $scope.scheduler.date);
+          scheduler.config.readonly = true;
+          scheduler.attachEvent("onClick", function (id, e) {
+            if(eventClickFunction) {
+              eventClickFunction(e);
+            }
+            return true;
+          });
+          scheduler.init($element[0], $scope.scheduler.date, $scope.scheduler.mode);
         }
       }
-    });
+    }]);
 
   angular.module('dhxScheduler')
-    .directive('dhxTemplate', ['$filter', function ($filter) {
+    .directive('dhxTemplate', ['$filter', '$compile', function ($filter, $compile) {
       scheduler.aFilter = $filter;
 
       return {

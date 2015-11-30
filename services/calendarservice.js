@@ -17,7 +17,7 @@ exports.retrieveIcs = function(url, callback) {
                     title: ev.summary,
                     description: ev.description,
                     start: ev.start.getTime(),
-                    end: ev.start.getTime(),
+                    end: ev.end.getTime(),
                 }
 
                 rows.push(row);
