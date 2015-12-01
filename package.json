@@ -1,11 +1,12 @@
 {
   "name": "cis",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "description": "CIS Club Information System",
   "repository": {
     "type": "git",
     "url": "https://github.com/hftlclub/cis"
   },
+  "license": "MIT",
   "main": "server.js",
   "engines": {
     "node": ">= 0.8.x"
