@@ -2,22 +2,23 @@ angular.module('app.cis').controller('CalendarController', function ($scope, $ro
 
     $scope.events = [];
     $scope.scheduler = { date: new Date(), mode: 'month' };
-    $scope.onEventClick = function (event) { console.log(event); };
+    $scope.onEventClick = onEventClicked;
     refresh();
 
     function refresh() {
         $http.get(appConf.api + '/calendar').
             success(function (data) {
                 var events = [];
-                var cals = ['public', 'internal'];
+                //var cals = ['public', 'internal'];
                 var pseudoEventId = 0;
-                for (var cal in cals) {
-                    for (var i = 0; i < data[cals[cal]].length; i++) {
+                for (var cals in data) {
+                    for (var i = 0; i < data[cals].events.length; i++) {
                         pseudoEventId++;
-                        var ev = data[cals[cal]][i];
+                        var ev = data[cals].events[i];
                         events.push({
                             id: pseudoEventId,
                             text: ev.title,
+                            calendar: data[cals].name,
                             start_date: new Date(ev.start),
                             end_date: new Date(ev.end)
                         });
@@ -27,7 +28,11 @@ angular.module('app.cis').controller('CalendarController', function ($scope, $ro
             });
     }
 
-    $scope.eventClicked = function (id) {
-        alert('event ' + id + ' clicked');
+    function onEventClicked(eventId) {
+        angular.forEach($scope.events, function (event) {
+            if (event.id === eventId) {
+                alert('event ' + event.text + ' clicked');
+            }
+        });
     }
 });

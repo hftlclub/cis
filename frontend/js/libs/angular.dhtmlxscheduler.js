@@ -50,9 +50,9 @@
 
           //init scheduler
           scheduler.config.readonly = true;
-          scheduler.attachEvent("onClick", function (id, e) {
+          scheduler.attachEvent("onClick", function (eventId, e) {
             if(eventClickFunction) {
-              eventClickFunction(e);
+              eventClickFunction(parseInt(eventId));
             }
             return true;
           });
