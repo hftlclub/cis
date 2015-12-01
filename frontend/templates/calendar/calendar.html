@@ -1,5 +1,9 @@
 <h2 class="page-header">Club-Kalender</h2>
-
+<helpbox label="Hilfe" active="true">
+Dieser Kalender zeigt die öffentlichen und internen Veranstaltungen an.<br>
+Die Daten werden aus dem Kalender der Stura-Seite abgerufen.<br>
+Mit Klick auf einen Termin werden Details angezeigt.
+</helpbox>
 <ul ng-if="false">
     <li ng-repeat="ev in events">
         {{ ev.text }}
@@ -13,6 +17,6 @@
     <div class="dhx_cal_date"></div>
 
     <div dhx-template="event_bar_text">
-        <span ng-if="false">{{event.text}}</span>
+        <span>{{event.text}}</span>
     </div>
 </div>
