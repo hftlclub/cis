@@ -1,0 +1,34 @@
+<div class="modal-header">
+    <a ng-click="$close()" class="pull-right text-muted">
+        <span class="glyphicon glyphicon-remove"></span>
+    </a>
+    <h3 class="modal-title">
+        <span class="glyphicon glyphicon-calendar"></span>
+        {{event.text}}
+    </h3>
+
+</div>
+<div class="modal-header">
+    <div>
+        <strong>Datum:</strong> {{event.start_date | date: 'fullDate'}}
+    </div>
+    <div>
+        <strong>Beginn:</strong> {{event.start_date | date: 'shortTime'}} Uhr
+    </div>
+    <div ng-if="event.end_date">
+        <strong>Ende:</strong> {{event.end_date | date: 'shortTime'}} Uhr
+    </div>
+
+
+</div>
+<div ng-if="event.description" class="modal-body">
+
+<div style="white-space: pre-line">
+{{ event.description }}
+</div>
+
+
+</div>
+<div class="modal-footer">
+	<button class="btn btn-default" ng-click="$close()">Schließen</button>
+</div>

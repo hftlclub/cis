@@ -1,4 +1,4 @@
-angular.module('app.cis').controller('CalendarController', function ($scope, $rootScope, $http, clubAuth, appConf) {
+angular.module('app.cis').controller('CalendarController', function ($scope, $rootScope, $http, clubAuth, $uibModal, appConf) {
 
     $scope.events = [];
     $scope.scheduler = { date: new Date(), mode: 'month' };
@@ -20,7 +20,8 @@ angular.module('app.cis').controller('CalendarController', function ($scope, $ro
                             text: ev.title,
                             calendar: data[cals].name,
                             start_date: new Date(ev.start),
-                            end_date: new Date(ev.end)
+                            end_date: new Date(ev.end),
+                            description: ev.description
                         });
                     }
                 }
@@ -31,8 +32,30 @@ angular.module('app.cis').controller('CalendarController', function ($scope, $ro
     function onEventClicked(eventId) {
         angular.forEach($scope.events, function (event) {
             if (event.id === eventId) {
-                alert('event ' + event.text + ' clicked');
+                var modal = $uibModal.open({
+                    templateUrl: 'templates/calendar/detailsmodal.html',
+                    controller: 'CalendarDetailsController',
+                    resolve: {
+                        event: function() {
+                            return event;
+                        }
+                    }
+                });
             }
         });
     }
+
+
+});
+
+
+
+
+angular.module('app.cis').controller('CalendarDetailsController', function($scope, $modalInstance, event) {
+    $scope.event = event;
+    console.log(event);
+
+    $scope.close = function() {
+        $modal.close();
+    };
 });
