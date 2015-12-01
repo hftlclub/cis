@@ -43,7 +43,7 @@
         <label for="inputRecorder" class="col-sm-2 control-label">Protokollführer</label>
         <div class="col-sm-10">
             <input type="text" ng-model="form.data.recorder" ng-required="true" class="form-control" id="inputRecorder" uib-typeahead="user for user in users | filter:$viewValue | limitTo:8" placeholder="Protokollführer" tooltip-placement="right" tooltip-trigger="focus"
-            tooltip="Wer ist Protokollführer?">
+            uib-tooltip="Wer ist Protokollführer?">
             <span ng-if="form.errors.recorder" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
         </div>
     </div>
@@ -53,7 +53,7 @@
         <div class="col-md-2">
             <p class="input-group datepicker">
                 <input type="text" class="form-control" uib-datepicker-popup="{{datePicker.format}}" ng-model="times.date" is-open="datePicker.opened" datepicker-options="datePicker.options" ng-required="true" close-text="Close" tooltip-placement="bottom" tooltip-trigger="focus"
-                tooltip="Wann wurde das Protokoll erstellt?" />
+                uib-tooltip="Wann wurde das Protokoll erstellt?" />
                 <span class="input-group-btn">
                     <button type="button" class="btn btn-default" ng-click="datePicker.open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                 </span>

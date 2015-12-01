@@ -53,7 +53,7 @@
                 <tr>
                     <th class="text-center">#</th>
                     <th>Name</th>
-                    <th ng-repeat="key in keys" tooltip-placement="top" tooltip-trigger="mouseenter" tooltip-append-to-body="true" tooltip="{{key.name}}" class="text-center">{{key.key}}</th>
+                    <th ng-repeat="key in keys" tooltip-placement="top" tooltip-trigger="mouseenter" tooltip-append-to-body="true" uib-tooltip="{{key.name}}" class="text-center">{{key.key}}</th>
                     <th ng-if="isSuperuser" class="text-center hidden-print">
                         <span class="glyphicon glyphicon-cog"></span>
                     </th>

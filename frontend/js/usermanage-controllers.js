@@ -1,7 +1,7 @@
-angular.module('app.cis').controller('UserFormController', function($scope, $rootScope, $routeParams, $route, $http, $location, $modal, $timeout, clubAuth, growl, appConf) {
+angular.module('app.cis').controller('UserFormController', function($scope, $rootScope, $routeParams, $route, $http, $location, $uibModal, $timeout, clubAuth, growl, appConf) {
     var form = {};
     $scope.form = form;
-    
+
     form.id = $routeParams.id;
     form.mode = $route.current.locals.clubMode;
     form.errors = {};
@@ -11,7 +11,7 @@ angular.module('app.cis').controller('UserFormController', function($scope, $roo
     if (form.mode == 'profile' && $rootScope.clubUser.superuser) {
         $location.path('/users/edit/' + $rootScope.clubUser.username);
     }
-    
+
 
     $scope.options = {
         shells: [{
@@ -56,7 +56,7 @@ angular.module('app.cis').controller('UserFormController', function($scope, $roo
             label: 'Vorstand'
         }
     ];
-    
+
 
 
     form.submit = submit;
@@ -195,7 +195,7 @@ angular.module('app.cis').controller('UserFormController', function($scope, $roo
 
 
 
-angular.module('app.cis').controller('UserListController', function($scope, $rootScope, $http, $routeParams, clubAuth, $modal, growl, appConf) {
+angular.module('app.cis').controller('UserListController', function($scope, $rootScope, $http, $routeParams, clubAuth, $uibModal, growl, appConf) {
     $scope.listFilter = '';
 
     $scope.users = {};
@@ -220,7 +220,7 @@ angular.module('app.cis').controller('UserListController', function($scope, $roo
     }
 
     function remove(user) {
-        var modal = $modal.open({
+        var modal = $uibModal.open({
             templateUrl: 'templates/usermanage/deletemodal.html',
             controller: 'UserDelModalController',
             resolve: {
@@ -245,7 +245,7 @@ angular.module('app.cis').controller('UserListController', function($scope, $roo
 
 
     function resetpw(user) {
-        var modal = $modal.open({
+        var modal = $uibModal.open({
             templateUrl: 'templates/usermanage/passwordresetmodal.html',
             controller: 'ResetPwModalController',
             resolve: {

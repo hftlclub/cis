@@ -25,7 +25,7 @@
                 <div ng-class="{'has-error has-feedback': form.errors.username}">
                     <label for="inputUsername" class="col-sm-3 control-label">Benutzername</label>
                     <div class="col-sm-9">
-                        <input type="text" ng-model="form.data.username" ng-disabled="(form.mode != 'add')" class="form-control" id="inputUsername" placeholder="Benutzername" tooltip-placement="right" tooltip-trigger="focus" tooltip="Benutzername: nur alphanumerisch in Kleinbuchstaben!">
+                        <input type="text" ng-model="form.data.username" ng-disabled="(form.mode != 'add')" class="form-control" id="inputUsername" placeholder="Benutzername" tooltip-placement="right" tooltip-trigger="focus" uib-tooltip="Benutzername: nur alphanumerisch in Kleinbuchstaben!">
                         <span ng-if="form.errors.username" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                     <label for="inputAccessiondate" class="col-sm-3 col-lg-2 control-label">Eintrittsdatum</label>
                     <div class="col-sm-3">
                       <p class="input-group datepicker">
-                          <input type="text" class="form-control" ng-disabled="(form.mode == 'profile')" ng-model="form.data.accessiondate" datepicker-popup="{{datePicker.format}}" placeholder="dd.mm.yyyy" is-open="datePicker.accessiondate.opened" datepicker-options="datePicker.options" min-date="datePicker.accessiondate.minDate" max-date="datePicker.accessiondate.maxDate" tooltip-placement="right" tooltip-trigger="focus" tooltip="Wann ist der Nutzer dem Club beigetreten?" />
+                          <input type="text" class="form-control" ng-disabled="(form.mode == 'profile')" ng-model="form.data.accessiondate" uib-datepicker-popup="{{datePicker.format}}" placeholder="dd.mm.yyyy" is-open="datePicker.accessiondate.opened" datepicker-options="datePicker.options" min-date="datePicker.accessiondate.minDate" max-date="datePicker.accessiondate.maxDate" tooltip-placement="right" tooltip-trigger="focus" uib-tooltip="Wann ist der Nutzer dem Club beigetreten?" />
                           <span class="input-group-btn">
                               <button type="button" class="btn btn-default" ng-click="datePicker.accessiondate.open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                           </span>
@@ -95,7 +95,7 @@
             <div class="form-group" ng-class="{'has-error has-feedback': form.errors.role}">
                 <label for="inputRole" class="col-sm-3 control-label">Position</label>
                 <div class="col-sm-9">
-                    <input type="text" ng-model="form.data.role" ng-disabled="(form.mode == 'profile')" class="form-control" id="inputRole" placeholder="Position" tooltip-placement="top" tooltip-trigger="focus" tooltip="zusätzliche Position (z.B. Vorstandsmitglied, etc.)">
+                    <input type="text" ng-model="form.data.role" ng-disabled="(form.mode == 'profile')" class="form-control" id="inputRole" placeholder="Position" tooltip-placement="top" tooltip-trigger="focus" uib-tooltip="zusätzliche Position (z.B. Vorstandsmitglied, etc.)">
                     <span ng-if="form.errors.role" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                 </div>
             </div>
@@ -104,7 +104,7 @@
             <div class="form-group required" ng-class="{'has-error has-feedback': form.errors.email}">
                 <label for="inputEmail" class="col-sm-3 control-label">E-Mail</label>
                 <div ng-class="form.mode == 'add' ? 'col-sm-5' : 'col-sm-9'">
-                    <input type="text" ng-model="form.data.email" class="form-control" id="inputEmail" placeholder="E-Mail" tooltip-placement="top" tooltip-trigger="focus" tooltip="Deine E-Mail Adresse für Club-Mails">
+                    <input type="text" ng-model="form.data.email" class="form-control" id="inputEmail" placeholder="E-Mail" tooltip-placement="top" tooltip-trigger="focus" uib-tooltip="Deine E-Mail Adresse für Club-Mails">
                     <span ng-if="form.errors.email" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                 </div>
                 <div class="col-sm-4" ng-if="(form.mode == 'add')">
@@ -134,7 +134,7 @@
             <div class="form-group" ng-class="{'has-error has-feedback': form.errors.alias}">
                 <label for="inputAlias" class="col-sm-3 control-label">Spitzname</label>
                 <div class="col-sm-9">
-                    <input type="text" ng-model="form.data.alias" class="form-control" id="inputAlias" placeholder="Spitzname" tooltip-placement="right" tooltip-trigger="focus" tooltip="Gibt es einen Spitznamen?">
+                    <input type="text" ng-model="form.data.alias" class="form-control" id="inputAlias" placeholder="Spitzname" tooltip-placement="right" tooltip-trigger="focus" uib-tooltip="Gibt es einen Spitznamen?">
                     <span ng-if="form.errors.alias" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                 </div>
             </div>
@@ -145,7 +145,7 @@
              <div class="form-group" ng-class="{'has-error has-feedback': form.errors.tel}">
                 <label for="inputTel" class="col-sm-3 control-label">Telefon</label>
                 <div class="col-sm-9">
-                    <input type="text" ng-model="form.data.tel" class="form-control" id="inputTel" placeholder="Telefon" tooltip-placement="right" tooltip-trigger="focus" tooltip="Unter welcher Nummer kann man dich erreichen?">
+                    <input type="text" ng-model="form.data.tel" class="form-control" id="inputTel" placeholder="Telefon" tooltip-placement="right" tooltip-trigger="focus" uib-tooltip="Unter welcher Nummer kann man dich erreichen?">
                     <span ng-if="form.errors.tel" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                 </div>
             </div>
@@ -153,7 +153,7 @@
                 <label for="inputBirthday" class="col-sm-3 control-label">Geburtstag</label>
                 <div class="col-sm-9">
                     <p class="input-group datepicker">
-                        <input type="text" class="form-control" ng-model="form.data.birthday" datepicker-popup="{{datePicker.format}}" placeholder="dd.mm.yyyy" is-open="datePicker.birthday.opened" datepicker-options="datePicker.options" tooltip-placement="right" tooltip-trigger="focus" tooltip="Hier kannst du deinen Geburtstag eintragen." />
+                        <input type="text" class="form-control" ng-model="form.data.birthday" uib-datepicker-popup="{{datePicker.format}}" placeholder="dd.mm.yyyy" is-open="datePicker.birthday.opened" datepicker-options="datePicker.options" tooltip-placement="right" tooltip-trigger="focus" uib-tooltip="Hier kannst du deinen Geburtstag eintragen." />
                         <span class="input-group-btn">
                             <button type="button" class="btn btn-default" ng-click="datePicker.birthday.open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                         </span>
@@ -166,7 +166,7 @@
             <div class="form-group" ng-class="{'has-error has-feedback': form.errors.street}">
                 <label for="inputStreet" class="col-sm-3 control-label">Adresse</label>
                 <div class="col-sm-9">
-                    <input type="text" ng-model="form.data.street" class="form-control" id="inputStreet" placeholder="Straße, Hausnummer" tooltip-placement="right" tooltip-trigger="focus" tooltip="Wo wohnst du?">
+                    <input type="text" ng-model="form.data.street" class="form-control" id="inputStreet" placeholder="Straße, Hausnummer" tooltip-placement="right" tooltip-trigger="focus" uib-tooltip="Wo wohnst du?">
                     <span ng-if="form.errors.street" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                 </div>
             </div>
@@ -176,7 +176,7 @@
                     <span ng-if="form.errors.zip" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                 </div>
                 <div class="col-xs-9 col-sm-7" ng-class="{'has-error has-feedback': form.errors.city}">
-                    <input type="text" ng-model="form.data.city" class="form-control" id="inputCity" placeholder="Stadt" tooltip-placement="right" tooltip-trigger="focus" tooltip="Wo wohnst du?">
+                    <input type="text" ng-model="form.data.city" class="form-control" id="inputCity" placeholder="Stadt" tooltip-placement="right" tooltip-trigger="focus" uib-tooltip="Wo wohnst du?">
                     <span ng-if="form.errors.city" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                 </div>
             </div>
