@@ -15,15 +15,16 @@ exports.retrieveIcs = function(url, callback) {
                 var row = {
                     uid: ev.uid,
                     title: ev.summary,
-                    description: ev.description,
                     start: ev.start.getTime(),
                     end: ev.end.getTime(),
                 }
 
+                if(ev.description) row.description = ev.description;
+
                 rows.push(row);
             }
         }
-        
+
         return callback(null, rows);
     });
 

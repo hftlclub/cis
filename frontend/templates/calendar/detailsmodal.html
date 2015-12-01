@@ -9,6 +9,16 @@
 
 </div>
 <div class="modal-header">
+    <div class="pull-right">
+        <span ng-if="event.cal == 'public'" class="label label-success">
+            <span class="glyphicon glyphicon-globe"></span>
+            Öffentlich
+        </span>
+        <span ng-if="event.cal == 'internal'" class="label label-warning">
+            <span class="glyphicon glyphicon-ban-circle"></span>
+            Intern
+        </span>
+    </div>
     <div>
         <strong>Datum:</strong> {{event.start_date | date: 'fullDate'}}
     </div>
