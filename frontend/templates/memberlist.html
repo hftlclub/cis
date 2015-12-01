@@ -20,7 +20,7 @@
             </a>
             <a class="btn btn-success" href="javascript:window.print()">
                 <span class="glyphicon glyphicon-print"></span>
-                <span ng-if="memberFilter">Gefilterte</span>
+                <span ng-if="listFilter">Gefilterte</span>
                 Mitgliederliste drucken
             </a>
         </div>
@@ -35,7 +35,7 @@
         </span>
         <span class="help-block"></span>
     </div>
-    <div ng-hide="!memberlistLoading">
+    <div ng-hide="!contentLoading">
         <br>
         <br>
         <div class="progress">
@@ -58,7 +58,7 @@
         </div>
     </form>
 
-    <div class="table-responsive" ng-hide="memberlistLoading">
+    <div class="table-responsive" ng-hide="contentLoading">
 
         <table class="table table-striped table-bordered table-condensed table-hover" ng-if="members.data">
             <thead>

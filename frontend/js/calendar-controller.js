@@ -1,4 +1,5 @@
 angular.module('app.cis').controller('CalendarController', function ($scope, $rootScope, $http, clubAuth, $uibModal, appConf) {
+    $scope.contentLoading = false;
 
     $scope.events = [];
     $scope.scheduler = { date: new Date(), mode: 'month' };
@@ -6,6 +7,9 @@ angular.module('app.cis').controller('CalendarController', function ($scope, $ro
     refresh();
 
     function refresh() {
+        // show loading bar
+        $scope.contentLoading = true;
+
         $http.get(appConf.api + '/calendar').
             success(function (data) {
                 var events = [];
@@ -23,6 +27,9 @@ angular.module('app.cis').controller('CalendarController', function ($scope, $ro
                 }
 
                 $scope.events = events;
+
+                // hide loading bar
+                $scope.contentLoading = false;
             });
     }
 

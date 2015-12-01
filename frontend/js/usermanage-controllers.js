@@ -202,7 +202,7 @@ angular.module('app.cis').controller('UserListController', function($scope, $roo
     $scope.users.data = null;
     $scope.users.remove = remove;
     $scope.users.resetpw = resetpw;
-    $scope.userlistLoading = true;
+    $scope.contentLoading = true;
 
     refresh();
 
@@ -211,11 +211,11 @@ angular.module('app.cis').controller('UserListController', function($scope, $roo
     /*** functions ***/
 
     function refresh() {
-        $scope.userlistLoading = true;
+        $scope.contentLoading = true;
         $http.get(appConf.api + '/user').
         success(function(data) {
             $scope.users.data = data;
-            $scope.userlistLoading = false;
+            $scope.contentLoading = false;
         });
     }
 
