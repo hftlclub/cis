@@ -1,11 +1,4 @@
 <ul class="nav navbar-nav">
-    <li club-active-state>
-      <a ng-href="#/settings">
-        <span class="glyphicon glyphicon-cog"></span>
-        Einstellungen
-      </a>
-    </li>
-
 
   <li club-active-state ng-if="user.type=='club'">
     <a ng-href="#/memberlist">
@@ -14,23 +7,24 @@
     </a>
   </li>
 
-  <li club-active-state ng-if="user.type=='club'" uib-dropdown>
-      <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" uib-dropdown-toggle>
-          <span class="glyphicon glyphicon-glass"></span> Club
-      </a>
-      <ul class="dropdown-menu" role="menu">
-          <li>
-            <a ng-href="#/protocols"><span class="glyphicon glyphicon-file"></span> Protokolle</a>
-          </li>
-          <li>
-              <a href="#/calendar"><span class="glyphicon glyphicon-calendar"></span> Kalender</a>
-          </li>
-      </ul>
+  <li club-active-state ng-if="user.type=='club'">
+    <a ng-href="#/protocols">
+      <span class="glyphicon glyphicon-file"></span>
+      Protokolle
+    </a>
   </li>
+
+  <li club-active-state ng-if="user.type=='club'">
+    <a ng-href="#/calendar">
+      <span class="glyphicon glyphicon-calendar"></span>
+      Kalender
+    </a>
+  </li>
+
 
 	<li club-active-state ng-if="user.type=='club'" uib-dropdown>
 		<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" uib-dropdown-toggle>
-			<span class="glyphicon glyphicon-tasks"></span> Dienste
+			<span class="glyphicon glyphicon-tasks"></span> Dienste <span class="caret"></span>
 		</a>
 		<ul class="dropdown-menu" role="menu">
 			<li>
@@ -42,16 +36,13 @@
 			<li>
 				<a href="https://pad.hftl.club/" target="_blank"><span class="glyphicon glyphicon-edit"></span> ClubPad</a>
 			</li>
-      <li>
-				<a href="#/calendar"><span class="glyphicon glyphicon-calendar"></span> Kalender</a>
-			</li>
 		</ul>
 	</li>
 
 
     <li club-active-state ng-if="user.superuser" uib-dropdown>
         <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" uib-dropdown-toggle>
-            <span class="glyphicon glyphicon-certificate"></span> Verwaltung
+            <span class="glyphicon glyphicon-certificate"></span> Verwaltung <span class="caret"></span>
         </a>
         <ul class="dropdown-menu" role="menu">
             <li>
@@ -66,19 +57,28 @@
 </ul>
 
 <div class="navbar-right">
-  <p class="navbar-text">
-    <b>
-      <a class="navbar-link" href="#/settings/profile">{{ user.username }}</a>
-  </b>
-    <span class="clubUserType" ng-if="user.superuser">Superuser</span>
-    <span ng-if="!user.superuser">
-      <span class="clubUserType" ng-if="user.type=='club'">(Club)</span>
-      <span class="clubUserType" ng-if="user.type=='other'">(Extern)</span>
-    </span>
-  </p>
+  <div class="btn-group" uib-dropdown>
 
-  <button class="btn btn-xs btn-default navbar-btn navbar-right" ng-click="nav.logout()" type="button">
-      <span class="glyphicon glyphicon-off"></span>
-      Logout
+  <button type="button" class="btn btn-md btn-default navbar-btn navbar-right dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" uib-dropdown-toggle>
+    <span class="glyphicon glyphicon-user"></span>
+    {{ user.username }}
+    <span class="caret"></span>
   </button>
-</div>
+  <ul class="dropdown-menu">
+    <li class="disabled">
+        <a class="small">
+            <span class="glyphicon glyphicon-star-empty"></span>
+            <span ng-if="user.superuser">Superuser</span>
+            <span ng-if="!user.superuser">
+              <span ng-if="user.type=='club'">Clubmitglied</span>
+              <span ng-if="user.type=='other'">Externer Benutzer</span>
+            </span>
+        </a>
+    </li>
+    <li role="separator" class="divider"></li>
+    <li><a ng-click="nav.logout()"><span class="glyphicon glyphicon-off"></span> <b>Logout</b></a></li>
+    <li role="separator" class="divider"></li>
+    <li><a ng-href="#/settings/changepassword"><span class="glyphicon glyphicon-lock"></span> Passwort ändern</a></li>
+    <li><a ng-href="#/settings/profile"><span class="glyphicon glyphicon-pencil"></span> Profil bearbeiten</a></li>
+  </ul>
+  </div>
