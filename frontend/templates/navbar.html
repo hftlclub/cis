@@ -1,35 +1,32 @@
 <ul class="nav navbar-nav">
-  <li club-active-state>
-    <a ng-href="#/settings">
-      <span class="glyphicon glyphicon-cog"></span>
-      Einstellungen
-    </a>
-  </li>
-  <li club-active-state ng-if="user.superuser">
-    <a ng-href="#/users">
-      <span class="glyphicon glyphicon-user"></span>
-      Benutzer
-    </a>
-  </li>
+    <li club-active-state>
+      <a ng-href="#/settings">
+        <span class="glyphicon glyphicon-cog"></span>
+        Einstellungen
+      </a>
+    </li>
+
+
   <li club-active-state ng-if="user.type=='club'">
     <a ng-href="#/memberlist">
       <span class="glyphicon glyphicon-list"></span>
       Mitgliederliste
     </a>
   </li>
-  <li club-active-state ng-if="user.type=='club' && user.superuser">
-    <a ng-href="#/keylist">
-      <span class="glyphicon glyphicon-list-alt"></span>
-      Schlüsselliste
-    </a>
-  </li>
-  <li club-active-state ng-if="user.type=='club'">
-    <a ng-href="#/protocols">
-      <span class="glyphicon glyphicon-file"></span>
-      Protokolle
-    </a>
-  </li>
 
+  <li club-active-state ng-if="user.type=='club'" uib-dropdown>
+      <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" uib-dropdown-toggle>
+          <span class="glyphicon glyphicon-glass"></span> Club
+      </a>
+      <ul class="dropdown-menu" role="menu">
+          <li>
+            <a ng-href="#/protocols"><span class="glyphicon glyphicon-file"></span> Protokolle</a>
+          </li>
+          <li>
+              <a href="#/calendar"><span class="glyphicon glyphicon-calendar"></span> Kalender</a>
+          </li>
+      </ul>
+  </li>
 
 	<li club-active-state ng-if="user.type=='club'" uib-dropdown>
 		<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" uib-dropdown-toggle>
@@ -51,19 +48,37 @@
 		</ul>
 	</li>
 
+
+    <li club-active-state ng-if="user.superuser" uib-dropdown>
+        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" uib-dropdown-toggle>
+            <span class="glyphicon glyphicon-certificate"></span> Verwaltung
+        </a>
+        <ul class="dropdown-menu" role="menu">
+            <li>
+              <a ng-href="#/users"><span class="glyphicon glyphicon-user"></span> Benutzer</a>
+            </li>
+            <li>
+                <a href="#/keylist"><span class="glyphicon glyphicon-list-alt"></span> Schlüsselliste</a>
+            </li>
+        </ul>
+    </li>
+
 </ul>
 
 <div class="navbar-right">
   <p class="navbar-text">
     <b>
       <a class="navbar-link" href="#/settings/profile">{{ user.username }}</a>
-    </b>
-    <span class="clubUserType" ng-if="user.superuser">(Superuser)</span>
+  </b>
+    <span class="clubUserType" ng-if="user.superuser">Superuser</span>
     <span ng-if="!user.superuser">
       <span class="clubUserType" ng-if="user.type=='club'">(Club)</span>
       <span class="clubUserType" ng-if="user.type=='other'">(Extern)</span>
     </span>
   </p>
 
-  <button class="btn btn-xs btn-default navbar-btn navbar-right" ng-click="nav.logout()" type="button">Logout</button>
+  <button class="btn btn-xs btn-default navbar-btn navbar-right" ng-click="nav.logout()" type="button">
+      <span class="glyphicon glyphicon-off"></span>
+      Logout
+  </button>
 </div>
