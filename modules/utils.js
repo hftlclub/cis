@@ -14,3 +14,7 @@ exports.uid = function(len) {
 exports.moment2mysql = function(mom) {
     return mom.format('YYYY-MM-DD HH:mm:ss');
 }
+
+exports.replaceAll = function(str, find, replace) {
+  return str.replace(new RegExp(find, 'g'), replace);
+}

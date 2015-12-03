@@ -2,6 +2,7 @@ var nodemailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
 var fs = require('fs');
 var config = require('../config');
+var utils = require('../modules/utils');
 
 //create mailer
 exports.conn = nodemailer.createTransport(smtpTransport(config.smtp));
@@ -22,8 +23,8 @@ exports.mail = function(to, template, val, callback) {
 
             //go through supplied keys and replace placeholders in template
             for (var key in val) {
-                body = body.replace('{' + key + '}', val[key]);
-                subject = subject.replace('{' + key + '}', val[key]);
+                body = utils.replaceAll(body, '\{' + key + '\}', val[key]);
+                subject = utils.replaceAll(subject, '\{' + key + '\}', val[key]);
             }
 
 
