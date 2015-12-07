@@ -1,5 +1,7 @@
-angular.module('app.cis').controller('KeyListController', function($scope, $rootScope, $http, $routeParams, clubAuth, appConf) {
+angular.module('app.cis').controller('KeyListController', function($scope, $rootScope, $http, clubAuth, appConf) {
+    $scope.loading = false;
     $scope.listFilter = '';
+    $scope.date = new Date();
 
     $scope.members = {};
     $scope.members.data = null;
@@ -11,13 +13,14 @@ angular.module('app.cis').controller('KeyListController', function($scope, $root
     refresh();
 
     function refresh() {
-        $http.get(appConf.api + '/keylist').
-        success(function(data) {
+        $scope.loading = true;
+        $http.get(appConf.api + '/keylist').success(function(data) {
             $scope.members.data = data;
+            $scope.loading = false;
         });
     }
 
-    $scope.date = new Date();
+
 
 });
 
@@ -25,7 +28,7 @@ angular.module('app.cis').controller('KeyListController', function($scope, $root
 
 
 angular.module('app.cis').controller('PublicKeyListController', function($scope, $http, $routeParams, appConf) {
-
+    $scope.date = new Date();
     $scope.members = {};
     $scope.members.data = null;
 
@@ -41,7 +44,5 @@ angular.module('app.cis').controller('PublicKeyListController', function($scope,
             $scope.members.data = data;
         });
     }
-
-    $scope.date = new Date();
 
 });
