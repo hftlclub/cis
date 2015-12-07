@@ -7,7 +7,7 @@ Mit Klick auf einen Termin werden Details angezeigt.
 
 <loading-bar show="loading"></loading-bar>
 
-<div ng-hide="loading" data="events" eventclick="onEventClick" dhx-scheduler style="height:600px; width:800px;">
+<div ng-if="!loading" data="events" eventclick="onEventClick" dhx-scheduler style="height:600px; width:800px;">
     <div class="dhx_cal_prev_button">&nbsp;</div>
     <div class="dhx_cal_next_button">&nbsp;</div>
     <div class="dhx_cal_today_button"></div>
