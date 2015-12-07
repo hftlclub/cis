@@ -1,14 +1,14 @@
 angular.module('app.cis').controller('CalendarController', function ($scope, $rootScope, $http, clubAuth, $uibModal, appConf) {
-    $scope.contentLoading = false;
+    $scope.loading = false;
 
     $scope.events = [];
     $scope.scheduler = { date: new Date(), mode: 'month' };
-    $scope.onEventClick = onEventClicked;
+    $scope.onEventClick = onEventClick;
     refresh();
 
     function refresh() {
         // show loading bar
-        $scope.contentLoading = true;
+        $scope.loading = true;
 
         $http.get(appConf.api + '/calendar').
             success(function (data) {
@@ -29,11 +29,11 @@ angular.module('app.cis').controller('CalendarController', function ($scope, $ro
                 $scope.events = events;
 
                 // hide loading bar
-                $scope.contentLoading = false;
+                $scope.loading = false;
             });
     }
 
-    function onEventClicked(eventId) {
+    function onEventClick(eventId) {
         var modal = $uibModal.open({
             templateUrl: 'templates/calendar/detailsmodal.html',
             controller: 'CalendarDetailsController',

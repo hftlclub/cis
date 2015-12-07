@@ -7,7 +7,7 @@ angular.module('app.cis').controller('MemberListController', function($scope, $r
 
     $scope.isSuperuser = $rootScope.clubUser.superuser;
 
-    $scope.contentLoading = false;
+    $scope.loading = false;
 
     $scope.formerHidden = true;
 
@@ -15,7 +15,7 @@ angular.module('app.cis').controller('MemberListController', function($scope, $r
 
     function refresh() {
         // show loading bar
-        $scope.contentLoading = true;
+        $scope.loading = true;
 
         $http.get(appConf.api + '/members')
           .success(function(data) {
@@ -32,7 +32,7 @@ angular.module('app.cis').controller('MemberListController', function($scope, $r
                 });
 
               // hide loading bar
-              $scope.contentLoading = false;
+              $scope.loading = false;
           });
 
     }

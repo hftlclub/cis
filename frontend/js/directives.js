@@ -37,7 +37,7 @@ angular.module('app.cis').directive('clubActiveState', function($location) {
 
 
 
-angular.module('app.cis').directive('helpbox', function($location) {
+angular.module('app.cis').directive('helpbox', function() {
     return {
         restrict: 'E',
         transclude: true,
@@ -50,9 +50,26 @@ angular.module('app.cis').directive('helpbox', function($location) {
             active: '@',
             label: '@',
         },
-        templateUrl: 'templates/helpbox/helpbox.html'
+        templateUrl: 'templates/directives/helpbox.html'
     }
 });
+
+
+
+
+angular.module('app.cis').directive('loadingBar', function() {
+    return {
+        restrict: 'E',
+        require: 'show',
+        scope: {
+            show: '=',
+        },
+        templateUrl: 'templates/directives/loadingBar.html'
+    }
+});
+
+
+
 
 
 

@@ -7,16 +7,10 @@
     </div>
     <h2>Benutzer</h2>
 </div>
-<div ng-hide="!contentLoading">
-    <br>
-    <br>
-    <div class="progress">
-        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-            Lädt...
-        </div>
-    </div>
-</div>
-<div ng-hide="contentLoading" class="table-responsive">
+
+<loading-bar show="loading"></loading-bar>
+
+<div ng-hide="loading" class="table-responsive">
 
     <form class="form horizontal hidden-print">
         <div class="form-group">
