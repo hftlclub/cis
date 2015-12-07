@@ -25,6 +25,7 @@ var protocolspdf = require('./modules/protocolspdf');
 var jwtauth = require('./middleware/jwtauth')
 var reqm = require('./middleware/requiremode');
 var errorhandler = require('./middleware/errorhandler');
+var nocache = require('./middleware/nocache');
 
 
 api.use(cors({
@@ -47,6 +48,8 @@ app.use(expressValidator({
 /****************************************
 	ROUTES
 *****************************************/
+// always include no-cache middleware
+api.use(nocache);
 
 //generic routes
 api.post('/login', authController.login);
