@@ -140,3 +140,23 @@ span.largeicon {
     content:"\00A0 *";
     color:red;
 }
+
+/* calendar classes */
+.dhx_cal_event_line.internal {
+  background-color: #f0ad4e;
+} 
+.dhx_cal_event_clear.internal {
+  color: #f0ad4e;
+} 
+.dhx_cal_event_line.public {
+  background-color: #5cb85c;
+} 
+.dhx_cal_event_clear.public {
+  color: #5cb85c;
+} 
+.dhx_cal_event_line.birthday {
+  background-color: #d9534f;
+} 
+.dhx_cal_event_clear.birthday {
+  color: #d9534f;
+} 

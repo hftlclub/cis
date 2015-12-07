@@ -5,7 +5,7 @@ Die Daten werden aus dem Kalender der Stura-Seite abgerufen.<br>
 Mit Klick auf einen Termin werden Details angezeigt.
 </helpbox>
 
-<div ng-hide="!contentLoading">
+<div ng-if="contentLoading">
     <br>
     <br>
     <div class="progress">
@@ -15,7 +15,7 @@ Mit Klick auf einen Termin werden Details angezeigt.
     </div>
 </div>
 
-<div ng-hide="contentLoading" data="events" eventclick="onEventClick" dhx-scheduler style="height:600px; width:800px;">
+<div ng-if="!contentLoading" data="events" eventclick="onEventClick" dhx-scheduler style="height:600px; width:800px;">
     <div class="dhx_cal_prev_button">&nbsp;</div>
     <div class="dhx_cal_next_button">&nbsp;</div>
     <div class="dhx_cal_today_button"></div>
@@ -23,5 +23,9 @@ Mit Klick auf einen Termin werden Details angezeigt.
 
     <div dhx-template="event_bar_text">
         <span>{{event.text}}</span>
+    </div>
+    
+    <div dhx-template="event_class">
+        {{event.cal}}
     </div>
 </div>

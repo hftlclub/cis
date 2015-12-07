@@ -18,6 +18,10 @@
             <span class="glyphicon glyphicon-ban-circle"></span>
             Intern
         </span>
+        <span ng-if="event.cal == 'birthday'" class="label label-danger">
+            <span class="glyphicon glyphicon-gift"></span>
+            Geburtstag
+        </span>
     </div>
     <div>
         <strong>Datum:</strong> {{event.start_date | date: 'fullDate'}}
