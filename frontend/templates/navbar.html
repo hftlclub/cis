@@ -8,19 +8,18 @@
   </li>
 
   <li club-active-state ng-if="user.type=='club'">
-    <a ng-href="#/protocols">
-      <span class="glyphicon glyphicon-file"></span>
-      Protokolle
-    </a>
-  </li>
-
-  <li club-active-state ng-if="user.type=='club'">
     <a ng-href="#/calendar">
       <span class="glyphicon glyphicon-calendar"></span>
       Kalender
     </a>
   </li>
 
+  <li club-active-state ng-if="user.type=='club'">
+    <a ng-href="#/protocols">
+      <span class="glyphicon glyphicon-file"></span>
+      Protokolle
+    </a>
+  </li>
 
 	<li club-active-state ng-if="user.type=='club'" uib-dropdown>
 		<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" uib-dropdown-toggle>
