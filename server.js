@@ -100,15 +100,15 @@ api.get('/calendar/urls', jwtauth, reqm('auth'), reqm('club'), calendarControlle
 api.post('/deploy/:key', deployController.deploy);
 
 
+//error handling
+api.use(errorhandler.validation);
+api.use(errorhandler.generic);
+
+
 // final 404 route
 api.all('*', function (req, res) {
     res.send('NOT FOUND', 404);
 });
-
-
-//error handling
-api.use(errorhandler.validation);
-api.use(errorhandler.generic);
 
 
 //assign api router to /api
