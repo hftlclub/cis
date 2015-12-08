@@ -35,6 +35,10 @@ exports.addedit = function(req, res, next) {
     req.checkBody('start', 'Startzeit ungültig').notEmpty();
     req.checkBody('end', 'Endzeit ungültig').notEmpty();
 
+    if(!req.body.attendants.length){
+        req.checkBody('attendants', 'Keine Teilnehmer angegeben').error(1);
+    }
+
     if (req.validationErrors()) {
         return next();
     }
@@ -259,7 +263,7 @@ exports.pdf = function(req, res, next){
         //create destination folder
         var subDir = utils.uid(32) + '/';
         var dir = config.protocols.pdfFullPath + subDir;
-	
+
         fs.mkdir(dir, function(err){
             if(err) return next(err);
 
