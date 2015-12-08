@@ -138,29 +138,30 @@ angular.module('app.cis').controller('ProtocolFormController', function ($scope,
             applicants: 0,
             guests: 0
         },
-        add: function (name) {
-            if (name) {
-                var attendee = {
-                    'name': name,
-                    'laterPopoverOpened': false,
-                    'type': 'member' //default is member
-                }
+        add: function (name, type) {
+            if(!name || !type) return;
 
-                //check if person is already attendee, end this function if already in list
-                for (var i = 0; i < form.data.attendants.length; i++) {
-                    if (form.data.attendants[i].name == attendee.name) return;;
-                }
-
-                //attendee seems to be new. add it
-                form.data.attendants.push(attendee);
+            var attendee = {
+                'name': name,
+                'laterPopoverOpened': false,
+                'type': type
             }
+
+            //check if person is already attendee, end this function if already in list
+            for (var i = 0; i < form.data.attendants.length; i++) {
+                if (form.data.attendants[i].name == attendee.name) return;
+            }
+
+            //attendee seems to be new. add it
+            form.data.attendants.push(attendee);
+
         },
         remove: function (index) {
             form.data.attendants.splice(index, 1);
             $scope.protocolForm.$setDirty();
         },
         addFromForm: function () {
-            this.add(this.input);
+            this.add(this.input, 'guest');
             this.input = null;
             $scope.protocolForm.$setDirty();
         },
@@ -191,6 +192,12 @@ angular.module('app.cis').controller('ProtocolFormController', function ($scope,
                 attendee.laterPopoverOpened = false;
             });
             return true;
+        },
+        addFromTypeahead: function(item){
+            //function is executed when an item from the typeahead is selected
+            this.add(item.name, item.type);
+            this.input = null;
+            $scope.protocolForm.$setDirty();
         }
 
     }
@@ -308,9 +315,15 @@ angular.module('app.cis').controller('ProtocolFormController', function ($scope,
             //build array with just names and only current members
             $scope.users = [];
             data.forEach(function (row) {
-                if (!row.former) {
-                    $scope.users.push(row.firstname + ' ' + row.lastname);
+                var push = {
+                    name: row.firstname + ' ' + row.lastname
                 }
+
+                if(row.former) push.type = 'guest';
+                else if(row.applicant) push.type = 'applicant';
+                else push.type = 'member';
+
+                $scope.users.push(push);
             });
         });
 
@@ -349,7 +362,8 @@ angular.module('app.cis').controller('ProtocolFormController', function ($scope,
         $scope.times.end = new Date();
         var me = clubAuth.user.firstname + ' ' + clubAuth.user.lastname;
         form.data.recorder = me;
-        $scope.attendants.add(me);
+        $scope.attendants.add(me, 'member');
+        //TODO: insert my real role, not always 'member'
     }
 
 

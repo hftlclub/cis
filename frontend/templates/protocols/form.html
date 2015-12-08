@@ -87,7 +87,7 @@
                     <span ng-if="attendants.count.applicants" class="label label-info" title="Anwärter">{{attendants.count.applicants}}</span>
                     <span ng-if="attendants.count.guests" class="label label-default" title="Gäste">{{attendants.count.guests}}</span>
                 </span>
-                <input type="text" ng-model="attendants.input" ng-enter="attendants.addFromForm()" class="form-control" id="inputAttendants" uib-typeahead="attendee for attendee in users | filter:$viewValue | limitTo:8" placeholder="Anwesende Personen" tooltip-placement="right"
+                <input type="text" ng-model="attendants.input" ng-enter="attendants.addFromForm()" class="form-control" id="inputAttendants" uib-typeahead="attendee.name for attendee in users | filter:$viewValue | limitTo:8" typeahead-on-select="attendants.addFromTypeahead($item)" placeholder="Anwesende Personen" tooltip-placement="right"
                 tooltip-trigger="focus" uib-tooltip="Welche Mitglieder sind anwesend?" autocomplete="off">
                 <span ng-if="form.errors.attendants" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
             </div>
