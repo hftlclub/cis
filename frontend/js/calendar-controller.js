@@ -10,12 +10,21 @@ angular.module('app.cis').controller('CalendarController', function ($scope, $ro
     refresh();
 
 
+
+    //watch on changes of cal display information
+    $scope.$watch('cals', function(){
+        $scope.events = parseEvents($scope.data);
+    }, true);
+
+
+    //make array of events from "data", depending on whether cal should be displayed or not
     function parseEvents(data){
         var events = [];
+
         var pseudoEvId = 1;
         for(var key in data){
-            //skip this step if cal key is unknown or has been set 0 (dont display)
-            if(!($scope.cals.hasOwnProperty(key) && $scope.cals[key] == 1)){
+            //skip this step if cal key is unknown or display has been set 0
+            if(!($scope.cals.hasOwnProperty(key) && $scope.cals[key])){
                 continue;
             }
 
@@ -32,7 +41,6 @@ angular.module('app.cis').controller('CalendarController', function ($scope, $ro
                 });
             }
         }
-
         return events;
     }
 
@@ -41,19 +49,17 @@ angular.module('app.cis').controller('CalendarController', function ($scope, $ro
         // show loading bar
         $scope.loading = true;
 
-        $http.get(appConf.api + '/calendar').
-            success(function (data) {
-                //gather all cal keys in $scope.cals and let them being shown (1)
-                for(var key in data){
-                    $scope.cals[key] = 1;
-                }
+        $http.get(appConf.api + '/calendar').success(function (data) {
+            //gather all cal keys in $scope.cals and allow them to be showed (true)
+            for(var key in data){
+                $scope.cals[key] = true;
+            }
+            $scope.data = data;
 
-                $scope.data = data;
+            $scope.events = parseEvents(data);
 
-                $scope.events = parseEvents(data);
-
-                // hide loading bar
-                $scope.loading = false;
+            // hide loading bar
+            $scope.loading = false;
             });
     }
 

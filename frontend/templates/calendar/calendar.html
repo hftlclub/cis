@@ -7,17 +7,28 @@ Mit Klick auf einen Termin werden Details angezeigt.
 
 <loading-bar show="loading"></loading-bar>
 
-<div ng-if="!loading" data="events" eventclick="onEventClick" dhx-scheduler style="height:600px; width:800px;">
-    <div class="dhx_cal_prev_button">&nbsp;</div>
-    <div class="dhx_cal_next_button">&nbsp;</div>
-    <div class="dhx_cal_today_button"></div>
-    <div class="dhx_cal_date"></div>
 
-    <div dhx-template="event_bar_text">
-        <span>{{event.text}}</span>
+<div ng-if="!loading">
+    <div class="pull-right">
+        <div ng-repeat="(key, cal) in cals" class="checkbox">
+            <label>
+                <input ng-model="cals[key]" type="checkbox"> {{ data[key].name }}
+            </label>
+        </div>
     </div>
 
-    <div dhx-template="event_class">
-        {{event.cal}}
+    <div data="events" eventclick="onEventClick" dhx-scheduler style="height:600px; width:800px;">
+        <div class="dhx_cal_prev_button">&nbsp;</div>
+        <div class="dhx_cal_next_button">&nbsp;</div>
+        <div class="dhx_cal_today_button"></div>
+        <div class="dhx_cal_date"></div>
+
+        <div dhx-template="event_bar_text">
+            <span>{{event.text}}</span>
+        </div>
+
+        <div dhx-template="event_class">
+            {{event.cal}}
+        </div>
     </div>
 </div>
