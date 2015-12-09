@@ -22,6 +22,10 @@
             <span class="glyphicon glyphicon-gift"></span>
             Geburtstag
         </span>
+        <span ng-if="event.cal == 'stura'" class="label label-primary">
+            <span class="glyphicon glyphicon-comment"></span>
+            Stura
+        </span>
     </div>
     <div>
         <strong>Datum:</strong> {{event.start_date | date: 'fullDate'}}
