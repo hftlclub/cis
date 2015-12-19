@@ -2,15 +2,13 @@ var config = require('../config');
 var userservice = require('../services/userservice');
 
 
-
-
 exports.changepassword = function(req, res, next) {
     //all values set?
     req.checkBody('oldPassword', 'Altes Passwort nicht angegeben').notEmpty();
     req.checkBody('newPassword1', 'Neues Passwort nicht angegeben').notEmpty();
     req.checkBody('newPassword2', 'Neues Passwort (Wdhlg.) nicht angegeben').notEmpty();
 
-    req.checkBody('newPassword2', 'Passw�rter nicht identisch').equals(req.body.newPassword1);
+    req.checkBody('newPassword2', 'Passwörter nicht identisch').equals(req.body.newPassword1);
 
     if (req.validationErrors()) {
         return next();
@@ -40,14 +38,14 @@ exports.changepassword = function(req, res, next) {
 exports.changeprofile = function(req, res, next) {
     var uid = req.user.username; //me
 
-    req.checkBody('email', 'E-Mail ung�ltig').notEmpty().isEmail();
-    req.checkBody('firstname', 'Vorname ung�ltig').notEmpty();
-    req.checkBody('lastname', 'Nachname ung�ltig').notEmpty();
+    req.checkBody('email', 'E-Mail ungültig').notEmpty().isEmail();
+    req.checkBody('firstname', 'Vorname ungültig').notEmpty();
+    req.checkBody('lastname', 'Nachname ungültig').notEmpty();
 
-    //req.checkBody('street', 'Strasse ung�ltig').notEmpty();
-    //req.checkBody('zip', 'PLZ ung�ltig').notEmpty().isNumeric();
-    //req.checkBody('city', 'Stadt ung�ltig').notEmpty();
-    //req.checkBody('tel', 'Telefon ung�ltig').notEmpty();
+    //req.checkBody('street', 'Strasse ungültig').notEmpty();
+    //req.checkBody('zip', 'PLZ ungültig').notEmpty().isNumeric();
+    //req.checkBody('city', 'Stadt ungültig').notEmpty();
+    //req.checkBody('tel', 'Telefon ungültig').notEmpty();
 
     if (req.validationErrors()) {
         return next();
@@ -64,7 +62,6 @@ exports.changeprofile = function(req, res, next) {
         zip: req.body.zip,
         city: req.body.city,
         tel: req.body.tel,
-        teamdrive: req.body.teamdrive,
         birthday: req.body.birthday
     };
 
