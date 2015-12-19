@@ -119,7 +119,8 @@ exports.edituser = function(req, res, next) {
         role: req.body.role,
         birthday: req.body.birthday,
         loginShell: req.body.loginShell,
-        keyPermissions: req.body.keyPermissions
+        keyPermissions: req.body.keyPermissions,
+        auth: req.body.auth
     };
 
     //accession date only for club members

@@ -142,6 +142,12 @@ exports.getUserByUid = function(uid, callback) {
                     user.keyPermissions[config.doorkeys[i]] = (groups.indexOf('door' + config.doorkeys[i]) >= 0) ? true : false;
                 }
 
+                //set privileges
+                user.auth = {};
+                for (var i = 0; i < config.authgroups.length; i++) {
+                    user.auth[config.authgroups[i]] = (groups.indexOf('auth' + config.authgroups[i]) >= 0) ? true : false;
+                }
+
                 return callback(null, user);
             });
         });
@@ -298,6 +304,18 @@ exports.addUser = function(data, callback) {
             }
         }
 
+
+        //add to auth groups
+        if (!data.hasOwnProperty('auth')) {
+            data.auth = {};
+        }
+
+        for (var i = 0; i < config.authgroups.length; i++) {
+            if (data.auth[config.authgroups[i]]) { //if permissions for this group are set
+                exports.addToGroup(data.username, 'auth' + config.authgroups[i], function(err, success) {});
+            }
+        }
+
         return callback(null, true);
     });
 }
@@ -426,6 +444,19 @@ exports.editUser = function(uid, data, callback) {
             }
         }
 
+
+        if ('auth' in data) {
+            for (var i = 0; i < config.authgroups.length; i++) {
+                if (data.auth[config.authgroups[i]]) { //if permissions for this group are set
+                    exports.addToGroup(uid, 'auth' + config.authgroups[i], function(err, success) {});
+                } else { //if no permissions for this group
+                    exports.removeFromGroup(uid, 'auth' + config.authgroups[i], function(err, success) {});
+                }
+            }
+        }
+
+
+
         return callback(null, true);
     });
 
@@ -447,15 +478,22 @@ exports.deleteUser = function(uid, callback) {
         if (err) return callback(err);
 
         //remove user from groups
-        var groupsremove = ['clubmembers', , 'clubothers', 'clubadmins', 'clubformer', 'clubhonorary', 'clubexec', 'clubapplicants'];
+        var groupsremove = ['clubmembers', 'clubothers', 'clubadmins', 'clubformer', 'clubhonorary', 'clubexec', 'clubapplicants'];
 
+        //remove from authgroups
+        groupsremove = groupsremove.concat(config.authgroups);
+
+        //remove from key permission groups
+        for (var i = 0; i < config.doorkeys.length; i++) {
+            groupsremove.push('door' + config.doorkeys[i]);
+        }
+
+        //finally REMOVE from all those groups
         groupsremove.forEach(function(row) {
             exports.removeFromGroup(uid, row, function(err, success) {});
         });
 
-        for (var i = 0; i < config.doorkeys.length; i++) {
-            exports.removeFromGroup(uid, 'door' + config.doorkeys[i], function(err, success) {});
-        }
+
 
         //remove user from seafile
         seafile.deleteUser(uid);
@@ -525,6 +563,7 @@ exports.getUsers = function(callback) {
                 user.superuser = false;
                 user.type = 'other';
                 user.keyPermissions = {};
+                user.auth = {};
 
                 //go through groups and assign params to user
                 for (var i = 0; i < groups.length; i++) {
@@ -552,10 +591,28 @@ exports.getUsers = function(callback) {
                             user.executive = true;
                         }
 
+
                         for (var k = 0; k < config.doorkeys.length; k++) {
+                            var val;
                             if (groups[i].cn == ('door' + config.doorkeys[k])) {
-                                user.keyPermissions[config.doorkeys[k]] = true;
+                                 val = true;
+                            }else{
+                                val = false;
                             }
+
+                            user.keyPermissions[config.doorkeys[k]] = val;
+                        }
+
+
+                        for (var k = 0; k < config.authgroups.length; k++) {
+                            var val;
+                            if (groups[i].cn == ('auth' + config.authgroups[k])) {
+                                val = true;
+                            }else{
+                                val = false;
+                            }
+
+                            user.auth[config.authgroups[k]] = val;
                         }
                     }
                 }

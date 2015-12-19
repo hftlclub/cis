@@ -79,6 +79,11 @@ exports.protocols = {
 }
 exports.protocols.pdfFullPath = exports.abspath + "/frontend" + exports.protocols.pdfFrontendPath
 
+//LDAP groups for auth ("auth...")
+exports.authgroups = ["radius", "cis", "drive", "apache"];
+
+
+
 
 //ICS URLs to show in calendar
 exports.ics = {
