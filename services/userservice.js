@@ -481,12 +481,14 @@ exports.deleteUser = function(uid, callback) {
         var groupsremove = ['clubmembers', 'clubothers', 'clubadmins', 'clubformer', 'clubhonorary', 'clubexec', 'clubapplicants'];
 
         //remove from authgroups
-        groupsremove = groupsremove.concat(config.authgroups);
+        config.authgroups.forEach(function(row){
+            groupsremove.push('auth' + row);
+        });
 
         //remove from key permission groups
-        for (var i = 0; i < config.doorkeys.length; i++) {
-            groupsremove.push('door' + config.doorkeys[i]);
-        }
+        config.doorkeys.forEach(function(row){
+            groupsremove.push('door' + row);
+        });
 
         //finally REMOVE from all those groups
         groupsremove.forEach(function(row) {
