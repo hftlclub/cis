@@ -39,11 +39,28 @@
                 </div>
             </div>
 
+
+            <div class="form-inline form-group">
+
+                <div ng-if="form.mode != 'profile'">
+                    <label class="col-sm-3 control-label">Nutzerrechte</label>
+                    <div>
+                        <div class="checkbox" ng-repeat="group in authgroups" style="margin-right: 15px">
+                            <label>
+                                <input ng-model="form.data.auth[group.key]" type="checkbox">{{group.label}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
             <!-- ########## user permissions, accessiondate ########-->
-            <div class="form-group required">
+            <div class="form-group">
 
                 <div ng-class="{'has-error has-feedback': form.errors.type}">
-                    <label class="col-sm-3 control-label">Nutzerrechte</label>
+                    <label class="col-sm-3 control-label">Typ</label>
                     <div ng-class="(form.data.type == 'club') ? 'col-sm-3 col-lg-4' : 'col-sm-9'">
                         <select class="form-control" ng-options="opt.value as opt.label for opt in options.usertypes" ng-model="form.data.type" ng-disabled="(form.mode == 'profile')"></select>
                     </div>

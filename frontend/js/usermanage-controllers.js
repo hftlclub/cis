@@ -58,17 +58,44 @@ angular.module('app.cis').controller('UserFormController', function($scope, $roo
     ];
 
 
+    $scope.authgroups = [
+        {
+            key: 'radius',
+            label: 'WLAN'
+        },
+        {
+            key: 'cis',
+            label: 'CIS'
+        },
+        {
+            key: 'drive',
+            label: 'ClubDrive'
+        },
+        {
+            key: 'apache',
+            label: 'Infoscreen'
+        }
+    ];
+
 
     form.submit = submit;
 
     //default values
     if (form.mode == 'add') {
         form.data = {
-            sendPassword: true
+            sendPassword: true,
+            auth: {} //filled below
         };
+        //set all authgroups
+        for(var i = 0; i < $scope.authgroups.length; i++){
+            form.data.auth[$scope.authgroups[i].key] = true;
+        }
+
     } else {
         form.data = null; // 'cause form is hidden when data is null
     }
+
+
 
 
     refresh();
