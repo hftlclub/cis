@@ -18,8 +18,11 @@ exports.login = function(req, res, next) {
     userservice.checkpassword(req.body.username, req.body.password, function(err, success) {
         //error if login failed or error occured
         if (err || !success) {
+            console.log(new Date() + ' FAIL User Login: ' + req.body.username);
             return res.send(null, 401);
         }
+
+        console.log(new Date() + ' SUCCESS User Login: ' + req.body.username);
 
         //get user
         userservice.getUserByUid(req.body.username, function(err, user) {
@@ -78,9 +81,12 @@ exports.externallogin = function(req, res, next) {
     userservice.checkpassword(req.body.username, req.body.password, function(err, success) {
         //error if login failed or error occured
         if (err || !success) {
+            console.log(new Date() + ' FAIL External Auth: ' + req.body.username);
             res.send('failed', 401);
             return;
         }
+
+        console.log(new Date() + ' SUCCESS External Auth: ' + req.body.username);
 
         //get user
         userservice.getUserByUid(req.body.username, function(err, user) {

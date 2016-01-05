@@ -26,6 +26,9 @@ exports.changepassword = function(req, res, next) {
         //SET new password!
         userservice.setPassword(req.user.username, req.body.newPassword1, function(err) {
             if (err) next(err);
+
+            console.log(new Date() + ' SUCCESS User Password Change: ' + req.body.username);
+
             res.end();
         });
     });
