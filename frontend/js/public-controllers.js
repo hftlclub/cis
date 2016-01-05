@@ -1,4 +1,4 @@
-angular.module('app.cis').controller('LoginController', function($scope, $http, $location, clubAuth, $modal, $timeout, ngAudio, growl, appConf) {
+angular.module('app.cis').controller('LoginController', function($scope, $http, $location, clubAuth, $timeout, ngAudio, growl, appConf) {
 
     $scope.login = {};
     $scope.login.data = {};
@@ -17,13 +17,13 @@ angular.module('app.cis').controller('LoginController', function($scope, $http, 
         success(function(data) {
             localStorage.setItem('accessToken', data.token);
             $http.defaults.headers.common['X-Access-Token'] = data.token;
-            
+
             growl.success('Erfolgreich angemeldet!');
             $scope.chord.play();
 
             clubAuth.refresh().then(function(){}, function(){});
         }).
-        error(function(data, status) { 
+        error(function(data, status) {
             growl.error('Benutzername oder Passwort nicht korrekt.');
         });
 
