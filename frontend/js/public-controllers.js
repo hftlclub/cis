@@ -1,4 +1,4 @@
-angular.module('app.cis').controller('LoginController', function($scope, $http, $location, clubAuth, $timeout, ngAudio, growl, appConf) {
+angular.module('app.cis').controller('LoginController', function($scope, $http, $location, $uibModal, clubAuth, $timeout, ngAudio, growl, appConf) {
 
     $scope.login = {};
     $scope.login.data = {};
@@ -7,6 +7,13 @@ angular.module('app.cis').controller('LoginController', function($scope, $http, 
     $scope.chord = ngAudio.load('media/cismajor.mp3');
 
     clubAuth.refresh().then(function(){}, function(){});
+
+
+    $scope.openPwForgotModal = function() {
+        var modalInstance = $uibModal.open({
+            templateUrl: 'templates/pwForgotModal.html',
+        });
+    };
 
     function submit() {
         //fixAutofillBug();

@@ -1,23 +1,41 @@
 <form class="form-horizontal" role="form" ng-submit="login.submit()">
 
-	<div class="form-group">
-		<label for="inputUsername" class="col-sm-2 control-label">Benutzername</label>
-		<div class="col-sm-10">
-			<input type="text" ng-model="login.data.username" class="form-control" id="inputUsername" placeholder="Benutzername">
-		</div>
+<div class="row col-md-6 col-md-offset-3">
+
+
+<div class="panel panel-success">
+	<div class="panel-heading">
+		<h3 class="panel-title">
+			<span class="glyphicon glyphicon-home pull-right"></span>
+			Anmelden
+		</h3>
 	</div>
 
-	<div class="form-group">
-		<label for="inputPassword" class="col-sm-2 control-label">Passwort</label>
-		<div class="col-sm-10">
-			<input type="password" ng-model="login.data.password" class="form-control" id="inputPassword" placeholder="Passwort">
-		</div>
+	<div class="panel-body">
+
+	<label class="sr-only" for="inputUsername">Benutzername</label>
+	<div class="input-group input-group-lg" style="margin-bottom: 15px">
+		<div class="input-group-addon"><span class="glyphicon glyphicon-user"></span></div>
+		<input type="text" ng-model="login.data.username" class="form-control" id="inputUsername" placeholder="Benutzername">
 	</div>
 
-	<div class="form-group">
-		<div class="col-sm-offset-2 col-sm-10">
-			<button type="submit" class="btn btn-default">Einloggen</button>
-		</div>
+
+	<label class="sr-only" for="inputPassword">Passwort</label>
+	<div class="input-group input-group-lg" style="margin-bottom: 15px">
+		<div class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></div>
+		<input type="password" ng-model="login.data.password" class="form-control" id="inputPassword" placeholder="Passwort">
+		<span class="input-group-btn">
+			<button ng-click="openPwForgotModal()" class="btn btn-warning" type="button"><span class="glyphicon glyphicon-fire"></span></button>
+		</span>
+
 	</div>
+
+
+		<button type="submit" class="btn btn-block btn-lg btn-success">Einloggen</button>
+
+	</div>
+	</div>
+</div>
+</div>
 
 </form>
