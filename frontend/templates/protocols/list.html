@@ -8,14 +8,14 @@
     <h2>Protokolle</h2>
 </div>
 
-<div class="panel panel-default" ng-repeat="(year, yprotocols) in protocols">
+<div class="panel panel-default" ng-repeat="year in years | orderBy:year:true">
     <!-- Default panel contents -->
     <div class="panel-heading">
         <h4>{{year}}</h4>
     </div>
     <!-- List group -->
     <ul class="list-group protocol-list">
-        <li class="list-group-item" ng-repeat="protocol in yprotocols" ng-click="showProtocol(protocol.id)">
+        <li class="list-group-item" ng-repeat="protocol in protocols[year]" ng-click="showProtocol(protocol.id)">
 
             <div class="row">
                 <div class="col-md-10 col-sm-9 col-xs-5">

@@ -382,6 +382,7 @@ angular.module('app.cis').controller('ProtocolFormController', function ($scope,
 // controller for protocol list
 angular.module('app.cis').controller('ProtocolListController', function ($scope, $http, $routeParams, clubAuth, $uibModal, $location, appConf) {
     $scope.protocols = [];
+    $scope.years = [];
     refresh();
 
     /*** functions ***/
@@ -389,6 +390,7 @@ angular.module('app.cis').controller('ProtocolListController', function ($scope,
     function refresh() {
         $http.get(appConf.api + '/protocols?grouped').success(function (data) {
             $scope.protocols = data;
+            $scope.years = Object.keys(data);
         });
     }
 
