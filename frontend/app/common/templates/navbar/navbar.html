@@ -1,0 +1,83 @@
+<ul class="nav navbar-nav">
+
+  <li nav-active-state ng-if="user.type=='club'">
+    <a ng-href="#/memberlist">
+      <span class="glyphicon glyphicon-list"></span>
+      Mitgliederliste
+    </a>
+  </li>
+
+  <li nav-active-state ng-if="user.type=='club'">
+    <a ng-href="#/calendar">
+      <span class="glyphicon glyphicon-calendar"></span>
+      Kalender
+    </a>
+  </li>
+
+  <li nav-active-state ng-if="user.type=='club'">
+    <a ng-href="#/protocols">
+      <span class="glyphicon glyphicon-file"></span>
+      Protokolle
+    </a>
+  </li>
+
+	<li nav-active-state ng-if="user.type=='club'" uib-dropdown>
+		<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" uib-dropdown-toggle>
+			<span class="glyphicon glyphicon-tasks"></span> Dienste <span class="caret"></span>
+		</a>
+		<ul class="dropdown-menu" role="menu">
+			<li>
+				<a href="https://drive.hftl.club/" target="_blank"><span class="glyphicon glyphicon-hdd"></span> ClubDrive</a>
+			</li>
+			<li>
+				<a href="https://screen.hftl.club/" target="_blank"><span class="glyphicon glyphicon-info-sign"></span> Infoscreen</a>
+			</li>
+			<li>
+				<a href="https://pad.hftl.club/" target="_blank"><span class="glyphicon glyphicon-edit"></span> ClubPad</a>
+			</li>
+		</ul>
+	</li>
+
+
+    <li nav-active-state ng-if="user.superuser" uib-dropdown>
+        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" uib-dropdown-toggle>
+            <span class="glyphicon glyphicon-certificate"></span> Verwaltung <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu" role="menu">
+            <li>
+              <a ng-href="#/users"><span class="glyphicon glyphicon-user"></span> Benutzer</a>
+            </li>
+            <li>
+                <a href="#/keylist"><span class="glyphicon glyphicon-list-alt"></span> Schlüsselliste</a>
+            </li>
+        </ul>
+    </li>
+
+</ul>
+
+<div class="navbar-right">
+  <div class="btn-group" uib-dropdown>
+
+  <button type="button" class="btn btn-md btn-default navbar-btn navbar-right dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" uib-dropdown-toggle>
+    <span class="glyphicon glyphicon-user"></span>
+    {{ user.username }}
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <li class="disabled">
+        <a class="small">
+            <span class="glyphicon glyphicon-star-empty"></span>
+            <span ng-if="user.superuser">Superuser</span>
+            <span ng-if="!user.superuser">
+              <span ng-if="user.type=='club'">Clubmitglied</span>
+              <span ng-if="user.type=='other'">Externer Benutzer</span>
+            </span>
+        </a>
+    </li>
+    <li role="separator" class="divider"></li>
+    <li><a ng-click="nav.logout()"><span class="glyphicon glyphicon-off"></span> <b>Logout</b></a></li>
+    <li role="separator" class="divider"></li>
+    <li><a ng-href="#/settings/changepassword"><span class="glyphicon glyphicon-lock"></span> Passwort ändern</a></li>
+    <li><a ng-href="#/settings/profile"><span class="glyphicon glyphicon-pencil"></span> Profil bearbeiten</a></li>
+  </ul>
+  </div>

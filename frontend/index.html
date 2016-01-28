@@ -87,27 +87,45 @@
     <script src="app/app.js"></script>
 
     <!-- configuration file -->
-	<script src="js/config.js"></script>
+	<script src="app/config.js"></script>
 
-	<!-- basic controllers -->
-	<script src="js/main-controllers.js"></script>
-	<script src="js/public-controllers.js"></script>
-	<script src="js/settings-controllers.js"></script>
-	<script src="js/usermanage-controllers.js"></script>
-	<script src="js/memberlist-controller.js"></script>
-	<script src="js/keylist-controller.js"></script>
-	<script src="js/calendar-controller.js"></script>
+	<!-- controllers -->
+	<script src="app/common/controllers/MainCtrl.js"></script>
+	<script src="app/common/controllers/ModalFeedbackCtrl.js"></script>
+
+	<script src="app/calendar/controllers/CalendarCtrl.js"></script>
+	<script src="app/calendar/controllers/ModalCalendarDetailsCtrl.js"></script>
+
+	<script src="app/index/controllers/IndexCtrl.js"></script>
+
+	<script src="app/keylist/controllers/KeyListCtrl.js"></script>
+	<script src="app/keylist/controllers/PublicKeyListCtrl.js"></script>
+
+	<script src="app/login/controllers/LoginCtrl.js"></script>
+
+	<script src="app/memberlist/controllers/MemberListCtrl.js"></script>
 
 	<script src="app/protocols/controllers/ProtocolListCtrl.js"></script>
 	<script src="app/protocols/controllers/ProtocolDetailCtrl.js"></script>
 	<script src="app/protocols/controllers/ProtocolFormCtrl.js"></script>
 	<script src="app/protocols/controllers/ModalProtocolDeleteCtrl.js"></script>
 
+	<script src="app/settings/controllers/SettingsChangePasswordCtrl.js"></script>
+
+	<script src="app/user/controllers/UserListCtrl.js"></script>
+	<script src="app/user/controllers/UserFormCtrl.js"></script>
+	<script src="app/user/controllers/ModalUserDelCtrl.js"></script>
+	<script src="app/user/controllers/ModalResetPasswordCtrl.js"></script>
+
+	<!-- directives -->
+	<script src="app/common/directives/directives.js"></script>
+	<script src="app/common/directives/loadingBar/loadingBar.js"></script>
+	<script src="app/common/directives/helpbox/helpbox.js"></script>
+
 
 	<!-- other angular things -->
-	<script src="js/auth-service.js"></script>
-	<script src="js/route-config.js"></script>
-	<script src="js/directives.js"></script>
+	<script src="app/common/services/auth-service.js"></script>
+	<script src="app/route-config.js"></script>
 
 </body>
 
