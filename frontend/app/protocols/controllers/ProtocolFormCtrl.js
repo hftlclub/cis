@@ -1,5 +1,5 @@
 // controller for protocol form
-angular.module('app.cis').controller('ProtocolFormController', function ($scope, $http, $routeParams, $interval, $route, $window, clubAuth, hotkeys, growl, appConf) {
+angular.module('app.cis').controller('ProtocolFormCtrl', function ($scope, $http, $routeParams, $interval, $route, $window, clubAuth, hotkeys, growl, appConf) {
 
     $scope.options = {
         commonTitles: ['Clubsitzung', 'Mitgliederversammlung', 'Planungstreffen'],
@@ -93,12 +93,12 @@ angular.module('app.cis').controller('ProtocolFormController', function ($scope,
     //destroy timer and unloadListener on location change
     $scope.$on('$destroy', function () {
         $scope.autoSave.stopTimer();
-        $window.removeEventListener("beforeunload", unloadListener);
+        $window.removeEventListener('beforeunload', unloadListener);
     });
 
 
     // catch close/reload event and show confirmation message
-    $window.addEventListener("beforeunload", unloadListener);
+    $window.addEventListener('beforeunload', unloadListener);
 
     function unloadListener(event) {
         var confirmationMessage = '';
@@ -212,7 +212,7 @@ angular.module('app.cis').controller('ProtocolFormController', function ($scope,
      * "attendee is later" popover
      *************************/
     $scope.laterPopover = {
-        template: '/templates/protocols/laterPopover.html',
+        template: 'app/protocols/templates/laterPopover.html',
         setInitial: function (att) {
             att.later = new Date();
             $scope.protocolForm.$setDirty();
@@ -344,8 +344,6 @@ angular.module('app.cis').controller('ProtocolFormController', function ($scope,
 
 
 
-
-
     /**************************************************
      ***************************************************
      ****************************************************/
@@ -369,123 +367,4 @@ angular.module('app.cis').controller('ProtocolFormController', function ($scope,
 
 
 
-});
-
-
-
-
-
-
-
-
-
-// controller for protocol list
-angular.module('app.cis').controller('ProtocolListController', function ($scope, $http, $routeParams, clubAuth, $uibModal, $location, appConf) {
-    $scope.protocols = [];
-    $scope.years = [];
-    refresh();
-
-    /*** functions ***/
-
-    function refresh() {
-        $http.get(appConf.api + '/protocols?grouped').success(function (data) {
-            $scope.protocols = data;
-            $scope.years = Object.keys(data);
-        });
-    }
-
-    // function to open delete modal
-    $scope.deleteProtocol = function (prot) {
-
-        var modal = $uibModal.open({
-            templateUrl: 'templates/protocols/deletemodal.html',
-            controller: 'DelProtModalController',
-            resolve: {
-                protocol: function () {
-                    return prot;
-                }
-            }
-        });
-
-        modal.result.then(function () {
-            $http.delete(appConf.api + '/protocols/' + prot.id).
-                success(refresh);
-        });
-    }
-
-    $scope.showProtocol = function (id) {
-        $location.path('protocols/show/' + id);
-    }
-
-});
-
-
-
-
-// delete modal
-angular.module('app.cis').controller('DelProtModalController', function ($scope, $rootScope, $modalInstance, protocol) {
-    $scope.protocol = protocol;
-    $scope.checkWord = $rootScope.getCheckWord();
-
-    // check if input is the same like the give phrase
-    $scope.checkInput = function () {
-        if ($scope.checkWord == $scope.inputCheckWord) {
-            $modalInstance.close('success');
-        }
-    };
-});
-
-
-
-
-
-
-
-
-
-// controller for protocol details
-angular.module('app.cis').controller('ProtocolDetailController', function ($scope, $http, $routeParams, $window, $document, $timeout, clubAuth, appConf) {
-    $scope.protocolid = $routeParams.id;
-    $scope.protocol = {};
-
-    refresh();
-    /*** functions ***/
-
-    $scope.pdf = {
-        processing: 0,
-        processed: 0,
-        path: null,
-        delTimer: null,
-        generate: function(id){
-            $scope.pdf.processing = 1;
-
-            $http.get(appConf.api + '/protocols/pdf/' + id).then(function(res){
-                //change view flags
-                $scope.pdf.processing = 0;
-                $scope.pdf.processed = 1;
-
-                //add path to link
-                if(res.data.pdf) $scope.pdf.path = res.data.pdf;
-
-                //after PDF deletion timeout reset button
-                $scope.pdf.delTimer = $timeout($scope.pdf.reset, ((res.data.delTimeout - 2) * 1000));
-
-            }, function(){ //on error: reset button
-                $scope.pdf.reset();
-            });
-        },
-        reset: function(){
-            $scope.pdf.processed = 0;
-            $scope.pdf.processing = 0;
-            $scope.pdf.path = 0;
-            $timeout.cancel($scope.pdf.delTimer);
-        }
-    }
-
-
-    function refresh() {
-        $http.get(appConf.api + '/protocols/detail/' + $scope.protocolid).success(function (data) {
-            $scope.protocol = data;
-        });
-    }
 });

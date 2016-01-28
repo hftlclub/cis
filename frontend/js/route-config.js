@@ -16,7 +16,7 @@ angular.module('app.cis').config(function($routeProvider) {
     $routeProvider.
     when('/', {
         templateUrl: 'templates/landingPage.html',
-        controller: 'IndexController',
+        controller: 'IndexCtrl',
         resolve: { refresh: refreshAuth }
     }).
 
@@ -120,14 +120,14 @@ angular.module('app.cis').config(function($routeProvider) {
     /* club protocol routes */
 
     when('/protocols', {
-        templateUrl: 'templates/protocols/list.html',
-        controller: 'ProtocolListController',
+        templateUrl: 'app/protocols/templates/list.html',
+        controller: 'ProtocolListCtrl',
         resolve: { refresh: refreshAuth }
     }).
 
     when('/protocols/add', {
-        templateUrl: 'templates/protocols/form.html',
-        controller: 'ProtocolFormController',
+        templateUrl: 'app/protocols/templates/form.html',
+        controller: 'ProtocolFormCtrl',
         resolve: {
             refresh: refreshAuth,
             clubMode: function() {
@@ -137,8 +137,8 @@ angular.module('app.cis').config(function($routeProvider) {
     }).
 
     when('/protocols/edit/:id', {
-        templateUrl: 'templates/protocols/form.html',
-        controller: 'ProtocolFormController',
+        templateUrl: 'app/protocols/templates/form.html',
+        controller: 'ProtocolFormCtrl',
         resolve: {
             refresh: refreshAuth,
             clubMode: function() {
@@ -148,8 +148,8 @@ angular.module('app.cis').config(function($routeProvider) {
     }).
 
     when('/protocols/show/:id', {
-        templateUrl: 'templates/protocols/details.html',
-        controller: 'ProtocolDetailController',
+        templateUrl: 'app/protocols/templates/details.html',
+        controller: 'ProtocolDetailCtrl',
         resolve: { refresh: refreshAuth }
     }).
 

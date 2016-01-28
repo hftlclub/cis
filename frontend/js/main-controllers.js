@@ -7,7 +7,7 @@ function fixAutofillBug() {
 
 
 
-angular.module('app.cis').controller('MainController', function($scope, $rootScope, $route, $routeParams, $location, $interval, clubAuth, $timeout, $uibModal, $http, $anchorScroll, $window, appConf) {
+angular.module('app.cis').controller('MainCtrl', function($scope, $rootScope, $route, $routeParams, $location, $interval, clubAuth, $timeout, $uibModal, $http, $anchorScroll, $window, appConf) {
     $scope.scrollToTop = function() {
         $anchorScroll('scrollToTopTarget');
     }
@@ -63,7 +63,7 @@ angular.module('app.cis').controller('MainController', function($scope, $rootSco
 
 
 
-angular.module('app.cis').controller('IndexController', function($location, clubAuth) {
+angular.module('app.cis').controller('IndexCtrl', function($location, clubAuth) {
 
     clubAuth.refresh().then(function(){}, function(){});
 

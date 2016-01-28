@@ -22,7 +22,7 @@
 
 </head>
 
-<body ng-controller="MainController">
+<body ng-controller="MainCtrl">
 
 	<nav class="navbar navbar-default navbar-static-top" role="navigation">
 		<div class="container">
@@ -84,7 +84,7 @@
 	<script src="js/libs/angular.audio.js"></script>
 	<script src="js/libs/angular.growl.min.js"></script>
 
-    <script src="js/app.cis.module.js"></script>
+    <script src="app/app.js"></script>
 
     <!-- configuration file -->
 	<script src="js/config.js"></script>
@@ -96,8 +96,13 @@
 	<script src="js/usermanage-controllers.js"></script>
 	<script src="js/memberlist-controller.js"></script>
 	<script src="js/keylist-controller.js"></script>
-	<script src="js/protocols-controllers.js"></script>
 	<script src="js/calendar-controller.js"></script>
+
+	<script src="app/protocols/controllers/ProtocolListCtrl.js"></script>
+	<script src="app/protocols/controllers/ProtocolDetailCtrl.js"></script>
+	<script src="app/protocols/controllers/ProtocolFormCtrl.js"></script>
+	<script src="app/protocols/controllers/ModalProtocolDeleteCtrl.js"></script>
+
 
 	<!-- other angular things -->
 	<script src="js/auth-service.js"></script>
