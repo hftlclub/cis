@@ -16,7 +16,8 @@ angular.module('app.cis').config(function($routeProvider) {
     $routeProvider.
     when('/', {
         templateUrl: 'templates/landingPage.html',
-        controller: 'IndexController'
+        controller: 'IndexController',
+        resolve: { refresh: refreshAuth }
     }).
 
     when('/login', {
