@@ -125,5 +125,5 @@ protocolspdf.startTimer();
 
 //start server
 app.listen(config.port, function (err) {
-    console.log('CIS Server started on port ' + config.port);
+    console.log(new Date() + ' CIS Server started on port ' + config.port);
 });

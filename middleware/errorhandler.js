@@ -10,7 +10,7 @@ exports.validation = function(req, res, next) {
 
 
 exports.generic = function(err, req, res, next) {
-    console.error(new Date() + ':', err);
+    console.error(new Date(), ':', err);
     res.status(err.status || 500).json({
         error: err.message
     });

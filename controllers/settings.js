@@ -18,6 +18,7 @@ exports.changepassword = function(req, res, next) {
     userservice.checkpassword(req.user.username, req.body.oldPassword, function(err, success) {
         if (err) return next(err);
         if (!success) {
+            req.body.oldPassword = ''; //for security reasons, so that misspelled password does not appear in the logs
             req.checkBody('oldPassword', 'Altes Passwort nicht korrekt').error(1);
             next();
         }
@@ -25,6 +26,9 @@ exports.changepassword = function(req, res, next) {
         //SET new password!
         userservice.setPassword(req.user.username, req.body.newPassword1, function(err) {
             if (err) next(err);
+
+            console.log(new Date() + ' SUCCESS User Password Change: ' + req.body.username);
+
             res.end();
         });
     });

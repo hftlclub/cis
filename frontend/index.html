@@ -13,44 +13,6 @@
 	<link rel="stylesheet" type="text/css" href="css/dhtmlxscheduler.css">
 	<link href="css/style.css" rel="stylesheet">
 
-	<!-- Angular.js libs -->
-	<script src="js/libs/ace.js"></script>
-	<script src="js/libs/angular.1.4.x.min.js"></script>
-	<script src="js/libs/angular-locale_de-de.js"></script>
-	<script src="js/libs/angular-route.1.4.x.min.js"></script>
-	<script src="js/libs/angular-sanitize.1.4.x.min.js"></script>
-	<script src="js/libs/angular-animate.1.4.x.min.js"></script>
-	<script src="js/libs/ui-bootstrap-tpls.0.14.x.min.js"></script>
-	<script src="js/libs/angular-hotkeys.1.4.x.min.js"></script>
-	<script src="js/ui-ace.js"></script>
-	<script src="js/libs/dhtmlxscheduler.js"></script>
-	<script src="js/libs/dhtmlxscheduler.locale_de.js"></script>
-	<script src="js/libs/angular.dhtmlxscheduler.js"></script>
-	<script src="js/libs/angular.audio.js"></script>
-	<script src="js/libs/angular.growl.min.js"></script>
-
-    <script src="js/app.cis.module.js"></script>
-
-    <!-- configuration file -->
-	<script src="js/config.js"></script>
-
-	<!-- basic controllers -->
-	<script src="js/main-controllers.js"></script>
-	<script src="js/public-controllers.js"></script>
-	<script src="js/settings-controllers.js"></script>
-	<script src="js/usermanage-controllers.js"></script>
-	<script src="js/memberlist-controller.js"></script>
-	<script src="js/keylist-controller.js"></script>
-	<script src="js/protocols-controllers.js"></script>
-	<script src="js/calendar-controller.js"></script>
-
-	<!-- additional angular dependencies -->
-	<script src="js/auth-service.js"></script>
-	<script src="js/route-config.js"></script>
-
-	<!-- angular directives -->
-	<script src="js/directives.js"></script>
-
 	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 	<!--[if lt IE 9]>
@@ -60,7 +22,7 @@
 
 </head>
 
-<body ng-controller="MainController">
+<body ng-controller="MainCtrl">
 
 	<nav class="navbar navbar-default navbar-static-top" role="navigation">
 		<div class="container">
@@ -105,6 +67,65 @@
 
 	<div growl></div>
 
+
+	<!-- Libs -->
+	<script src="js/libs/ace.js"></script>
+	<script src="js/libs/angular.1.4.x.min.js"></script>
+	<script src="js/libs/angular-locale_de-de.js"></script>
+	<script src="js/libs/angular-route.1.4.x.min.js"></script>
+	<script src="js/libs/angular-sanitize.1.4.x.min.js"></script>
+	<script src="js/libs/angular-animate.1.4.x.min.js"></script>
+	<script src="js/libs/ui-bootstrap-tpls.0.14.x.min.js"></script>
+	<script src="js/libs/angular-hotkeys.1.4.x.min.js"></script>
+	<script src="js/ui-ace.js"></script>
+	<script src="js/libs/dhtmlxscheduler.js"></script>
+	<script src="js/libs/dhtmlxscheduler.locale_de.js"></script>
+	<script src="js/libs/angular.dhtmlxscheduler.js"></script>
+	<script src="js/libs/angular.audio.js"></script>
+	<script src="js/libs/angular.growl.min.js"></script>
+
+    <script src="app/app.js"></script>
+
+    <!-- configuration file -->
+	<script src="app/config.js"></script>
+
+	<!-- controllers -->
+	<script src="app/common/controllers/MainCtrl.js"></script>
+	<script src="app/common/controllers/ModalFeedbackCtrl.js"></script>
+
+	<script src="app/calendar/controllers/CalendarCtrl.js"></script>
+	<script src="app/calendar/controllers/ModalCalendarDetailsCtrl.js"></script>
+
+	<script src="app/index/controllers/IndexCtrl.js"></script>
+
+	<script src="app/keylist/controllers/KeyListCtrl.js"></script>
+	<script src="app/keylist/controllers/PublicKeyListCtrl.js"></script>
+
+	<script src="app/login/controllers/LoginCtrl.js"></script>
+
+	<script src="app/memberlist/controllers/MemberListCtrl.js"></script>
+
+	<script src="app/protocols/controllers/ProtocolListCtrl.js"></script>
+	<script src="app/protocols/controllers/ProtocolDetailCtrl.js"></script>
+	<script src="app/protocols/controllers/ProtocolFormCtrl.js"></script>
+	<script src="app/protocols/controllers/ModalProtocolDeleteCtrl.js"></script>
+
+	<script src="app/settings/controllers/SettingsChangePasswordCtrl.js"></script>
+
+	<script src="app/user/controllers/UserListCtrl.js"></script>
+	<script src="app/user/controllers/UserFormCtrl.js"></script>
+	<script src="app/user/controllers/ModalUserDelCtrl.js"></script>
+	<script src="app/user/controllers/ModalResetPasswordCtrl.js"></script>
+
+	<!-- directives -->
+	<script src="app/common/directives/directives.js"></script>
+	<script src="app/common/directives/loadingBar/loadingBar.js"></script>
+	<script src="app/common/directives/helpbox/helpbox.js"></script>
+
+
+	<!-- other angular things -->
+	<script src="app/common/services/auth-service.js"></script>
+	<script src="app/route-config.js"></script>
 
 </body>
 
