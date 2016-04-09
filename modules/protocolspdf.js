@@ -1,5 +1,6 @@
 var protocolsservice = require('../services/protocolsservice');
 var config = require('../config');
+var log = require('../modules/log');
 
 exports.jobs = {'yAcTc2FIwEx4tvfkth1g4LiLt7ZBKtTA': 1};
 
@@ -16,7 +17,7 @@ exports.startTimer = function() {
         return;
     }
 
-    //console.log('Protocol PDF job handler started...');
+    //log.debug('Protocol PDF job handler started...');
 
     for(var id in exports.jobs){
         //skip if this protocol doesnt have to be processed
@@ -26,11 +27,11 @@ exports.startTimer = function() {
 
         protocolsservice.makePdf(id, '/tmp/', function(err, location, filename){
             if(err){
-                console.log(err);
+                log.error(err);
                 return;
             }
 
-            console.log('Automatically created PDF', location, 'for filename', filename);
+            log.debug('Automatically created PDF', location, 'for filename', filename);
 
             //upload to seafile
             //TODO

@@ -3,6 +3,7 @@ var jwt = require('jwt-simple');
 var config = require('../config');
 var userservice = require('../services/userservice');
 var jwtblacklist = require('../modules/jwtblacklist');
+var log = require('../modules/log');
 
 
 
@@ -18,11 +19,9 @@ exports.login = function(req, res, next) {
     userservice.checkpassword(req.body.username, req.body.password, function(err, success) {
         //error if login failed or error occured
         if (err || !success) {
-            console.log(new Date() + ' FAIL User Login: ' + req.body.username);
+            log.info('FAIL User Login: ' + req.body.username);
             return res.status(401).send(null);
         }
-
-        console.log(new Date() + ' SUCCESS User Login: ' + req.body.username);
 
         //get user
         userservice.getUserByUid(req.body.username, function(err, user) {
@@ -39,6 +38,9 @@ exports.login = function(req, res, next) {
                 },
                 config.tokensecret
             );
+
+            log.info('SUCCESS User Login: ' + req.body.username);
+
             res.json({
                 token: token,
                 expires: expires,
@@ -81,12 +83,10 @@ exports.externallogin = function(req, res, next) {
     userservice.checkpassword(req.body.username, req.body.password, function(err, success) {
         //error if login failed or error occured
         if (err || !success) {
-            console.log(new Date() + ' FAIL External Auth: ' + req.body.username);
+            log.info('FAIL External Auth: ' + req.body.username);
             res.status(401).send('failed');
             return;
         }
-
-        console.log(new Date() + ' SUCCESS External Auth: ' + req.body.username);
 
         //get user
         userservice.getUserByUid(req.body.username, function(err, user) {
@@ -100,6 +100,8 @@ exports.externallogin = function(req, res, next) {
                 res.status(401).send('user type is not allowed');
                 return;
             }
+
+            log.info('SUCCESS External Auth: ' + req.body.username);
 
             res.send('success');
             return;

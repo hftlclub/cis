@@ -36,7 +36,6 @@ angular.module('app.cis').controller('ProtocolDetailCtrl', function ($scope, $ht
 
     // function to open delete modal
     $scope.deleteProtocol = function (prot) {
-        console.log(prot);
         var modal = $uibModal.open({
             templateUrl: 'app/protocols/templates/deletemodal.html',
             controller: 'ModalProtocolDeleteCtrl',

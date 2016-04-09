@@ -3,6 +3,8 @@ var expressValidator = require('express-validator');
 var bodyParser = require('body-parser');
 var cors = require('cors');
 
+var log = require('./modules/log');
+
 var app = express();
 var api = express.Router();
 
@@ -129,5 +131,5 @@ app.get('*', function(req, res, next){
 
 //start server
 app.listen(config.port, function (err) {
-    console.log(new Date().toString() + ': CIS Server started on port ' + config.port);
+    log.info('CIS Server started on port ', config.port);
 });

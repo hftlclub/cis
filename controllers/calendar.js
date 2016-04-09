@@ -1,6 +1,7 @@
 var async = require('async');
 var config = require('../config');
 var calendarservice = require('../services/calendarservice');
+var log = require('../modules/log');
 
 exports.listEvents = function (req, res, next) {
     var events = {};
@@ -19,7 +20,7 @@ exports.listEvents = function (req, res, next) {
             cb(null, null);
         });
     }, function (err) {
-        if (err) console.log(err);
+        if (err) log.error(err);
         res.json(events);
     });
 

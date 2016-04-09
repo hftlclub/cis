@@ -1,7 +1,9 @@
+var log = require('../modules/log');
+
 exports.validation = function(req, res, next) {
     var valerrors = req.validationErrors(true);
     if (valerrors) {
-        console.log(new Date().toString() + ':', valerrors);
+        //log.debug(valerrors);
         res.status(400).json({
             validationerror: valerrors
         }).end();
@@ -10,7 +12,7 @@ exports.validation = function(req, res, next) {
 
 
 exports.generic = function(err, req, res, next) {
-    console.error(new Date().toString(), ':', err);
+    log.error(err);
     res.status(err.status || 500).json({
         error: err.message
     });

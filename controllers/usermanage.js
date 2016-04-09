@@ -3,6 +3,7 @@ var config = require('../config');
 var smtp = require('../modules/smtp');
 var utils = require('../modules/utils');
 var userservice = require('../services/userservice');
+var log = require('../modules/log');
 
 
 //add user function for superusers
@@ -60,7 +61,7 @@ exports.adduser = function(req, res, next) {
                 if (req.body.alias) replace.name = req.body.alias;
 
                 smtp.mail(req.body.email, 'sendPwAdd', replace, function(err, success) {
-                    if (err) console.log(err);
+                    if (err) log.error(err);
                 });
             }
 

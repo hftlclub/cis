@@ -1,6 +1,7 @@
 var config = require('../config');
 var Seafile = require('seafile-api');
 var Promise = require('promise');
+var log = require('../modules/log');
 
 var sf = new Seafile(config.seafile.url, config.seafile.token);
 
@@ -16,7 +17,7 @@ exports.createUser = function(user) {
             password: user.password
         }, function(err, body) {
             if (err) {
-                console.log(err, body);
+                log.error(err, body);
                 reject();
                 return;
             }
@@ -28,7 +29,7 @@ exports.createUser = function(user) {
                 is_staff: user.superuser
             }, function(err) {
                 if (err) {
-                    console.log(err);
+                    log.error(err);
                     reject();
                     return;
                 }
@@ -48,7 +49,7 @@ exports.updateUser = function(username, update) {
 
         sf.updateAccount(update, function(err) {
             if (err) {
-                console.log(err);
+                log.error(err);
                 reject();
                 return;
             }
@@ -69,7 +70,7 @@ exports.deleteUser = function(username) {
         exports.removeFromAllGroups(username).then(function() {
             sf.deleteAccount(email, function(err) {
                 if (err) {
-                    console.log(err);
+                    log.error(err);
                     reject();
                     return;
                 }

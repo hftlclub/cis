@@ -269,18 +269,17 @@ exports.pdf = function(req, res, next){
 
             //move temp file to destination folder
             mv(location, (dir + filename), function(err){
-                if(err) console.log(err);
+                if(err) next(err);
 
                 //set timer for garbage collection
                 setTimeout(function(){
                     //delete PDF file
                     fs.unlink(dir + filename, function(err){
-                        if(err) console.log(err);
+                        if(err) next(err);
 
                         //delete folder
                         fs.rmdir(dir, function(err){
-                            if(err) console.log(err);
-                            //console.log('GC done');
+                            if(err) next(err);
                         });
                     });
 
@@ -295,9 +294,5 @@ exports.pdf = function(req, res, next){
 
             });
         });
-
-
-
-
     });
 }
