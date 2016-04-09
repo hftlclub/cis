@@ -7,11 +7,11 @@
 
 <!-- ########## helpboxes ########-->
 <helpbox ng-if="form.mode=='profile'" label="Hilfe" active="true">
-    <div ng-include="'templates/helpbox/content/editProfile.html'"></div>
+    <div ng-include="'app/user/templates/helpbox/editProfile.html'"></div>
 </helpbox>
 
 <helpbox ng-if="form.mode=='add' || form.mode=='edit'" label="Hilfe">
-    <div ng-include="'templates/helpbox/content/addUser.html'"></div>
+    <div ng-include="'app/user/templates/helpbox/addUser.html'"></div>
 </helpbox>
 
 <div class="row">
