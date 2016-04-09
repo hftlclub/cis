@@ -5,7 +5,7 @@ var sanitize = require('sanitize-filename');
 var mysql = require('../modules/mysql');
 var config = require('../config');
 var utils = require('../modules/utils');
-
+var log = require('../modules/log');
 
 
 exports.get = function(id, callback) {
@@ -287,9 +287,9 @@ exports.makePdf = function(id, path, callback){
         ]
 
         pdc(outmd, 'markdown', 'latex', args, function(err, result){
-            console.log('Created PDF for protocol', id);
+            log.debug('Created PDF for protocol ', id);
             if(err) return callback(err);
-            if(result) console.log(result);
+            if(result) log.debug(result);
 
             callback(null, location, filename);
 
