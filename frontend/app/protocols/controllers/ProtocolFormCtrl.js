@@ -259,7 +259,7 @@ angular.module('app.cis').controller('ProtocolFormCtrl', function ($scope, $http
                 .success(function (data) {
                     growl.success(succMsg);
                     if (!nosetpristine) $scope.protocolForm.$setPristine();
-
+                    form.errors = null;
                 })
                 .error(function (data, status) {
                     if (status == 400 && data.validationerror) {
@@ -287,7 +287,7 @@ angular.module('app.cis').controller('ProtocolFormCtrl', function ($scope, $http
                         form.mode = 'edit';
                         form.id = data.id;
                     }
-
+                    form.errors = null;
                 })
                 .error(function (data, status) {
                     if (status == 400 && data.validationerror) {

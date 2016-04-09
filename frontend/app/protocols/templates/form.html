@@ -146,8 +146,8 @@
         </helpbox>
     </div>
 
-    <h4>Protokolltext (Markdown)</h4>
-    <div class="well well-lg" ui-ace="options.aceoptions" ng-model="form.data.text" id="test"></div>
+    <h4>Protokolltext (Markdown) <span ng-if="form.errors.text" class="glyphicon glyphicon-remove text-danger" aria-hidden="true"></span></h4>
+    <div class="well well-lg" ng-class="{'ace-error': form.errors.text}" ui-ace="options.aceoptions" ng-model="form.data.text" id="test"></div>
 
     <h4>Kommentare</h4>
     <textarea class="form-control" ng-model="form.data.comment" rows="3" placeholder="Kommentare"></textarea>

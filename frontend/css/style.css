@@ -32,6 +32,10 @@ span.largeicon {
 .ace_editor {
   height: 400px;
 }
+.ace-error {
+  border: 1px solid #a94442;
+}
+
 #protocolContent h1 {
   font-size: 2em;
 }
