@@ -1,8 +1,5 @@
 // controller for protocol details
-angular.module('app.cis').controller('ProtocolDetailCtrl', function ($scope, $http, $routeParams, $window, $document, $timeout, clubAuth, appConf) {
-    $scope.protocolid = $routeParams.id;
-    $scope.protocol = {};
-
+angular.module('app.cis').controller('ProtocolDetailCtrl', function ($scope, $http, $routeParams, $window, $document, $timeout, $location, $uibModal, clubAuth, growl, appConf) {
     refresh();
     /*** functions ***/
 
@@ -37,10 +34,35 @@ angular.module('app.cis').controller('ProtocolDetailCtrl', function ($scope, $ht
         }
     }
 
+    // function to open delete modal
+    $scope.deleteProtocol = function (prot) {
+        console.log(prot);
+        var modal = $uibModal.open({
+            templateUrl: 'app/protocols/templates/deletemodal.html',
+            controller: 'ModalProtocolDeleteCtrl',
+            resolve: {
+                protocol: function () {
+                    return prot;
+                }
+            }
+        });
+
+        modal.result.then(function () {
+            $http.delete(appConf.api + '/protocols/' + prot.id).
+                success(function() {
+                  growl.success('Das Protokoll wurde gelöscht.');
+                  $location.path('/protocols')
+                });
+        });
+    }
+
 
     function refresh() {
-        $http.get(appConf.api + '/protocols/detail/' + $scope.protocolid).success(function (data) {
+        var protid = $routeParams.id;
+
+        $http.get(appConf.api + '/protocols/detail/' + protid).success(function (data) {
             $scope.protocol = data;
+            $scope.protocol.id = protid;
         });
     }
 });

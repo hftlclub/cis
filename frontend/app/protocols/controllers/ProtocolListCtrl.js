@@ -1,5 +1,5 @@
 // controller for protocol list
-angular.module('app.cis').controller('ProtocolListCtrl', function ($scope, $http, $routeParams, clubAuth, $uibModal, $location, appConf) {
+angular.module('app.cis').controller('ProtocolListCtrl', function ($scope, $http, $routeParams, clubAuth, $uibModal, $location, growl, appConf) {
     $scope.protocols = [];
     $scope.years = [];
     refresh();
@@ -28,7 +28,10 @@ angular.module('app.cis').controller('ProtocolListCtrl', function ($scope, $http
 
         modal.result.then(function () {
             $http.delete(appConf.api + '/protocols/' + prot.id).
-                success(refresh);
+                success(function() {
+                  refresh();
+                  growl.success('Das Protokoll wurde gelöscht.');
+                });
         });
     }
 
