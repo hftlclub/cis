@@ -31,7 +31,7 @@ exports.login = function(req, res, next) {
             }
 
             //user is authenticated and fetched --> send token
-            var expires = moment().add(7, 'days').valueOf()
+            var expires = moment().add(1, 'days').valueOf()
             var token = jwt.encode({
                     uid: user.username,
                     exp: expires
