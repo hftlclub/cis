@@ -1,4 +1,7 @@
-<div class="page-header" id="protocolDetailHeader">
+<loading-bar show="loading"></loading-bar>
+
+<div ng-hide="loading">
+<div class="page-header" id="protocolDetailHeader" ng-hide="loading">
     <div class="pull-right">
 
         <div aria-label="..." class="btn-group" role="group">
@@ -119,4 +122,5 @@
     <span class="glyphicon glyphicon-remove"></span>
     Löschen
   </button>
+</div>
 </div>

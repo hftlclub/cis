@@ -56,9 +56,9 @@
         </div>
     </form>
 
-    <div class="table-responsive" ng-hide="contentLoading">
+    <div class="table-responsive" ng-hide="loading">
 
-        <table class="table table-striped table-bordered table-condensed table-hover" ng-if="members.data">
+        <table class="table table-striped table-bordered table-condensed table-hover">
             <thead>
                 <tr>
                     <th ng-click="orderBy(attr)" ng-if="!attrs[attr].hasOwnProperty('state') || attrs[attr].state" ng-repeat="attr in attrlist">{{attrs[attr].label}}

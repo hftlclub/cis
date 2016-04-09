@@ -1,5 +1,6 @@
 // controller for protocol details
 angular.module('app.cis').controller('ProtocolDetailCtrl', function ($scope, $http, $routeParams, $window, $document, $timeout, $location, $uibModal, clubAuth, growl, appConf) {
+    $scope.loading = false;
     refresh();
     /*** functions ***/
 
@@ -57,11 +58,13 @@ angular.module('app.cis').controller('ProtocolDetailCtrl', function ($scope, $ht
 
 
     function refresh() {
+        $scope.loading = true;
         var protid = $routeParams.id;
 
         $http.get(appConf.api + '/protocols/detail/' + protid).success(function (data) {
             $scope.protocol = data;
             $scope.protocol.id = protid;
+            $scope.loading = false;
         });
     }
 });

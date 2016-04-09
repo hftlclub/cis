@@ -8,7 +8,9 @@
     <h2>Protokolle</h2>
 </div>
 
-<div class="panel panel-default" ng-repeat="year in years | orderBy:year:true">
+<loading-bar show="loading"></loading-bar>
+
+<div class="panel panel-default" ng-repeat="year in years | orderBy:year:true" ng-hide="loading">
     <!-- Default panel contents -->
     <div class="panel-heading">
         <h4>{{year}}</h4>

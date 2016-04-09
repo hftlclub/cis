@@ -2,14 +2,21 @@
 angular.module('app.cis').controller('ProtocolListCtrl', function ($scope, $http, $routeParams, clubAuth, $uibModal, $location, growl, appConf) {
     $scope.protocols = [];
     $scope.years = [];
+    $scope.loading = false;
+
     refresh();
 
     /*** functions ***/
 
     function refresh() {
+        // show loading bar
+        $scope.loading = true;
+
         $http.get(appConf.api + '/protocols?grouped').success(function (data) {
             $scope.protocols = data;
             $scope.years = Object.keys(data);
+
+            $scope.loading = false;
         });
     }
 
