@@ -11,7 +11,10 @@ angular.module('app.cis').factory('clubAuth', function($http, $location, $rootSc
                 $rootScope.$broadcast('clubAuthRefreshed');
                 $rootScope.clubUser = data;
 
-                if ($location.path() == '/login') $location.path('/');
+                if ($location.path() == '/login') {
+                    var redirect = $rootScope.redirect || '/';
+                    $location.path(redirect);
+                }
 
                 resolve();
 
@@ -21,8 +24,11 @@ angular.module('app.cis').factory('clubAuth', function($http, $location, $rootSc
                 $rootScope.$broadcast('clubAuthRefreshed');
                 $rootScope.clubUser = {};
 
-                if (!isPublicPage($location.path()))
+                if (!isPublicPage($location.path())) {
+                    $rootScope.redirect = $location.path();
                     $location.path('/login');
+                }
+
 
                 reject();
 
