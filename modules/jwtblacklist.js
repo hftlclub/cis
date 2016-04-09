@@ -1,5 +1,3 @@
-var config = require('../config');
-
 //token blacklist is filled on logout so that tokens are no longer used after logout
 var blacklist = {};
 

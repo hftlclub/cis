@@ -8,7 +8,7 @@ exports.uid = function(len) {
     }
 
     return buffer.join('');
-};
+}
 
 
 exports.moment2mysql = function(mom) {

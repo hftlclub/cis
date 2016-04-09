@@ -56,7 +56,6 @@ exports.updateUser = function(username, update) {
             resolve();
         });
     });
-
 }
 
 

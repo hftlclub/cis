@@ -28,13 +28,10 @@ var errorhandler = require('./middleware/errorhandler');
 var nocache = require('./middleware/nocache');
 
 
-api.use(cors({
-    origin: '*'
-}));
+api.use(cors({ origin: '*' }));
+api.use(nocache);
 api.use(bodyParser.json());
-api.use(bodyParser.urlencoded({
-    extended: true
-}));
+api.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(expressValidator({
     customValidators: {
@@ -48,8 +45,6 @@ app.use(expressValidator({
 /****************************************
 	ROUTES
 *****************************************/
-// always include no-cache middleware
-api.use(nocache);
 
 //generic routes
 api.post('/login', authController.login);
@@ -111,9 +106,12 @@ api.all('*', function (req, res) {
 });
 
 
+
+
+
+
 //assign api router to /api
 app.use('/api', api);
-
 
 //static frontend
 app.use('/', express.static(__dirname + '/frontend'));
@@ -124,10 +122,12 @@ app.get('*', function(req, res, next){
 });
 
 //start protocols PDF job handler
-protocolspdf.startTimer();
+//protocolspdf.startTimer();
+
+
 
 
 //start server
 app.listen(config.port, function (err) {
-    console.log(new Date() + ' CIS Server started on port ' + config.port);
+    console.log(new Date().toString() + ': CIS Server started on port ' + config.port);
 });

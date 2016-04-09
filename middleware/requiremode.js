@@ -4,16 +4,16 @@ module.exports = function(mode) {
     return function(req, res, next) {
 
         if (mode == 'auth' && !req.user) {
-            res.send(null, 401);
+            res.status(401).send(null);
 
         } else if (mode == 'su' && !req.user.superuser) {
-            res.send('Must be superuser', 401);
+            res.status(401).send('Must be superuser');
 
         } else if (mode == 'club' && req.user.type != 'club') {
-            res.send('Must be club user', 401);
+            res.status(401).send('Must be club user');
 
         } else if (mode == 'pubaccess' && req.params.accesskey != config.pubaccesskey) {
-            res.send('Invalid access key', 401);
+            res.status(401).send('Invalid access key');
 
         } else {
             next();

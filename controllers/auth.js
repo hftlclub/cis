@@ -10,7 +10,7 @@ exports.login = function(req, res, next) {
 
     //error if uid or password not set
     if (!req.body.username || !req.body.password) {
-        res.send(null, 400);
+        res.status(400).send(null);
         return;
     }
 
@@ -19,7 +19,7 @@ exports.login = function(req, res, next) {
         //error if login failed or error occured
         if (err || !success) {
             console.log(new Date() + ' FAIL User Login: ' + req.body.username);
-            return res.send(null, 401);
+            return res.status(401).send(null);
         }
 
         console.log(new Date() + ' SUCCESS User Login: ' + req.body.username);
@@ -27,7 +27,7 @@ exports.login = function(req, res, next) {
         //get user
         userservice.getUserByUid(req.body.username, function(err, user) {
             if (err || !user) {
-                res.send(null, 401);
+                res.status(401).send(null);
                 return;
             }
 
@@ -72,7 +72,7 @@ exports.logout = function(req, res, next) {
 exports.externallogin = function(req, res, next) {
     //error if uid or password not set
     if (!req.body.username || !req.body.password) {
-        res.send(null, 400);
+        res.status(400).send(null);
         return;
     }
 
@@ -82,7 +82,7 @@ exports.externallogin = function(req, res, next) {
         //error if login failed or error occured
         if (err || !success) {
             console.log(new Date() + ' FAIL External Auth: ' + req.body.username);
-            res.send('failed', 401);
+            res.status(401).send('failed');
             return;
         }
 
@@ -91,17 +91,17 @@ exports.externallogin = function(req, res, next) {
         //get user
         userservice.getUserByUid(req.body.username, function(err, user) {
             if (err || !user) {
-                res.send('could not find user', 401);
+                res.status(401).send('could not find user');
                 return;
             }
 
             //if not all types are allowed and user is not of allowed type
             if (req.params.type != 'all' && user.type != req.params.type) {
-                res.send('user type is not allowed', 401);
+                res.status(401).send('user type is not allowed');
                 return;
             }
 
-            res.send('success', 200);
+            res.send('success');
             return;
 
         });
