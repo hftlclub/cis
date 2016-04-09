@@ -103,13 +103,14 @@ exports.get = function(req, res, next) {
         return next(err);
     }
 
-    protocolsservice.get(id, function(err, prot) {
+    protocolsservice.get(id, function(err, row) {
         if (err) return next(err);
+        if (!row) return next(new Error('Protocol ' + id + ' not found'));
 
         //make up data
-        prot.date = prot.start; //date is a timestamp for the datepicker
+        row.date = row.start; //date is a timestamp for the datepicker
 
-        return res.json(prot).end();
+        return res.json(row).end();
     });
 }
 
@@ -131,6 +132,7 @@ exports.getDetail = function(req, res, next) {
 
     protocolsservice.get(id, function(err, row) {
         if (err) return next(err);
+        if (!row) return next(new Error('Protocol ' + id + ' not found'));
 
         var out = {
             "title": row.title,

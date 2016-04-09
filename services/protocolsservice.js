@@ -16,17 +16,11 @@ exports.get = function(id, callback) {
     var query = 'SELECT * FROM protocols WHERE id = ? LIMIT 1;';
 
     mysql.conn.query(query, id, function(err, rows, fields) {
-        if (err) {
-            return callback(err);
-        }
-
-        if (!rows[0]) {
-            return callback(null, false);
-        }
+        if (err) return callback(err);
+        if (!rows[0]) return callback(null, false);
 
         //make JS object from JSON
         rows[0].attendants = JSON.parse(rows[0].attendants);
-
 
         return callback(null, rows[0]);
     });
@@ -257,7 +251,7 @@ exports.makePdf = function(id, path, callback){
         }
         for(var key in attendants){
             var value = null;
-            
+
             if(attendants[key].length){
                 value = attendants[key].join(', ');
             }else{
