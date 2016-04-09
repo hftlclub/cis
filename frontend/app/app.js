@@ -19,3 +19,8 @@ angular.module('app.cis').run(function($http, $cookies) {
     var token = $cookies.get('accessToken');
     $http.defaults.headers.common['X-Access-Token'] = token;
 });
+
+
+angular.module('app.cis').config(function($locationProvider) {
+    $locationProvider.html5Mode(true);
+});

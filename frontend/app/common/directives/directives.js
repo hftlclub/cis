@@ -21,7 +21,7 @@ angular.module('app.cis').directive('navActiveState', function($location) {
             refresh();
 
             function refresh() {
-                var curr = '#' + $location.path();
+                var curr = $location.path();
                 var href = a.attr('href');
                 if (curr.indexOf(href) == 0)
                     attr.$addClass('active');

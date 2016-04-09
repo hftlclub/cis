@@ -1,6 +1,6 @@
 <div class="page-header">
     <div class="pull-right">
-        <a class="btn btn-success" ng-href="#/protocols/add">
+        <a class="btn btn-success" href="protocols/add">
             <span class="glyphicon glyphicon-plus"></span>
             Neues Protokoll
         </a>
@@ -33,7 +33,7 @@
                                 <span class="glyphicon glyphicon-comment"></span>
                             </button>
 
-                            <a class="btn btn-sm btn-default" ng-href="#/protocols/show/{{protocol.id}}" title="Anzeigen" type="button" ng-click="$event.stopPropagation()">
+                            <a class="btn btn-sm btn-default" ng-href="protocols/show/{{protocol.id}}" title="Anzeigen" type="button" ng-click="$event.stopPropagation()">
                                 <span class="glyphicon glyphicon-eye-open"></span>
                             </a>
 
@@ -46,7 +46,7 @@
                             </button>
                             <ul class="dropdown-menu pull-right" role="menu">
                                 <li>
-                                    <a ng-href="#/protocols/edit/{{protocol.id}}" ng-click="$event.stopPropagation()">
+                                    <a ng-href="protocols/edit/{{protocol.id}}" ng-click="$event.stopPropagation()">
                                         <span class="glyphicon glyphicon-pencil"></span>
                                         Bearbeiten
                                     </a>

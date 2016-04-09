@@ -116,8 +116,12 @@ app.use('/api', api);
 
 
 //static frontend
-app.use(express.static(__dirname + '/frontend'));
+app.use('/', express.static(__dirname + '/frontend'));
 
+//forward everything to index.html for SPA
+app.get('*', function(req, res, next){
+    res.sendFile(__dirname + '/frontend/index.html');
+});
 
 //start protocols PDF job handler
 protocolspdf.startTimer();
