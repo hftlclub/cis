@@ -1,4 +1,4 @@
-angular.module('app.cis').controller('LoginCtrl', function($scope, $http, $location, $uibModal, clubAuth, $timeout, ngAudio, growl, appConf) {
+angular.module('app.cis').controller('LoginCtrl', function($scope, $http, $location, $uibModal, $cookies, clubAuth, $timeout, ngAudio, growl, appConf) {
 
     $scope.login = {};
     $scope.login.data = {};
@@ -22,7 +22,10 @@ angular.module('app.cis').controller('LoginCtrl', function($scope, $http, $locat
             'password': $scope.login.data.password
         }).
         success(function(data) {
-            localStorage.setItem('accessToken', data.token);
+            var expires = new Date();
+            expires.setDate(expires.getDate() + 1); //one day
+            $cookies.put('accessToken', data.token, { expires: expires });
+
             $http.defaults.headers.common['X-Access-Token'] = data.token;
 
             growl.success('Erfolgreich angemeldet!');

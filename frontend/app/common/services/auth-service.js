@@ -1,4 +1,4 @@
-angular.module('app.cis').factory('clubAuth', function($http, $location, $rootScope, $q, growl, appConf) {
+angular.module('app.cis').factory('clubAuth', function($http, $location, $rootScope, $q, $cookies, growl, appConf) {
     var clubAuth = {};
 
     $rootScope.clubAuth = clubAuth;
@@ -10,22 +10,22 @@ angular.module('app.cis').factory('clubAuth', function($http, $location, $rootSc
                 clubAuth.user = data;
                 $rootScope.$broadcast('clubAuthRefreshed');
                 $rootScope.clubUser = data;
-    
+
                 if ($location.path() == '/login') $location.path('/');
-                
+
                 resolve();
-    
+
             }).
             error(function(data, status) {
                 clubAuth.user = {};
                 $rootScope.$broadcast('clubAuthRefreshed');
                 $rootScope.clubUser = {};
-    
+
                 if (!isPublicPage($location.path()))
                     $location.path('/login');
-                
+
                 reject();
-                
+
             });
         });
     }
@@ -36,9 +36,9 @@ angular.module('app.cis').factory('clubAuth', function($http, $location, $rootSc
             growl.success('Du wurdest abgemeldet!');
             clubAuth.refresh().then(function(){}, function(){});
         });
-        localStorage.removeItem('accessToken');
+        $cookies.remove('accessToken');
         $http.defaults.headers.common['X-Access-Token'] = null;
-        
+
         clubAuth.refresh().then(function(){}, function(){});
     }
 

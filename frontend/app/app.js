@@ -1,5 +1,6 @@
 angular.module('app.cis', [
     'ngRoute',
+    'ngCookies',
     'ui.bootstrap',
     'ui.bootstrap.dropdown',
     'ui.bootstrap.modal',
@@ -14,7 +15,7 @@ angular.module('app.cis', [
 ]);
 
 
-angular.module('app.cis').run(function($http) {
-    var token = (localStorage.getItem('accessToken')) ? localStorage.getItem('accessToken') : null;
+angular.module('app.cis').run(function($http, $cookies) {
+    var token = $cookies.get('accessToken');
     $http.defaults.headers.common['X-Access-Token'] = token;
 });
