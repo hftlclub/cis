@@ -1,5 +1,6 @@
 var config = require('../config');
 var userservice = require('../services/userservice');
+var log = require('../modules/log');
 
 
 exports.changepassword = function(req, res, next) {
@@ -27,7 +28,7 @@ exports.changepassword = function(req, res, next) {
         userservice.setPassword(req.user.username, req.body.newPassword1, function(err) {
             if (err) next(err);
 
-            log.info('SUCCESS User Password Change: ' + req.body.username);
+            log.info('SUCCESS User Password Change: ' + req.user.username);
 
             res.end();
         });
