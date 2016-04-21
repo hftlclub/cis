@@ -29,7 +29,7 @@ angular.module('app.cis').controller('LoginCtrl', function($scope, $http, $locat
             $http.defaults.headers.common['X-Access-Token'] = data.token;
 
             growl.success('Erfolgreich angemeldet!');
-            $scope.chord.play();
+            //$scope.chord.play();
 
             clubAuth.refresh().then(function(){}, function(){});
         }).
