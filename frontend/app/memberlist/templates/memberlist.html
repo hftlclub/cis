@@ -78,7 +78,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-class="{'text-muted': member.former}" ng-if="!(formerHidden && member.former) && !(onleaveHidden && member.onleave)" ng-repeat="member in members.data | orderBy:attrs[orderByCol].order:reverseSort | filter:listFilter">
+                <tr ng-class="{'text-muted': member.former || member.onleave}" ng-if="!(formerHidden && member.former) && !(onleaveHidden && member.onleave)" ng-repeat="member in members.data | orderBy:attrs[orderByCol].order:reverseSort | filter:listFilter">
                     <td ng-if="attrs.index.state">{{ $index + 1 }}</td>
                     <td>
                         {{ member.lastname }}, {{ member.firstname }}

@@ -119,7 +119,6 @@ angular.module('app.cis').controller('MemberListCtrl', function($scope, $rootSco
 
     $scope.formerFilter = function() {
         $scope.formerHidden = !$scope.formerHidden;
-        $scope.apply();
     };
 
     $scope.onleaveFilter = function() {

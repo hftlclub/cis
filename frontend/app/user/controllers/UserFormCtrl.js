@@ -36,18 +36,6 @@ angular.module('app.cis').controller('UserFormCtrl', function($scope, $rootScope
     $scope.keys = appConf.doorKeyList;
     $scope.groups = [
         {
-            key: 'former',
-            label: 'Ehemalig'
-        },
-        {
-            key: 'honorary',
-            label: 'Ehrenmitglied'
-        },
-        {
-            key: 'superuser',
-            label: 'Superuser'
-        },
-        {
             key: 'applicant',
             label: 'Anwärter'
         },
@@ -56,8 +44,20 @@ angular.module('app.cis').controller('UserFormCtrl', function($scope, $rootScope
             label: 'Vorstand'
         },
         {
+            key: 'former',
+            label: 'ehemalig'
+        },
+        {
+            key: 'honorary',
+            label: 'Ehrenmitglied'
+        },
+        {
             key: 'onleave',
             label: 'beurlaubt'
+        },
+        {
+            key: 'superuser',
+            label: 'Superuser'
         }
     ];
 
