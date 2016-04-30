@@ -312,14 +312,14 @@ angular.module('app.cis').controller('ProtocolFormCtrl', function ($scope, $http
 
     function refresh() {
         $http.get(appConf.api + '/members').success(function (data) {
-            //build array with just names and only current members
+            //build array with just names and only members
             $scope.users = [];
             data.forEach(function (row) {
                 var push = {
                     name: row.firstname + ' ' + row.lastname
                 }
 
-                if(row.former) push.type = 'guest';
+                if(row.former || row.onleave) push.type = 'guest';
                 else if(row.applicant) push.type = 'applicant';
                 else push.type = 'member';
 

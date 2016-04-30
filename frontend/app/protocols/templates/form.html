@@ -14,9 +14,7 @@
             </a>
 
             <a ng-click="save()" class="btn btn-success" ng-class="{'disabled': protocolForm.$pristine}">
-                <span class="glyphicon glyphicon-save"></span>
-                <span ng-if="form.mode=='add'">Speichern</span>
-                <span ng-if="form.mode=='edit'">Speichern</span>
+                <span class="glyphicon glyphicon-save"></span> Speichern
             </a>
         </div>
 
@@ -42,8 +40,8 @@
     <div class="form-group" ng-class="{'has-error has-feedback': form.errors.recorder}">
         <label for="inputRecorder" class="col-sm-2 control-label">Protokollführer</label>
         <div class="col-sm-10">
-            <input type="text" ng-model="form.data.recorder" ng-required="true" class="form-control" id="inputRecorder" uib-typeahead="user for user in users | filter:$viewValue | limitTo:8" placeholder="Protokollführer" tooltip-placement="right" tooltip-trigger="focus"
-            uib-tooltip="Wer ist Protokollführer?">
+            <input type="text" ng-model="form.data.recorder" ng-required="true" class="form-control" id="inputRecorder" uib-typeahead="u.name for u in users | filter:{name:$viewValue} | limitTo:8" placeholder="Protokollführer" tooltip-placement="right" tooltip-trigger="focus"
+            uib-tooltip="Wer ist Protokollführer?" autocomplete="off">
             <span ng-if="form.errors.recorder" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
         </div>
     </div>
@@ -87,7 +85,7 @@
                     <span ng-if="attendants.count.applicants" class="label label-info" title="Anwärter">{{attendants.count.applicants}}</span>
                     <span ng-if="attendants.count.guests" class="label label-default" title="Gäste">{{attendants.count.guests}}</span>
                 </span>
-                <input type="text" ng-model="attendants.input" ng-enter="attendants.addFromForm()" class="form-control" id="inputAttendants" uib-typeahead="attendee.name for attendee in users | filter:$viewValue | limitTo:8" typeahead-on-select="attendants.addFromTypeahead($item)" placeholder="Anwesende Personen" tooltip-placement="right"
+                <input type="text" ng-model="attendants.input" ng-enter="attendants.addFromForm()" class="form-control" id="inputAttendants" uib-typeahead="a.name for a in users | filter:{name:$viewValue} | limitTo:8" typeahead-on-select="attendants.addFromTypeahead($item)" placeholder="Anwesende Personen" tooltip-placement="right"
                 tooltip-trigger="focus" uib-tooltip="Welche Mitglieder sind anwesend?" autocomplete="off">
                 <span ng-if="form.errors.attendants" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
             </div>
