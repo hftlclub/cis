@@ -45,7 +45,7 @@ angular.module('app.cis').controller('UserFormCtrl', function($scope, $rootScope
         },
         {
             key: 'former',
-            label: 'ehemalig'
+            label: 'Ehemalig'
         },
         {
             key: 'honorary',
@@ -53,7 +53,7 @@ angular.module('app.cis').controller('UserFormCtrl', function($scope, $rootScope
         },
         {
             key: 'onleave',
-            label: 'beurlaubt'
+            label: 'Beurlaubt'
         },
         {
             key: 'superuser',

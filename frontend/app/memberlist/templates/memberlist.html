@@ -118,9 +118,9 @@
                         <span class="badge" ng-repeat="(key, value) in member.keyPermissions">{{ key }}</span>
                     </td>
                     <td>
-                        <span class="label label-success" ng-if="!member.former && !member.onleave">aktiv</span>
-                        <span class="label label-default" ng-if="member.former">ehemalig</span>
-                        <span class="label label-warning" ng-if="member.onleave">beurlaubt</span>
+                        <span class="label label-success" ng-if="!member.former && !member.onleave">Aktiv</span>
+                        <span class="label label-default" ng-if="member.former">Ehemalig</span>
+                        <span class="label label-warning" ng-if="member.onleave">Beurlaubt</span>
                     </td>
                     <td class="text-center hidden-print" ng-if="isSuperuser" style="width: 33px">
                         <a class="btn btn-xs btn-default" ng-href="users/edit/{{member.username}}" type="button">
