@@ -82,11 +82,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-class="{'text-muted': member.former || member.onleave}" ng-repeat="member in members.data | orderBy:attrs[orderByCol].order:reverseSort | filter:listFilterString | filter:rowFilter.filter">
+                <tr ng-class="{'text-muted': member.former || member.onleave, 'danger': isBirthday(member.birthday)}" ng-repeat="member in members.data | orderBy:attrs[orderByCol].order:reverseSort | filter:listFilterString | filter:rowFilter.filter">
                     <td ng-if="attrs.index.state">{{ $index + 1 }}</td>
                     <td>
                         {{ member.lastname }}, {{ member.firstname }}
                         <div class="pull-right">
+                            <span ng-if="isBirthday(member.birthday)" class="glyphicon glyphicon-gift text-danger" title="{{ member.firstname }} hat heute Geburtstag"></span>
                             <span ng-if="member.applicant" class="glyphicon glyphicon-asterisk text-primary" title="Anwärter"></span>
                             <span ng-if="member.executive" class="glyphicon glyphicon-tower text-danger" title="Vorstand"></span>
                         </div>
@@ -110,9 +111,7 @@
                     </td>
                     <td ng-if="attrs.addr.state">{{ member.street }}
                         <br>{{ member.zip }} {{ member.city }}</td>
-                    <td ng-class="{'text-warning': isBirthday(member.birthday)}" ng-if="attrs.birthday.state">{{ member.birthday | date:fulldate }}
-                        <span class="glyphicon glyphicon-gift pull-right" ng-if="isBirthday(member.birthday)"></span>
-                    </td>
+                    <td ng-if="attrs.birthday.state">{{ member.birthday | date:fulldate }}</td>
                     <td ng-if="attrs.accdate.state">{{ member.accessiondate | date:fulldate }}</td>
                     <td ng-if="attrs.keyPermissions.state">
                         <span class="badge" ng-repeat="(key, value) in member.keyPermissions">{{ key }}</span>

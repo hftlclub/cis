@@ -15,6 +15,8 @@ angular.module('app.cis').controller('MemberListCtrl', function($scope, $rootSco
         }
     }
 
+    $scope.date = new Date();
+
     $scope.members = {};
     $scope.members.data = null;
     $scope.members.keys = null;
@@ -22,9 +24,6 @@ angular.module('app.cis').controller('MemberListCtrl', function($scope, $rootSco
     $scope.isSuperuser = $rootScope.clubUser.superuser;
 
     $scope.loading = false;
-
-    $scope.formerHidden = true;
-    $scope.onleaveHidden = false;
 
     refresh();
 
@@ -132,12 +131,13 @@ angular.module('app.cis').controller('MemberListCtrl', function($scope, $rootSco
     }
 
 
-
     $scope.isBirthday = function(birthday) {
         if (!birthday) return false;
-        return (new Date(birthday).toDateString() == new Date().toDateString());
-    };
 
-    $scope.date = new Date();
+        function daymonth(date) {
+          return date.getDate() + "-" + date.getMonth()
+        }
+        return daymonth(new Date(birthday)) == daymonth(new Date());
+    };
 
 });
