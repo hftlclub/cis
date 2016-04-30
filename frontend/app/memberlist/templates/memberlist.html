@@ -15,13 +15,17 @@
 <div ng-if="user.type=='club'">
     <div class="page-header">
         <div class="pull-right hidden-print">
-            <a class="btn btn-default" ng-click="rowFilter.onleave = !rowFilter.onleave" type="button">
-                <span class="glyphicon" ng-class="{'glyphicon glyphicon-check': rowFilter.onleave, 'glyphicon glyphicon-unchecked': !rowFilter.onleave}"></span>
-                Beurlaubte Mitglieder
+            <a class="btn btn-default" ng-click="rowFilter.state.applicant = !rowFilter.state.applicant" type="button">
+                <span class="glyphicon" ng-class="{'glyphicon glyphicon-check': rowFilter.state.applicant, 'glyphicon glyphicon-unchecked': !rowFilter.state.applicant}"></span>
+                Anwärter
             </a>
-            <a class="btn btn-default" ng-click="rowFilter.former = !rowFilter.former" type="button">
-                <span class="glyphicon" ng-class="{'glyphicon glyphicon-check': rowFilter.former, 'glyphicon glyphicon-unchecked': !rowFilter.former}"></span>
-                Ehemalige Mitglieder
+            <a class="btn btn-default" ng-click="rowFilter.state.onleave = !rowFilter.state.onleave" type="button">
+                <span class="glyphicon" ng-class="{'glyphicon glyphicon-check': rowFilter.state.onleave, 'glyphicon glyphicon-unchecked': !rowFilter.state.onleave}"></span>
+                Beurlaubt
+            </a>
+            <a class="btn btn-default" ng-click="rowFilter.state.former = !rowFilter.state.former" type="button">
+                <span class="glyphicon" ng-class="{'glyphicon glyphicon-check': rowFilter.state.former, 'glyphicon glyphicon-unchecked': !rowFilter.state.former}"></span>
+                Ehemalig
             </a>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <a class="btn btn-success" href="javascript:window.print()">

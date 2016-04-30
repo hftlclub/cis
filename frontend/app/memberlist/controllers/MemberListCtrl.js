@@ -1,11 +1,16 @@
 angular.module('app.cis').controller('MemberListCtrl', function($scope, $rootScope, $http, $routeParams, clubAuth, appConf) {
     $scope.listFilterString = '';
     $scope.rowFilter = {
-        former: false,
-        onleave: true,
+        state: {
+            former: false,
+            onleave: true,
+            applicant: true
+        },
         filter: function(row){
-            if(row.former && !$scope.rowFilter.former) return false;
-            if(row.onleave && !$scope.rowFilter.onleave) return false;
+            var state = $scope.rowFilter.state;
+            for(s in state){
+              if(row[s] && !state[s]) return false;
+            }
             return true;
         }
     }
