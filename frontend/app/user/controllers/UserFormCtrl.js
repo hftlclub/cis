@@ -54,6 +54,10 @@ angular.module('app.cis').controller('UserFormCtrl', function($scope, $rootScope
         {
             key: 'executive',
             label: 'Vorstand'
+        },
+        {
+            key: 'onleave',
+            label: 'beurlaubt'
         }
     ];
 

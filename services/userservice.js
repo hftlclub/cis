@@ -119,7 +119,10 @@ exports.getUserByUid = function(uid, callback) {
                 }, {
                     group: 'clubexec',
                     key: 'executive'
-                }, ];
+                }, {
+                    group: 'clubonleave',
+                    key: 'onleave'
+                } ];
 
                 groupsadd.forEach(function(row) {
                     user[row.key] = (groups.indexOf(row.group) >= 0) ? true : false;
@@ -271,6 +274,9 @@ exports.addUser = function(data, callback) {
             }, {
                 group: 'clubexec',
                 condition: data.executive
+            }, {
+                group: 'clubonleave',
+                condition: data.onleave
             }];
 
             groupsadd.forEach(function(row) {
@@ -384,6 +390,8 @@ exports.editUser = function(uid, data, callback) {
                 exports.addToGroup(uid, 'clubmembers', function(err, success) {});
                 exports.removeFromGroup(uid, 'clubothers', function(err, success) {});
 
+                console.log(data);
+
                 //optional groups
                 var groupsopt = [{
                     group: 'clubformer',
@@ -397,6 +405,9 @@ exports.editUser = function(uid, data, callback) {
                 }, {
                     group: 'clubexec',
                     condition: data.executive
+                }, {
+                    group: 'clubonleave',
+                    condition: data.onleave
                 }];
 
                 groupsopt.forEach(function(row) {
@@ -408,8 +419,9 @@ exports.editUser = function(uid, data, callback) {
 
             } else { //others and undefined
                 exports.addToGroup(uid, 'clubothers', function(err, success) {});
-                var groupsremove = ['clubmembers', 'clubformer', 'clubhonorary', 'clubexec', 'clubapplicants'];
 
+                //user has to be removed from all club groups
+                var groupsremove = ['clubmembers', 'clubformer', 'clubhonorary', 'clubexec', 'clubapplicants', 'clubonleave'];
                 groupsremove.forEach(function(row) {
                     exports.removeFromGroup(uid, row, function(err, success) {});
                 });
@@ -447,7 +459,7 @@ exports.deleteUser = function(uid, callback) {
         if (err) return callback(err);
 
         //remove user from groups
-        var groupsremove = ['clubmembers', , 'clubothers', 'clubadmins', 'clubformer', 'clubhonorary', 'clubexec', 'clubapplicants'];
+        var groupsremove = ['clubmembers', 'clubothers', 'clubadmins', 'clubformer', 'clubhonorary', 'clubexec', 'clubapplicants', 'clubonleave'];
 
         groupsremove.forEach(function(row) {
             exports.removeFromGroup(uid, row, function(err, success) {});
@@ -550,6 +562,9 @@ exports.getUsers = function(callback) {
 
                         } else if (groups[i].cn == 'clubexec') {
                             user.executive = true;
+
+                        } else if (groups[i].cn == 'clubonleave') {
+                            user.onleave = true;
                         }
 
                         for (var k = 0; k < config.doorkeys.length; k++) {
