@@ -15,10 +15,15 @@
 <div ng-if="user.type=='club'">
     <div class="page-header">
         <div class="pull-right hidden-print">
-            <a class="btn" ng-class="{'btn-warning': formerHidden, 'btn-success': !formerHidden}" ng-click="formerFilter()" type="button">
+            <a class="btn btn-default" ng-click="onleaveFilter()" type="button">
+                <span class="glyphicon" ng-class="{'glyphicon glyphicon-check': !onleaveHidden, 'glyphicon glyphicon-unchecked': onleaveHidden}"></span>
+                Beurlaubte Mitglieder
+            </a>
+            <a class="btn btn-default" ng-click="formerFilter()" type="button">
                 <span class="glyphicon" ng-class="{'glyphicon glyphicon-check': !formerHidden, 'glyphicon glyphicon-unchecked': formerHidden}"></span>
                 Ehemalige Mitglieder
             </a>
+            &nbsp;&nbsp;&nbsp;&nbsp;
             <a class="btn btn-success" href="javascript:window.print()">
                 <span class="glyphicon glyphicon-print"></span>
                 <span ng-if="listFilter">Gefilterte</span>
@@ -73,7 +78,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-class="{'text-muted': member.former}" ng-if="!(formerHidden && member.former)" ng-repeat="member in members.data | orderBy:attrs[orderByCol].order:reverseSort | filter:listFilter">
+                <tr ng-class="{'text-muted': member.former}" ng-if="!(formerHidden && member.former) && !(onleaveHidden && member.onleave)" ng-repeat="member in members.data | orderBy:attrs[orderByCol].order:reverseSort | filter:listFilter">
                     <td ng-if="attrs.index.state">{{ $index + 1 }}</td>
                     <td>
                         {{ member.lastname }}, {{ member.firstname }}
@@ -109,8 +114,9 @@
                         <span class="badge" ng-repeat="(key, value) in member.keyPermissions">{{ key }}</span>
                     </td>
                     <td>
-                        <span class="label label-success" ng-if="!member.former">Aktiv</span>
-                        <span class="label label-default" ng-if="member.former">Ehemalig</span>
+                        <span class="label label-success" ng-if="!member.former && !member.onleave">aktiv</span>
+                        <span class="label label-default" ng-if="member.former">ehemalig</span>
+                        <span class="label label-warning" ng-if="member.onleave">beurlaubt</span>
                     </td>
                     <td class="text-center hidden-print" ng-if="isSuperuser" style="width: 33px">
                         <a class="btn btn-xs btn-default" ng-href="users/edit/{{member.username}}" type="button">

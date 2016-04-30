@@ -10,6 +10,7 @@ angular.module('app.cis').controller('MemberListCtrl', function($scope, $rootSco
     $scope.loading = false;
 
     $scope.formerHidden = true;
+    $scope.onleaveHidden = false;
 
     refresh();
 
@@ -118,6 +119,11 @@ angular.module('app.cis').controller('MemberListCtrl', function($scope, $rootSco
 
     $scope.formerFilter = function() {
         $scope.formerHidden = !$scope.formerHidden;
+        $scope.apply();
+    };
+
+    $scope.onleaveFilter = function() {
+        $scope.onleaveHidden = !$scope.onleaveHidden;
     };
 
     $scope.isBirthday = function(birthday) {

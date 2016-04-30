@@ -390,8 +390,6 @@ exports.editUser = function(uid, data, callback) {
                 exports.addToGroup(uid, 'clubmembers', function(err, success) {});
                 exports.removeFromGroup(uid, 'clubothers', function(err, success) {});
 
-                console.log(data);
-
                 //optional groups
                 var groupsopt = [{
                     group: 'clubformer',
