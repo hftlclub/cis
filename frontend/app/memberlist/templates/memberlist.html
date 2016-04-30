@@ -15,12 +15,12 @@
 <div ng-if="user.type=='club'">
     <div class="page-header">
         <div class="pull-right hidden-print">
-            <a class="btn btn-default" ng-click="onleaveFilter()" type="button">
-                <span class="glyphicon" ng-class="{'glyphicon glyphicon-check': !onleaveHidden, 'glyphicon glyphicon-unchecked': onleaveHidden}"></span>
+            <a class="btn btn-default" ng-click="rowFilter.onleave = !rowFilter.onleave" type="button">
+                <span class="glyphicon" ng-class="{'glyphicon glyphicon-check': rowFilter.onleave, 'glyphicon glyphicon-unchecked': !rowFilter.onleave}"></span>
                 Beurlaubte Mitglieder
             </a>
-            <a class="btn btn-default" ng-click="formerFilter()" type="button">
-                <span class="glyphicon" ng-class="{'glyphicon glyphicon-check': !formerHidden, 'glyphicon glyphicon-unchecked': formerHidden}"></span>
+            <a class="btn btn-default" ng-click="rowFilter.former = !rowFilter.former" type="button">
+                <span class="glyphicon" ng-class="{'glyphicon glyphicon-check': rowFilter.former, 'glyphicon glyphicon-unchecked': !rowFilter.former}"></span>
                 Ehemalige Mitglieder
             </a>
             &nbsp;&nbsp;&nbsp;&nbsp;
@@ -50,13 +50,13 @@
         <div class="form-group">
             <div class="input-group">
                 <span class="input-group-btn">
-                    <button class="btn" ng-class="{'btn-warning': listFilter, 'btn-default disabled': !listFilter}" ng-click="listFilter = ''" type="button">
+                    <button class="btn" ng-class="{'btn-warning': listFilterString, 'btn-default disabled': !listFilterString}" ng-click="listFilterString = ''" type="button">
                         Filter
-                        <span class="glyphicon glyphicon glyphicon-filter" ng-if="!listFilter"></span>
-                        <span class="glyphicon glyphicon-remove" ng-if="listFilter"></span>
+                        <span class="glyphicon glyphicon glyphicon-filter" ng-if="!listFilterString"></span>
+                        <span class="glyphicon glyphicon-remove" ng-if="listFilterString"></span>
                     </button>
                 </span>
-                <input class="form-control" ng-model="listFilter" placeholder="Mitgliederliste durchsuchen" type="text">
+                <input class="form-control" ng-model="listFilterString" placeholder="Mitgliederliste durchsuchen" type="text">
             </div>
         </div>
     </form>
@@ -78,7 +78,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-class="{'text-muted': member.former || member.onleave}" ng-if="!(formerHidden && member.former) && !(onleaveHidden && member.onleave)" ng-repeat="member in members.data | orderBy:attrs[orderByCol].order:reverseSort | filter:listFilter">
+                <tr ng-class="{'text-muted': member.former || member.onleave}" ng-repeat="member in members.data | orderBy:attrs[orderByCol].order:reverseSort | filter:listFilterString | filter:rowFilter.filter">
                     <td ng-if="attrs.index.state">{{ $index + 1 }}</td>
                     <td>
                         {{ member.lastname }}, {{ member.firstname }}

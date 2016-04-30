@@ -1,5 +1,14 @@
 angular.module('app.cis').controller('MemberListCtrl', function($scope, $rootScope, $http, $routeParams, clubAuth, appConf) {
-    $scope.listFilter = '';
+    $scope.listFilterString = '';
+    $scope.rowFilter = {
+        former: false,
+        onleave: true,
+        filter: function(row){
+            if(row.former && !$scope.rowFilter.former) return false;
+            if(row.onleave && !$scope.rowFilter.onleave) return false;
+            return true;
+        }
+    }
 
     $scope.members = {};
     $scope.members.data = null;
@@ -117,13 +126,7 @@ angular.module('app.cis').controller('MemberListCtrl', function($scope, $rootSco
         }
     }
 
-    $scope.formerFilter = function() {
-        $scope.formerHidden = !$scope.formerHidden;
-    };
 
-    $scope.onleaveFilter = function() {
-        $scope.onleaveHidden = !$scope.onleaveHidden;
-    };
 
     $scope.isBirthday = function(birthday) {
         if (!birthday) return false;
