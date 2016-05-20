@@ -232,7 +232,7 @@ angular.module('app.cis').controller('ProtocolFormCtrl', function ($scope, $http
         for (i = 0; i < $scope.options.commonTitles.length; i++) { //go through common titles
             if ($scope.options.commonTitles[i] == form.data.title && !form.data.text) { //if current title matches a common title and there's no text in the field
                 //get protocol and fill textfield with it
-                $http.get('/templates/protocols/presets/clubsitzung.md').success(function (data) {
+                $http.get('/app/protocols/templates/presets/clubsitzung.md').success(function (data) {
                     form.data.text = data;
                 });
             }
