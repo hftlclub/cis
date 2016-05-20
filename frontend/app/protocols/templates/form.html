@@ -2,7 +2,6 @@
     <div class="pull-right">
         <span class="glyphicon glyphicon-question-sign" uib-tooltip="Wenn aktiviert, wird das Protokoll alle 2 Minuten automatisch gespeichert."></span>
         <a class="btn btn-default" ng-click="autoSave.toggle()" type="button">
-            <!-- ng-class="{'btn-default': !autoSave.isActive, 'btn-default': autoSave.isActive}" -->
             <span class="glyphicon" ng-class="{'glyphicon glyphicon-check': autoSave.isActive, 'glyphicon glyphicon-unchecked': !autoSave.isActive}"></span>
             Automatisch speichern
         </a>
@@ -33,7 +32,7 @@
     <div class="form-group" ng-class="{'has-error has-feedback': form.errors.title}">
         <label for="inputTitle" class="col-sm-2 control-label">Titel</label>
         <div class="col-sm-10">
-            <input type="text" ng-enter="checkTitle()" ng-model="form.data.title" class="form-control" id="inputTitle" uib-typeahead="title for title in options.commonTitles | filter:$viewValue" placeholder="Titel" tooltip-placement="right" tooltip-trigger="focus" uib-tooltip="Sitzung? MV? Vorstand?">
+            <input type="text" ng-enter="checkTitle()" typeahead-on-select="checkTitle()" ng-model="form.data.title" autocomplete="off" class="form-control" id="inputTitle" uib-typeahead="title for title in options.commonTitles | filter:$viewValue" placeholder="Titel" tooltip-placement="right" tooltip-trigger="focus" uib-tooltip="Sitzung? MV? Vorstand?">
             <span ng-if="form.errors.title" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
         </div>
     </div>

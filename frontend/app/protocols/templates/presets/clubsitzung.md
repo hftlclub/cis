@@ -7,6 +7,7 @@
 # Berichte der Ressorts
 ## Technik
 ## Werbung
+## IT
 ## Lagerverwaltung / Bar
 ## Finanzen
 ## Interclubkommunikation
