@@ -15,6 +15,10 @@
 <div ng-if="user.type=='club'">
     <div class="page-header">
         <div class="pull-right hidden-print">
+            <a class="btn btn-default" ng-click="rowFilter.state.normal = !rowFilter.state.normal" type="button">
+                <span class="glyphicon" ng-class="{'glyphicon glyphicon-check': rowFilter.state.normal, 'glyphicon glyphicon-unchecked': !rowFilter.state.normal}"></span>
+                Normal
+            </a>
             <a class="btn btn-default" ng-click="rowFilter.state.applicant = !rowFilter.state.applicant" type="button">
                 <span class="glyphicon" ng-class="{'glyphicon glyphicon-check': rowFilter.state.applicant, 'glyphicon glyphicon-unchecked': !rowFilter.state.applicant}"></span>
                 Anwärter

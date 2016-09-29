@@ -4,7 +4,8 @@ angular.module('app.cis').controller('MemberListCtrl', function($scope, $rootSco
         state: {
             former: false,
             onleave: true,
-            applicant: true
+            applicant: true,
+            normal: true
         },
         filter: function(row){
             var state = $scope.rowFilter.state;
@@ -14,6 +15,10 @@ angular.module('app.cis').controller('MemberListCtrl', function($scope, $rootSco
             return true;
         }
     }
+
+    //those are all states which cancel the "normal" state. If a member has none of them, it's a "normal" member
+    var statesNotNormal = ['former', 'onleave', 'applicant'];
+
 
     $scope.date = new Date();
 
@@ -38,9 +43,17 @@ angular.module('app.cis').controller('MemberListCtrl', function($scope, $rootSco
               $http.get(appConf.api + '/keylist')
                 .success(function(data) {
                     $scope.members.data.forEach(function(user) {
+                        //assign "normal" status when user has non of the other states
+                        user.normal = true;
+                        statesNotNormal.forEach(function(s) {
+                            if (user[s]) user.normal = false;
+                        });
+
+                        //assign key permissions
                         data.forEach(function(key) {
-                            if (user.username == key.username)
+                            if (user.username == key.username) {
                                 user.keyPermissions = key.keyPermissions;
+                            }
                         });
                     });
                 });
