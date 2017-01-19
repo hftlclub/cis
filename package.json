@@ -31,7 +31,7 @@
     "sanitize-filename": "^1.4.5",
     "seafile-api": "^0.1.0",
     "simple-node-logger": "^0.93.11",
-    "smbhash": "0.0.1",
+    "smbhash": "git+https://github.com/fmalcher/node-smbhash.git#buffer",
     "ssha": "~1.0.1",
     "trim": "0.0.1"
   },
