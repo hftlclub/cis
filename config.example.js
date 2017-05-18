@@ -84,18 +84,22 @@ exports.protocols.pdfFullPath = exports.abspath + "/frontend" + exports.protocol
 exports.ics = {
     "public": {
         "name": "Öffentlich",
-        "url": "http://stura.hft-leipzig.de/events/club/events.ics"
+        "url": "http://stura.hft-leipzig.de/events/club/events.ics",
+        "checkedByDefault": true
     },
     "internal": {
         "name": "Intern",
-        "url": "http://stura.hft-leipzig.de/events/club/events.ics"
+        "url": "http://stura.hft-leipzig.de/events/club/events.ics",
+        "checkedByDefault": true
     },
     "birthday": {
         "name": "Club-Geburtstage",
-        "url": "http://stura.hft-leipzig.de/events/club/events.ics"
+        "url": "http://stura.hft-leipzig.de/events/club/events.ics",
+        "checkedByDefault": true
     },
     "stura": {
         "name": "Stura",
-        "url": "http://stura.hft-leipzig.de/events/stura/events.ics"
+        "url": "http://stura.hft-leipzig.de/events/stura/events.ics",
+        "checkedByDefault": false
     }
 }

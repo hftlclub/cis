@@ -14,6 +14,7 @@ exports.listEvents = function (req, res, next) {
 
             events[key] = {
                 'name': config.ics[key].name,
+                'checkedByDefault': !!config.ics[key].checkedByDefault,
                 'events': rows
             };
 

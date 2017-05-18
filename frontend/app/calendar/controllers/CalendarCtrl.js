@@ -52,7 +52,7 @@ angular.module('app.cis').controller('CalendarCtrl', function ($scope, $rootScop
         $http.get(appConf.api + '/calendar').success(function (data) {
             //gather all cal keys in $scope.cals and allow them to be showed (true)
             for(var key in data){
-                $scope.cals[key] = true;
+                $scope.cals[key] = data[key].checkedByDefault;
             }
             $scope.data = data;
 
