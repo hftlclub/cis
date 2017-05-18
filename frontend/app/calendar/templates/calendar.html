@@ -10,10 +10,18 @@ Mit Klick auf einen Termin werden Details angezeigt.
 
 <div ng-if="!loading">
     <div class="pull-right">
-        <div ng-repeat="(key, cal) in cals" class="checkbox">
-            <label>
-                <input ng-model="cals[key]" type="checkbox"> {{ data[key].name }}
-            </label>
+        <div class="well">
+            <h4>
+                <span class="glyphicon glyphicon-calendar"></span>
+                Kalender anzeigen
+            </h4>
+            <div style="margin-top: 15px">
+                <div ng-repeat="(key, cal) in cals" class="checkbox">
+                    <label>
+                        <input ng-model="cals[key]" type="checkbox"> {{ data[key].name }}
+                    </label>
+                </div>
+            </div>
         </div>
     </div>
 
