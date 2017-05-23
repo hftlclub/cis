@@ -158,11 +158,11 @@ span.largeicon {
 .dhx_cal_event_clear.public {
   color: #5cb85c;
 }
-.dhx_cal_event_line.birthday {
-  background-color: #d9534f;
+.dhx_cal_event_line.rutilust {
+  background-color: #888888;
 }
-.dhx_cal_event_clear.birthday {
-  color: #d9534f;
+.dhx_cal_event_clear.rutilust {
+  color: #888888;
 }
 .dhx_cal_event_line.stura {
   background-color: #286090;
