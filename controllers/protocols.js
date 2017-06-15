@@ -259,7 +259,7 @@ exports.pdf = function(req, res, next){
     }
 
 
-    protocolsservice.makePdf(id, '/tmp/', function(err, location, filename){
+    protocolsservice.makePdf(id, '/tmp/', function(err, location, filenames){
         if(err) return next(err);
 
         //create destination folder
@@ -269,31 +269,40 @@ exports.pdf = function(req, res, next){
         fs.mkdir(dir, function(err){
             if(err) return next(err);
 
-            //move temp file to destination folder
-            mv(location, (dir + filename), function(err){
-                if(err) next(err);
+            // move PDF temp file to destination folder
+            mv(location.pdf, (dir + filenames.pdf), function(err){
+                if(err) return next(err);
+                // move MD temp file
+                mv(location.md, (dir + filenames.md), function(err){
+                    if(err) return next(err);
 
-                //set timer for garbage collection
-                setTimeout(function(){
-                    //delete PDF file
-                    fs.unlink(dir + filename, function(err){
-                        if(err) next(err);
-
-                        //delete folder
-                        fs.rmdir(dir, function(err){
+                    // set timer for garbage collection
+                    setTimeout(function(){
+                        // delete PDF file
+                        fs.unlink(dir + filenames.pdf, function(err) {
                             if(err) next(err);
+                            // delete MD file
+                            fs.unlink(dir + filenames.md, function(err) {
+                                if(err) next(err);
+
+                                //delete folder
+                                fs.rmdir(dir, function(err){
+                                    if(err) next(err);
+                                });
+                            });
                         });
-                    });
+                    }, (config.protocols.pdfDeleteTimeout * 1000));
+                
 
-                }, (config.protocols.pdfDeleteTimeout * 1000));
-
-                //send PDF filename and delete timeout
-                var out = {
-                    pdf: config.protocols.pdfFrontendPath + subDir + filename,
-                    delTimeout: config.protocols.pdfDeleteTimeout
-                }
-                res.json(out);
-
+                    //send PDF filename and delete timeout
+                    let fullFrontendPath = config.protocols.pdfFrontendPath + subDir;
+                    let out = {
+                        pdf: fullFrontendPath + filenames.pdf,
+                        md: fullFrontendPath + filenames.md,
+                        delTimeout: config.protocols.pdfDeleteTimeout
+                    }
+                    res.json(out);
+                });
             });
         });
     });

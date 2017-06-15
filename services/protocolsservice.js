@@ -1,5 +1,6 @@
 var pdc = require('pdc');
 var moment = require('moment');
+var fs = require('fs');
 var sanitize = require('sanitize-filename');
 
 var mysql = require('../modules/mysql');
@@ -273,26 +274,39 @@ exports.makePdf = function(id, path, callback){
         var outmd = out.join('\n')
 
         //make filename
-        var filename = moment(row.start).format('YYYY-MM-DD') + '-protokoll_' + row.title + '.pdf';
-        filename = filename.replace(' ', '-');
-        filename = filename.toLowerCase();
-        filename = sanitize(filename);
+        var filenamePart = moment(row.start).format('YYYY-MM-DD') + '-protokoll_' + row.title;
+        filenamePart = filenamePart.replace(' ', '-');
+        filenamePart = filenamePart.toLowerCase();
+        filenamePart = sanitize(filenamePart);
 
-        var location = path + utils.uid(20) + '.pdf';
+        let filenames = {
+            pdf: filenamePart + '.pdf',
+            md: filenamePart + '.md'
+        }
 
+        let locationPart = path + utils.uid(20);
+        let locations = {
+            pdf: locationPart + '.pdf',
+            md: locationPart + '.md'
+        }
 
+        // args for pandoc process
         var args = [
             '--template=' + tplpath + 'clubtemplate.tex',
-            '--output=' + location
+            '--output=' + locations.pdf
         ]
 
+        // run pandoc to create PDF
         pdc(outmd, 'markdown', 'latex', args, function(err, result){
             log.debug('Created PDF for protocol ', id);
             if(err) return callback(err);
             if(result) log.debug(result);
 
-            callback(null, location, filename);
-
+            // write markdown to file
+            fs.writeFile(locations.md, outmd, function(err) {
+                if(err) return callback(err);                
+                callback(null, locations, filenames);
+            });
         });
     })
 }
