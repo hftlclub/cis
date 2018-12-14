@@ -39,7 +39,7 @@ exports.smtp = {
 };
 
 exports.mailsettings = {
-    "from": "HfTL Club <club@hft-leipzig.de>",
+    "from": "Studentenclub Stecker <club@hft-leipzig.de>",
     "tplpath": exports.abspath + "/templates/email/"
 };
 

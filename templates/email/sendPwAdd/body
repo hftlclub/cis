@@ -5,21 +5,20 @@ Benutzername: {username}
 Passwort: {password}
 
 Den Account brauchst Du für:
-1) Club-WLAN (hftl_club)
-2) CIS Club Information System: https://cis.hftl.club
-3) ClubDrive: https://drive.hftl.club (Login: {username}@hftl.club)
-4) Infoscreen (Fernseher): https://screen.hftl.club
-5) Netzwerkdosen im Club
+1) Club-WLAN (stecker)
+2) CIS Club Information System: https://cis.stecker.club
+3) ClubDrive: https://drive.stecker.club (Login: {username}@hftl.club)
+4) Infoscreen (Fernseher): https://screen.stecker.club
 
 Bitte logge Dich in das Clubsystem ein und ändere dein Passwort!
 Der Account ist persönlich und darf nicht weitergegeben werden.
 
-Solltest Du Fehler bemerken oder weitere Ideen haben, schreibe bitte an Ferdinand oder Danny.
+Solltest Du Fehler bemerken oder weitere Ideen haben, melde Dich beim Ressort IT.
 
 
 
-Technische Infos:
+Technische Infos für Nerds:
 - Passwörter werden als SSHA- und NTLM-Hashes im LDAP gespeichert
 - Konstruktives Kaputtspielen ist erlaubt, wenn es der Verbesserung dient ;-)
 - LAN und WLAN: 802.1X, PEAP, MSCHAPv2
-- Repository: https://github.com/hftlclub/cis
+- Git-Repository: https://github.com/hftlclub/cis
