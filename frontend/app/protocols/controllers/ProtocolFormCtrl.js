@@ -360,6 +360,7 @@ angular.module('app.cis').controller('ProtocolFormCtrl', function ($scope, $http
         $scope.times.end = new Date();
         var me = clubAuth.user.firstname + ' ' + clubAuth.user.lastname;
         form.data.recorder = me;
+        form.data.location = appConf.location;
         $scope.attendants.add(me, 'member');
         //TODO: insert my real role, not always 'member'
     }

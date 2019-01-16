@@ -38,6 +38,8 @@ exports.add = function(data, callback) {
     var attrs = [
         'title',
         'recorder',
+        'chairperson',
+        'location',
         'start',
         'end',
         'attendants',
@@ -236,8 +238,10 @@ exports.makePdf = function(id, path, callback){
 
         out.push('---'); //header begin
         out.push('tplpath: \'' + tplpath + '\'');
-        out.push('title: \'Protokoll ' + row.title + ' ' + date + '\'');
+        out.push('title: \'Protokoll ' + row.title + '\'');
         out.push('author: ' + row.recorder);
+        out.push('chairperson: ' + row.chairperson);
+        out.push('location: ' + row.location);
         out.push('date: ' + date);
         out.push('begin: ' + moment(row.start).format('HH:mm') + ' Uhr');
         out.push('end: ' + moment(row.end).format('HH:mm') + ' Uhr');

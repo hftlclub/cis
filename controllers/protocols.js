@@ -49,6 +49,8 @@ exports.addedit = function(req, res, next) {
     var prot = {
         "title": req.body.title,
         "recorder": req.body.recorder,
+        "chairperson": req.body.chairperson,
+        "location": req.body.location,
         "text": req.body.text,
         "comment": req.body.comment,
         "attendants": req.body.attendants
@@ -137,6 +139,8 @@ exports.getDetail = function(req, res, next) {
         var out = {
             "title": row.title,
             "recorder": row.recorder,
+            "chairperson": row.chairperson,
+            "location": row.location,
             "start": row.start,
             "end": row.end,
             "comment": row.comment

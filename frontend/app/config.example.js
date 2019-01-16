@@ -17,7 +17,9 @@ config.doorKeyList = [
         key : "456",
         name: "Ausgang"
     }
-]
+];
+
+config.location = 'Studentenclub Stecker (HfTL-Club), Eichendorffstraße 14, 04277 Leipzig';
 
 angular.module('app.cis').constant('appConf', config);
 

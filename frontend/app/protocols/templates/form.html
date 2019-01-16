@@ -41,8 +41,26 @@
         <label for="inputRecorder" class="col-sm-2 control-label">Protokollführer</label>
         <div class="col-sm-10">
             <input type="text" ng-model="form.data.recorder" ng-required="true" class="form-control" id="inputRecorder" uib-typeahead="u.name for u in users | filter:{name:$viewValue} | limitTo:8" placeholder="Protokollführer" tooltip-placement="right" tooltip-trigger="focus"
-            uib-tooltip="Wer ist Protokollführer?" autocomplete="off">
+            uib-tooltip="Wer führt Protokoll?" autocomplete="off">
             <span ng-if="form.errors.recorder" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        </div>
+    </div>
+    
+    <div class="form-group" ng-class="{'has-error has-feedback': form.errors.chairperson}">
+        <label for="inputChairperson" class="col-sm-2 control-label">Sitzungsleiter</label>
+        <div class="col-sm-10">
+            <input type="text" ng-model="form.data.chairperson" ng-required="true" class="form-control" id="inputChairperson" uib-typeahead="u.name for u in users | filter:{name:$viewValue} | limitTo:8" placeholder="Sitzungsleiter" tooltip-placement="right" tooltip-trigger="focus"
+            uib-tooltip="Wer leitet die Sitzung?" autocomplete="off">
+            <span ng-if="form.errors.chairperson" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        </div>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error has-feedback': form.errors.location}">
+        <label for="inputLocation" class="col-sm-2 control-label">Sitzungsort</label>
+        <div class="col-sm-10">
+            <input type="text" ng-model="form.data.location" ng-required="true" class="form-control" id="inputLocation" placeholder="Sitzungsort" tooltip-placement="right" tooltip-trigger="focus"
+            uib-tooltip="Wo findet die Sitzung statt?" autocomplete="off">
+            <span ng-if="form.errors.location" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
         </div>
     </div>
 

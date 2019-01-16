@@ -53,8 +53,8 @@ $endif$
 \lhead{\itshape $title$}
 \chead{}
 %\rhead{\itshape{\nouppercase{\leftmark}}}
-\rhead{}
-\lfoot{}
+\rhead{$date$}
+\lfoot{HfTL Studentenverein e.V.}
 \cfoot{}
 \rfoot{Seite \thepage{ }von \totalpages}
 
@@ -149,26 +149,28 @@ $if(title)$
         \vfill
         \begin{figure}[ht]
 	       \centering
-           \includegraphics[width=0.7\textwidth]{$tplpath$stecker01.png}
+           \includegraphics[width=.8\textwidth]{$tplpath$steckerlogo_black_schrift.png}
         \end{figure}
         \vfill
 		\begin{center}
-			\LARGE
-			\textbf{$title$}
+			\Huge\textbf{$title$}\\
+      \Large HfTL Studentenverein e.V. / $date$
             \par
 		\end{center}
 		\vfill
 
 		\begin{table}[htb]
 		\begin{tabular}{lp{10cm}}
+			\textbf{Sitzungsleiter:} & $chairperson$\\\\
 			\textbf{Protokollführer:} & $author$\\\\
-            \textbf{Sitzungsdatum:} & $date$\\\\
-            \textbf{Beginn:} & $begin$\\\\
-            \textbf{Ende:} & $end$\\\\
-            \textbf{Anwesend:} & $anwesend$\\\\
-            \textbf{Später:} & $spaeter$\\\\
-            \textbf{Anwärter:} & $anwaerter$\\\\
-            \textbf{Gäste:} & $gaeste$\\\\
+      \textbf{Sitzungsdatum:} & $date$\\\\
+      \textbf{Sitzungsort:} & $location$\\\\
+      \textbf{Beginn:} & $begin$\\\\
+      \textbf{Ende:} & $end$\\\\
+      \textbf{Anwesend:} & $anwesend$\\\\
+      \textbf{Später:} & $spaeter$\\\\
+      \textbf{Anwärter:} & $anwaerter$\\\\
+      \textbf{Gäste:} & $gaeste$\\\\
 		\end{tabular}
 		\end{table}
 
