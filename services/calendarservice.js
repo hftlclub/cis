@@ -15,8 +15,8 @@ exports.retrieveIcs = function(url, callback) {
                 var row = {
                     uid: ev.uid,
                     title: ev.summary,
-                    start: ev.start.getTime(),
-                    end: ev.end.getTime(),
+                    start: ev.start && ev.start.getTime(),
+                    end: ev.end && ev.end.getTime(),
                 }
 
                 if(ev.description) row.description = ev.description;
