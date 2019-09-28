@@ -49,6 +49,7 @@ app.use(expressValidator({
 *****************************************/
 
 //generic routes
+api.get('/', function(req, res) { res.send('CIS API') });
 api.post('/login', authController.login);
 api.get('/logout', authController.logout);
 api.post('/feedback', feedbackController.sendFeedback);
