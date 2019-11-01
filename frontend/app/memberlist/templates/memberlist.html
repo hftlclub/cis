@@ -138,7 +138,7 @@
                 <h3 class="panel-title">E-Mail-Adressen (nach Filter) für Mailverteiler</h3>
             </div>
             <div class="panel-body">
-                <span ng-repeat="member in members.data | orderBy:attrs[orderByCol].order:reverseSort | filter:listFilterString | filter:rowFilter.filter">{{ member.email }}; </span>
+                <span ng-repeat="member in members.data | orderBy:attrs[orderByCol].order:reverseSort | filter:listFilterString | filter:rowFilter.filter">{{ member.email }}&nbsp;</span>
             </div>
         </div>
     </div>
