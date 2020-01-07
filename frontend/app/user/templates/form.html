@@ -36,14 +36,25 @@
 
                 <div ng-class="{'has-error has-feedback': form.errors.type}">
                     <label class="col-sm-3 control-label">Nutzerrechte</label>
-                    <div ng-class="(form.data.type == 'club') ? 'col-sm-3 col-lg-4' : 'col-sm-9'">
+                    <div class="col-sm-3 col-lg-4">
                         <select class="form-control" ng-options="opt.value as opt.label for opt in options.usertypes" ng-model="form.data.type" ng-disabled="(form.mode == 'profile')"></select>
+                    </div>
+                    <div class="col-sm-3 col-lg-4">
+                        <div ng-repeat="group in accessgroups">
+                            <div class="checkbox" ng-hide="form.mode == 'profile' && !form.data[group.key]">
+                                <label>
+                                    <input ng-model="form.data[group.key]" ng-disabled="(form.mode == 'profile')" type="checkbox">{{group.label}}
+                                </label>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
+            </div>
+            <div class="form-group required">
                 <div ng-if="form.data.type == 'club'" class="form-group" ng-class="{'has-error has-feedback': form.errors.accessiondate}">
-                    <label for="inputAccessiondate" class="col-sm-3 col-lg-2 control-label">Eintrittsdatum</label>
-                    <div class="col-sm-3">
+                    <label for="inputAccessiondate" class="col-sm-3 control-label">Eintrittsdatum</label>
+                    <div class="col-sm-9">
                       <p class="input-group datepicker">
                           <input type="text" class="form-control" ng-disabled="(form.mode == 'profile')" ng-model="form.data.accessiondate" uib-datepicker-popup="{{datePicker.format}}" placeholder="dd.mm.yyyy" is-open="datePicker.accessiondate.opened" datepicker-options="datePicker.options" min-date="datePicker.accessiondate.minDate" max-date="datePicker.accessiondate.maxDate" tooltip-placement="right" tooltip-trigger="focus" uib-tooltip="Wann ist der Nutzer dem Club beigetreten?" />
                           <span class="input-group-btn">
@@ -61,7 +72,7 @@
 
                 <div ng-if="form.data.type == 'club'" class="col-sm-offset-3 col-sm-4">
                     <label>Rollen</label>
-                    <div ng-repeat="group in groups">
+                    <div ng-repeat="group in clubgroups">
                         <div class="checkbox" ng-hide="form.mode == 'profile' && !form.data[group.key]">
                             <label>
                                 <input ng-model="form.data[group.key]" ng-disabled="(form.mode == 'profile')" type="checkbox">{{group.label}}

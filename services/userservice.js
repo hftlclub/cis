@@ -119,6 +119,12 @@ exports.getUserByUid = function(uid, callback) {
                 }, {
                     group: 'clubonleave',
                     key: 'onleave'
+                } , {
+                    group: 'accesscloud',
+                    key: 'accesscloud'
+                } , {
+                    group: 'accesswifi',
+                    key: 'accesswifi'
                 } ];
 
                 groupsadd.forEach(function(row) {
@@ -262,6 +268,13 @@ exports.addUser = function(data, callback) {
         } else { //other and undefined
             exports.addToGroup(data.username, 'clubothers', function(err, success) {});
         }
+        
+        if (data.accesscloud) {
+            exports.addToGroup(data.username, 'accesscloud', function(err, success) {});
+        }
+        if (data.accesswifi) {
+            exports.addToGroup(data.username, 'accesswifi', function(err, success) {});
+        }
 
         //if no key permissions are set, at least use an empty object
         if (!data.hasOwnProperty('keyPermissions')) {
@@ -373,6 +386,18 @@ exports.editUser = function(uid, data, callback) {
                     exports.removeFromGroup(uid, row, function(err, success) {});
                 });
             }
+
+            if (data.accesscloud) {
+                exports.addToGroup(uid, 'accesscloud', function(err, success) {});
+            } else {
+                exports.removeFromGroup(uid, 'accesscloud', function(err, success) {});
+            }
+
+            if (data.accesswifi) {
+                exports.addToGroup(uid, 'accesswifi', function(err, success) {});
+            } else {
+                exports.removeFromGroup(uid, 'accesswifi', function(err, success) {});
+            }
         }
 
         if ('keyPermissions' in data) {
@@ -406,7 +431,7 @@ exports.deleteUser = function(uid, callback) {
         if (err) return callback(err);
 
         //remove user from groups
-        var groupsremove = ['clubmembers', 'clubothers', 'admin', 'clubformer', 'clubhonorary', 'clubexec', 'clubapplicants', 'clubonleave'];
+        var groupsremove = ['clubmembers', 'clubothers', 'admin', 'clubformer', 'clubhonorary', 'clubexec', 'clubapplicants', 'clubonleave', 'accesscloud', 'accesswifi'];
 
         groupsremove.forEach(function(row) {
             exports.removeFromGroup(uid, row, function(err, success) {});
@@ -505,6 +530,12 @@ exports.getUsers = function(callback) {
 
                         } else if (groups[i].cn == 'clubonleave') {
                             user.onleave = true;
+                        
+                        } else if (groups[i].cn == 'accesscloud') {
+                            user.accesscloud = true;
+                        
+                        } else if (groups[i].cn == 'accesswifi') {
+                            user.accesswifi = true;
                         }
 
                         for (var k = 0; k < config.doorkeys.length; k++) {

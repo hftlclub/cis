@@ -24,7 +24,19 @@ angular.module('app.cis').controller('UserFormCtrl', function($scope, $rootScope
     };
 
     $scope.keys = appConf.doorKeyList;
-    $scope.groups = [
+
+    $scope.accessgroups = [
+        {
+            key: 'accesswifi',
+            label: 'WLAN-Zugang'
+        },
+        {
+            key: 'accesscloud',
+            label: 'Cloud-Zugang'
+        }
+    ];
+
+    $scope.clubgroups = [
         {
             key: 'applicant',
             label: 'Anwärter'

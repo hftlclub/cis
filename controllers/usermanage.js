@@ -102,6 +102,8 @@ exports.edituser = function(req, res, next) {
         executive: req.body.executive,
         applicant: req.body.applicant,
         onleave: req.body.onleave,
+        accesscloud: req.body.accesscloud,
+        accesswifi: req.body.accesswifi,
         alias: req.body.alias,
         email: req.body.email,
         firstname: req.body.firstname,
