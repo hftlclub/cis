@@ -102,7 +102,7 @@ exports.getUserByUid = function(uid, callback) {
 
                 //set flags according to groups user belongs to
                 var groupsadd = [{
-                    group: 'admin',
+                    group: 'clubadmins',
                     key: 'superuser'
                 }, {
                     group: 'clubformer',
@@ -230,7 +230,7 @@ exports.addUser = function(data, callback) {
 
         //set groups
         if (data.superuser) {
-            exports.addToGroup(data.username, 'admin', function(err, success) {});
+            exports.addToGroup(data.username, 'clubadmins', function(err, success) {});
         }
 
         if (data.type == 'club') {
@@ -340,9 +340,9 @@ exports.editUser = function(uid, data, callback) {
         //set groups: add user to given group but also remove them from the other groups
         if ('superuser' in data) {
             if (data.superuser) {
-                exports.addToGroup(uid, 'admin', function(err, success) {});
+                exports.addToGroup(uid, 'clubadmins', function(err, success) {});
             } else {
-                exports.removeFromGroup(uid, 'admin', function(err, success) {});
+                exports.removeFromGroup(uid, 'clubadmins', function(err, success) {});
             }
         }
 
@@ -431,7 +431,7 @@ exports.deleteUser = function(uid, callback) {
         if (err) return callback(err);
 
         //remove user from groups
-        var groupsremove = ['clubmembers', 'clubothers', 'admin', 'clubformer', 'clubhonorary', 'clubexec', 'clubapplicants', 'clubonleave', 'accesscloud', 'accesswifi'];
+        var groupsremove = ['clubmembers', 'clubothers', 'clubadmins', 'clubformer', 'clubhonorary', 'clubexec', 'clubapplicants', 'clubonleave', 'accesscloud', 'accesswifi'];
 
         groupsremove.forEach(function(row) {
             exports.removeFromGroup(uid, row, function(err, success) {});
@@ -508,7 +508,7 @@ exports.getUsers = function(callback) {
                     if (groups[i].uniqueMember.indexOf(uidtodn(entry.object.uid)) >= 0) { //if user is group member
 
                         //set params for user
-                        if (groups[i].cn == 'admin') {
+                        if (groups[i].cn == 'clubadmins') {
                             user.superuser = true;
                         } else if (groups[i].cn == 'clubmembers') {
                             user.type = 'club';
