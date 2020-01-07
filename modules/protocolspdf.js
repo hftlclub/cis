@@ -33,9 +33,6 @@ exports.startTimer = function() {
 
             log.debug('Automatically created PDF', location, 'for filename', filename);
 
-            //upload to seafile
-            //TODO
-
             //remove id from job queue
             delete exports.jobs[id];
         });

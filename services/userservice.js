@@ -5,21 +5,18 @@ var moment = require('moment');
 var Promise = require('promise');
 var ldap = require('../modules/ldap');
 var config = require('../config');
-var seafile = require('../modules/seafile');
-
 
 var userattrs = {
     //LDAPAttr : ClubAdminAttr
     'uid': 'username',
-    'uidNumber': 'uidNumber',
     'sn': 'lastname',
     'givenName': 'firstname',
+    'displayName': 'displayname',
     'street': 'street',
     'postalCode': 'zip',
     'l': 'city',
     'mail': 'email',
     'telephoneNumber': 'tel',
-    'loginShell': 'loginShell',
     'employeeType': 'role',
     'title': 'alias',
     'dialupAccess': 'birthday',
@@ -105,7 +102,7 @@ exports.getUserByUid = function(uid, callback) {
 
                 //set flags according to groups user belongs to
                 var groupsadd = [{
-                    group: 'clubadmins',
+                    group: 'admin',
                     key: 'superuser'
                 }, {
                     group: 'clubformer',
@@ -170,35 +167,21 @@ exports.addUser = function(data, callback) {
         mail: data.email,
         givenName: data.firstname,
         sn: data.lastname,
+        displayName: data.firstname + ' ' + data.lastname,
         userPassword: hashes.userPassword,
         sambaNTPassword: hashes.sambaNTPassword,
         sambaLMPassword: hashes.sambaLMPassword,
-        uidNumber: data.uidnumber,
-        gidNumber: 100,
-        homeDirectory: '/home/' + data.username,
-        sambaSID: "S-1-0-0-" + (data.uidnumber * 2 + 5),
+        sambaSID: 'S-1-0-0-100',
         objectClass: [
             'inetOrgPerson',
             'organizationalPerson',
             'person',
-            'posixAccount',
             'radiusprofile',
             'sambaSamAccount',
             'top'
         ]
     };
 
-
-    /*//loginShell for superusers only
-    if (data.loginShell && data.superuser) {
-        user[getLDAPAttrName('loginShell')] = data.loginShell;
-    } else {
-        user[getLDAPAttrName('loginShell')] = '/bin/false';
-    }*/
-
-    if (data.loginShell) {
-        user[ldapattrs['loginShell']] = data.loginShell;
-    }
 
     if (data.street) {
         user[ldapattrs['street']] = data.street;
@@ -233,28 +216,15 @@ exports.addUser = function(data, callback) {
         user[ldapattrs['accessiondate']] = data.accessiondate;
     }
 
+    console.log('add', user)
+
     //add user to LDAP tree
     ldap.client.add(uidtodn(user.uid), user, function(err) {
         if (err) return callback(err);
 
-        //add user to seafile
-        seafile.createUser(data).then(function() {
-            if (data.type == 'club') {
-                //add club users to "allgemein" group, but not the applicants
-                if (!data.applicant) seafile.addToGroup(data.username, 'allgemein');
-
-                //add executives to all groups
-                if (data.executive) seafile.addToAllGroups(data.username);
-
-                //other users will have no pre-assigned groups
-            }
-        });
-
-
-
         //set groups
         if (data.superuser) {
-            exports.addToGroup(data.username, 'clubadmins', function(err, success) {});
+            exports.addToGroup(data.username, 'admin', function(err, success) {});
         }
 
         if (data.type == 'club') {
@@ -354,33 +324,12 @@ exports.editUser = function(uid, data, callback) {
     ldap.client.modify(uidtodn(uid), changes, function(err) {
         if (err) return callback(err);
 
-        //update seafile user
-        var sfupdate = {};
-        sfupdate.name = (data.firstname && data.lastname) ? data.firstname + ' ' + data.lastname : null;
-        sfupdate.is_active = (data.former) ? 0 : 1; //deactivate former users
-        sfupdate.is_staff = (data.superuser) ? 1 : 0;
-
-        seafile.updateUser(uid, sfupdate);
-
-        if (data.type == 'club') {
-            //add club users to "allgemein" group, but not the applicants
-            if (!data.applicant) seafile.addToGroup(uid, 'allgemein');
-
-            //add executives to all groups / remove non-executives from "vorstand" group
-            if (data.executive) seafile.addToAllGroups(uid);
-            else seafile.removeFromGroup(uid, 'vorstand');
-
-            //other users have no pre-assigned groups and thus, will not be changed
-        }
-
-
-
         //set groups: add user to given group but also remove them from the other groups
         if ('superuser' in data) {
             if (data.superuser) {
-                exports.addToGroup(uid, 'clubadmins', function(err, success) {});
+                exports.addToGroup(uid, 'admin', function(err, success) {});
             } else {
-                exports.removeFromGroup(uid, 'clubadmins', function(err, success) {});
+                exports.removeFromGroup(uid, 'admin', function(err, success) {});
             }
         }
 
@@ -457,7 +406,7 @@ exports.deleteUser = function(uid, callback) {
         if (err) return callback(err);
 
         //remove user from groups
-        var groupsremove = ['clubmembers', 'clubothers', 'clubadmins', 'clubformer', 'clubhonorary', 'clubexec', 'clubapplicants', 'clubonleave'];
+        var groupsremove = ['clubmembers', 'clubothers', 'admin', 'clubformer', 'clubhonorary', 'clubexec', 'clubapplicants', 'clubonleave'];
 
         groupsremove.forEach(function(row) {
             exports.removeFromGroup(uid, row, function(err, success) {});
@@ -466,9 +415,6 @@ exports.deleteUser = function(uid, callback) {
         for (var i = 0; i < config.doorkeys.length; i++) {
             exports.removeFromGroup(uid, 'door' + config.doorkeys[i], function(err, success) {});
         }
-
-        //remove user from seafile
-        seafile.deleteUser(uid);
 
         return callback();
     });
@@ -495,10 +441,6 @@ exports.setPassword = function(uid, password, callback) {
 
     ldap.client.modify(uidtodn(uid), changes, function(err) {
         if (err) return callback(err);
-
-        //edit seafile user
-        seafile.updateUser(uid, { password: password });
-
         return callback();
     });
 }
@@ -538,10 +480,10 @@ exports.getUsers = function(callback) {
 
                 //go through groups and assign params to user
                 for (var i = 0; i < groups.length; i++) {
-                    if (groups[i].memberUid.indexOf(entry.object.uid) >= 0) { //if user is group member
+                    if (groups[i].uniqueMember.indexOf(uidtodn(entry.object.uid)) >= 0) { //if user is group member
 
                         //set params for user
-                        if (groups[i].cn == 'clubadmins') {
+                        if (groups[i].cn == 'admin') {
                             user.superuser = true;
                         } else if (groups[i].cn == 'clubmembers') {
                             user.type = 'club';
@@ -600,7 +542,7 @@ exports.getGroupsByUid = function(uid, callback) {
     var opts = {
         'attributes': ['cn'],
         'scope': 'one',
-        'filter': '(memberUid=' + uid + ')'
+        'filter': '(uniqueMember=' + uidtodn(uid) + ')'
     };
 
     //get groups
@@ -630,9 +572,9 @@ exports.getGroupsByUid = function(uid, callback) {
 //get all groups and their members
 exports.getGroups = function(callback) {
     var opts = {
-        'attributes': ['cn', 'memberUid'],
+        'attributes': ['cn', 'uniqueMember'],
         'scope': 'one',
-        'filter': '(memberUid=*)' //only groups with members
+        'filter': '(uniqueMember=*)' //only groups with members
     };
 
 
@@ -645,7 +587,7 @@ exports.getGroups = function(callback) {
 
             groups.push({
                 cn: entry.object.cn,
-                memberUid: entry.object.memberUid
+                uniqueMember: entry.object.uniqueMember
             });
 
         });
@@ -668,7 +610,7 @@ exports.getGroups = function(callback) {
 //get all members of a group (gid)
 exports.getGroupMembers = function(gid, callback) {
     var opts = {
-        'attributes': ['memberUid'],
+        'attributes': ['uniqueMember'],
     };
 
     var groupdn = 'cn=' + gid + ',' + config.ldap.groupbase + ',' + config.ldap.basedn
@@ -681,17 +623,18 @@ exports.getGroupMembers = function(gid, callback) {
         res.on('searchEntry', function(entry) {
 
             //if value is just one string, push it to array
-            if (typeof entry.object.memberUid === "string") {
-                members.push(entry.object.memberUid);
+            if (typeof entry.object.uniqueMember === "string") {
+                members.push(entry.object.uniqueMember);
 
                 //if value is an array/object, use this as array
-            } else if (typeof entry.object.memberUid === "object") {
-                members = entry.object.memberUid;
+            } else if (typeof entry.object.uniqueMember === "object") {
+                members = entry.object.uniqueMember;
             }
         });
 
         //member list is completed
         res.on('end', function(result) {
+            members = members.map(dntouid);
             return callback(null, members, groupdn);
         });
 
@@ -727,7 +670,7 @@ exports.addToGroup = function(uid, gid, callback) {
             var change = new ldapjs.Change({
                 operation: 'replace',
                 modification: {
-                    memberUid: members
+                    uniqueMember: members.map(uidtodn)
                 }
             });
 
@@ -757,7 +700,7 @@ exports.removeFromGroup = function(uid, gid, callback) {
             var change = new ldapjs.Change({
                 operation: 'replace',
                 modification: {
-                    memberUid: members
+                    uniqueMember: members.map(uidtodn)
                 }
             });
 
@@ -774,48 +717,14 @@ exports.removeFromGroup = function(uid, gid, callback) {
 
 }
 
-
-
-exports.nextFreeUnixID = function(increment, callback) {
-    var nfuidn = 'cn=NextFreeUnixId,' + config.ldap.basedn;
-
-    ldap.client.search(nfuidn, function(err, res) {
-        if (err) callback(err);
-
-        res.on('searchEntry', function(entry) {
-            var uidNumber = parseInt(entry.object.uidNumber);
-
-            //do not increment, just return uidNumber
-            if (!increment) {
-                return callback(null, uidNumber);
-            }
-
-            //increment uidNumber
-            var change = new ldapjs.Change({
-                operation: 'replace',
-                modification: {
-                    uidNumber: (uidNumber + 1)
-                }
-            });
-
-            ldap.client.modify(nfuidn, change, function(err) {
-                //and return OLD uidNumber
-                return callback(null, uidNumber);
-            });
-        });
-
-        res.on('error', function(err) {
-            callback(err);
-        });
-
-    });
+function uidtodn(uid) {
+    if (uid.substr(0, 8) === 'cn=admin') { return uid; }
+    return 'uid=' + uid + ',' + config.ldap.userbase + ',' + config.ldap.basedn;
 }
 
-
-
-
-function uidtodn(uid) {
-    return 'uid=' + uid + ',' + config.ldap.userbase + ',' + config.ldap.basedn;
+function dntouid(dn) {
+    if (dn.substr(0, 8) === 'cn=admin') { return dn; }
+    return dn.split(',')[0].split('=')[1];
 }
 
 

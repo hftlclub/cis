@@ -12,8 +12,6 @@ exports.adduser = function(req, res, next) {
     req.checkBody('username', 'Benutzername ungültig').notEmpty().isAlphanumeric();
     req.checkBody('type', 'Nutzerechte ungültig').notEmpty().isIn(['club', 'other']);
 
-    if (!req.body.loginShell) req.body.loginShell = '/bin/false';
-
     req.checkBody('email', 'E-Mail ungültig').notEmpty().isEmail();
     req.checkBody('firstname', 'Vorname ungültig').notEmpty();
     req.checkBody('lastname', 'Nachname ungültig').notEmpty();
@@ -30,48 +28,42 @@ exports.adduser = function(req, res, next) {
     //random password
     req.body.password = utils.uid(8);
 
-    //get next free unix ID
-    userservice.nextFreeUnixID(1, function(err, uidnumber) {
+    //force username to lowercase
+    req.body.username = (req.body.username).toLowerCase();
 
-        req.body.uidnumber = uidnumber;
-
-        //force username to lowercase
-        req.body.username = (req.body.username).toLowerCase();
-
-        //add new user
-        userservice.addUser(req.body, function(err, success) {
-            if (err) {
-                //throw validation error if entry already exists
-                if (err.name == 'EntryAlreadyExistsError') {
-                    req.checkBody('username', 'Benutzername wird schon verwendet').error(1);
-                    next();
-                } else {
-                    next(err);
-                }
+    //add new user
+    userservice.addUser(req.body, function(err, success) {
+        if (err) {
+            //throw validation error if entry already exists
+            if (err.name == 'EntryAlreadyExistsError') {
+                req.checkBody('username', 'Benutzername wird schon verwendet').error(1);
+                next();
+            } else {
+                next(err);
             }
+        }
 
-            if (req.body.sendPassword) {
-                var replace = {
-                    'username': req.body.username,
-                    'password': req.body.password,
-                    'name': req.body.firstname
-                }
-
-                //use alias name instead of firstname if set
-                if (req.body.alias) replace.name = req.body.alias;
-
-                smtp.mail(req.body.email, 'sendPwAdd', replace, function(err, success) {
-                    if (err) log.error(err);
-                });
-            }
-
-
-            //return new password
-            res.json({
+        if (req.body.sendPassword) {
+            var replace = {
                 'username': req.body.username,
-                'password': req.body.password
-            }).end();
-        });
+                'password': req.body.password,
+                'name': req.body.firstname
+            }
+
+            //use alias name instead of firstname if set
+            if (req.body.alias) replace.name = req.body.alias;
+
+            smtp.mail(req.body.email, 'sendPwAdd', replace, function(err, success) {
+                if (err) log.error(err);
+            });
+        }
+
+
+        //return new password
+        res.json({
+            'username': req.body.username,
+            'password': req.body.password
+        }).end();
     });
 }
 
@@ -114,13 +106,13 @@ exports.edituser = function(req, res, next) {
         email: req.body.email,
         firstname: req.body.firstname,
         lastname: req.body.lastname,
+        displayname: req.body.firstname + ' ' + req.body.lastname,
         street: req.body.street,
         zip: req.body.zip,
         city: req.body.city,
         tel: req.body.tel,
         role: req.body.role,
         birthday: req.body.birthday,
-        loginShell: req.body.loginShell,
         keyPermissions: req.body.keyPermissions
     };
 
@@ -142,9 +134,6 @@ exports.edituser = function(req, res, next) {
     } else {
         data.superuser = req.user.superuser;
     }
-
-    //sanitize
-    if(!data.loginShell) data.loginShell = '/bin/false';
 
     //edit user!
     userservice.editUser(uid, data, function(err, success) {

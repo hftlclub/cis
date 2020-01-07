@@ -22,7 +22,7 @@ exports.listmembers = function(req, res, next) {
 
         //column headers
         var data = [
-            ['Nachname', 'Vorname', 'E-Mail', 'Spitzname', 'Telefon', 'Status', 'Position', 'Vereinsbeitritt', 'Ehrenmitglied', 'Teamdrive']
+            ['Nachname', 'Vorname', 'E-Mail', 'Spitzname', 'Telefon', 'Status', 'Position', 'Vereinsbeitritt', 'Ehrenmitglied']
         ];
 
         for (var i = 0; i < members.length; i++) {

@@ -10,7 +10,7 @@ exports.getMembers = function(callback) {
         var members = [];
 
         //desired attributes
-        var attrs = ['username', 'firstname', 'lastname', 'tel', 'email', 'role', 'teamdrive', 'street', 'zip', 'city', 'former', 'honorary', 'alias', 'birthday', 'accessiondate', 'executive', 'applicant', 'superuser', 'onleave'];
+        var attrs = ['username', 'firstname', 'lastname', 'tel', 'email', 'role', 'street', 'zip', 'city', 'former', 'honorary', 'alias', 'birthday', 'accessiondate', 'executive', 'applicant', 'superuser', 'onleave'];
 
         //go through array
         for (var i = 0; i < users.length; i++) {

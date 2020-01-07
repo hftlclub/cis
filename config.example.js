@@ -44,20 +44,6 @@ exports.mailsettings = {
 };
 
 
-exports.seafile = {
-    token: 'abcdefg123456789',
-    url: 'https://url.to.sf',
-    usersuffix: '@hftl.club',
-    groups: { //internal key : seafile group ID
-        werbung: 1,
-        vorstand: 2,
-        technik: 3,
-        finanzen: 4,
-        allgemein: 5
-    }
-}
-
-
 //recipient for feedback emails
 exports.feedbackmail = "mail@ferdinand-malcher.de, mail@d-koppenhagen.de";
 

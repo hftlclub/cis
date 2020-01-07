@@ -14,16 +14,6 @@ angular.module('app.cis').controller('UserFormCtrl', function($scope, $rootScope
 
 
     $scope.options = {
-        shells: [{
-            label: '/bin/false (keine)',
-            value: '/bin/false'
-        }, {
-            label: '/bin/bash (Bash)',
-            value: '/bin/bash'
-        }, {
-            label: '/usr/bin/zsh (Z-Shell)',
-            value: '/usr/bin/zsh'
-        }],
         usertypes: [{
             label: 'Clubmitglied',
             value: 'club'
